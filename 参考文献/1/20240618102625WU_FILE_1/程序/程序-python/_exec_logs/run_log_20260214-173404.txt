@@ -1,0 +1,1206 @@
+Notebook: /Users/mac/Desktop/Grad_thesis/参考文献/1/20240618102625WU_FILE_1/程序/程序-python/主检验-一年期训练-股利支付率-ALE plot-test.ipynb
+Executed: /Users/mac/Desktop/Grad_thesis/参考文献/1/20240618102625WU_FILE_1/程序/程序-python/_exec_logs/executed_20260214-173404.ipynb
+Timestamp: 20260214-173404
+Execution error: PermissionError: [Errno 1] Operation not permitted
+
+=== Cell 0 ===
+import os
+from pathlib import Path
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score,mean_absolute_error,median_absolute_error,explained_variance_score
+from sklearn.linear_model import Lasso
+from sklearn.model_selection import GridSearchCV,KFold,StratifiedKFold,RandomizedSearchCV #交叉验证
+from sklearn.preprocessing import StandardScaler #特征标准化
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.inspection import PartialDependenceDisplay #部分依赖图
+import warnings
+warnings.filterwarnings("ignore")
+from sklearn.model_selection import train_test_split  # 划分训练集、验证集、测试集
+from sklearn.svm import SVR #支持向量机
+from sklearn.neural_network import MLPRegressor #神经网络
+from sklearn.tree import DecisionTreeRegressor #决策树
+from sklearn.svm import SVR #支持向量机
+# from xgboost.sklearn import XGBRegressor
+[no output]
+
+=== Cell 1 ===
+TARGET_FOLDER = '参考文献/1/20240618102625WU_FILE_1'
+def locate_project_root(target_folder=TARGET_FOLDER):
+    current = Path.cwd().resolve()
+    for candidate in [current, *current.parents]:
+        if (candidate / target_folder).exists():
+            return candidate
+    raise FileNotFoundError(f'未能在 {current} 及其父目录中定位 {target_folder}')
+PROJECT_ROOT = locate_project_root()
+DATA_DIR = PROJECT_ROOT / TARGET_FOLDER / '数据' / '数据-python'
+NOTEBOOK_DIR = PROJECT_ROOT / TARGET_FOLDER / '程序' / '程序-python'
+FIG_DIR = NOTEBOOK_DIR / 'figures'
+RESULT_DIR = NOTEBOOK_DIR / 'results'
+for path in (FIG_DIR, RESULT_DIR):
+    path.mkdir(parents=True, exist_ok=True)
+[no output]
+
+=== Cell 2 ===
+###### 数据导入
+data = pd.read_csv(DATA_DIR / 'data.csv', header=0)
+data = pd.DataFrame(data)
+print(data.head(3))
+print(data.shape)
+[no output]
+
+=== Cell 3 ===
+###### 数据预处理
+x = data.iloc[:, 6:]
+y = data.iloc[:, 2] #股利分配率
+# y = data.iloc[:, 1] #是否发放股利
+
+x_train1 = x.loc[data['year']==2007]
+y_train1 = y.loc[data['year']==2007]
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.30,
+                                                    random_state=0)  # 划分训练集、测试集,未分年度，按y的分布混合抽样
+sc = StandardScaler()
+sc.fit(x_train)
+x_train = sc.transform(x_train) #训练集特征标准化
+x_test = sc.transform(x_test) #测试集特征标准化，使用训练集的参数进行变换，即测试集的变化与训练集保持一致
+x_train = pd.DataFrame(x_train,columns=x.columns)
+x_test = pd.DataFrame(x_test,columns=x.columns)
+names = list(x_train.columns)
+[no output]
+
+=== Cell 4 ===
+names_chinese = [ '管理费用率', '管理层持股比例', '独立董事比例','董事会女性比例', '董事长持股比例', '董事长年龄',
+                 '董事长任期','董事长薪酬', '股权激励虚拟变量','财务报告质量',  '其他应收款资产比', '股权集中度','股权制衡度','中小股东持股比例', 
+                 '机构投资者持股比例', '控股股东股权质押比例', '留存收益资产比','自由现金流', 
+                 '税收规避程度', '实际税率', '纳税波动率','融资约束程度', '再融资动机','投资者情绪', '上一期股利水平','资产收益率',
+                 '每股经营活动现金流量', '托宾Q', '账面市值比', '资产负债率', '产权性质',
+                 '销售增长率', '公司规模','分析师跟踪人数','公司所在省份市场化程度','ind1', 'ind2', 'ind3' ,'ind4' ,'ind4' ,'ind5',
+                 'ind7', 'ind8' ,'ind11' ,'ind12' ,'ind15' ,'ind16' ,'ind17' ,'ind18' ,'ind19' ,'ind20' ,'ind21',
+                 'ind22', 'ind23', 'ind24', 'ind25' ,'ind26' ,'ind27' ,'ind28' ,'ind29' ,'ind30' ,'ind31' ,'ind32',
+                 'ind33' ,'ind34' ,'ind35' ,'ind37' ,'ind38' ,'ind39' ,'ind40' ,'ind41' ,'ind42']
+[no output]
+
+=== Cell 5 ===
+# 函数获得分位数
+def _get_quantiles(train_set, feature, bins):
+    quantiles = np.unique(
+        np.quantile(train_set[feature], np.linspace(0, 1, bins + 1), interpolation="lower")    
+    )
+    bins = len(quantiles) - 1
+    return quantiles, bins
+[no output]
+
+=== Cell 6 ===
+def _get_centres(x):
+    return (x[1:] + x[:-1])/ 2
+[no output]
+
+=== Cell 7 ===
+# 估计一阶ALE参数
+def _first_order_ale_quant(predictor, train_set, feature, bins):
+    quantiles, _ = _get_quantiles(train_set, feature, bins)  # 获得分位数
+    # 获得每个特征所在的索引
+    indices = np.clip(
+        np.digitize(train_set[feature], quantiles, right=True) - 1, 0, None
+    )
+    predictions = []  # 用来存放特征修改之后的预测结果
+    for offset in range(2):
+        mod_train_set = train_set.copy()
+        mod_train_set[feature] = quantiles[indices + offset]
+        predictions.append(predictor(mod_train_set))
+    effects = predictions[1] - predictions[0]
+    index_groupby = pd.DataFrame({"index":indices, "effects": effects}).groupby("index")
+    mean_effects = index_groupby.mean().to_numpy().flatten()
+    ale = np.array([0, *np.cumsum(mean_effects)])  # 在最前面增加一个0
+    ale = _get_centres(ale)  # 中心化之后降维
+    ale -= np.sum(ale * index_groupby.size() / train_set.shape[0])
+    return ale, quantiles
+[no output]
+
+=== Cell 8 ===
+# 绘制一阶图像
+def _first_order_quant_plot(ax, quantiles, ale, **kwargs):
+    ax.plot(_get_centres(quantiles), ale, **kwargs)
+[no output]
+
+=== Cell 9 ===
+# 设置图像横纵坐标
+def _ax_labels(ax, xlabel=None, ylabel=None):
+    if xlabel is not None:
+        ax.set_xlabel(xlabel)
+    if ylabel is not None:
+        ax.set_ylabel(ylabel)
+        
+# 设置图像标题
+def _ax_title(ax, title, subtitle=""):
+    ax.set_title("\n".join((title, subtitle)))
+[no output]
+
+=== Cell 10 ===
+##fuhegeshi
+def ale_plot(model, train_set, features,
+            bins=10, monte_carlo=False, monte_carlo_rep=50, 
+             monte_carlo_ratio=0.1, rugplot_lim=1000):
+    # 这里feature应该是字符串
+    fig, ax = plt.subplots()
+    plt.rcParams['font.sans-serif']=['SimHei']
+    plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
+    if monte_carlo:  # 蒙特卡洛采样
+        mc_replicates = np.asarray(
+        [
+            [
+                    np.random.choice(range(train_set.shape[0]))
+                    for _ in range(int(monte_carlo_ratio * train_set.shape[0]))
+            ]
+            for _ in range(monte_carlo_rep)
+        ])
+        for k, rep in enumerate(mc_replicates):
+            train_set_rep = train_set.iloc[rep, :]
+            mc_ale, mc_quantiles = _first_order_ale_quant(
+                model.predict,
+                train_set_rep,
+                features[0],
+                bins,
+            )
+#             _first_order_quant_plot(ax, mc_quantiles, mc_ale, color="#1f77b4", alpha=0.06)
+    ale, quantiles = _first_order_ale_quant(
+        model.predict,
+        train_set,
+        features[0],
+        bins,
+    )
+    
+#         # 设置横纵轴标签  
+#     ax.set_xlabel("Feature Value")  # 设置横轴标签  
+#     ax.set_ylabel("ALE")  # 设置纵轴标签  
+      
+#     # 设置标题（如果需要）  
+#     ax.set_title("ALE Plot for Feature '{}'".format(features[0]))  
+      
+    # 如果需要，取消注释下面的代码以添加更多设置  
+    ax.set_xlim(train_set[features[0]].min(), train_set[features[0]].max())  # 设置横轴范围  
+    min_ale, max_ale = min(ale), max(ale) 
+    
+    # 可以根据需要调整缓冲区（buffer）来更好地展示数据  
+    buffer = (max_ale - min_ale) * 0.1  # 例如，10%的缓冲区  
+    ax.set_ylim(min_ale - buffer, max_ale + buffer)  
+    # ax.set_ylim(...)  # 设置纵轴范围  
+      
+  
+    if rugplot_lim is None or train_set.shape[0] <= rugplot_lim:  
+#         sns.rugplot(train_set[features[0]], ax=ax, alpha=0.2)  
+        _first_order_quant_plot(ax, quantiles, ale, color="black")  
+        
+  
+    return ax
+#     _ax_labels(ax
+[no output]
+
+=== Cell 11 ===
+model_gbr_fig = GradientBoostingRegressor(n_estimators =3000 , max_depth = 4,subsample = 0.7,learning_rate = 0.001,random_state=0)
+model_gbr_fig.fit(x_train,y_train)
+[no output]
+
+=== Cell 12 ===
+model_forest_fig = RandomForestRegressor(n_estimators=5000, max_features=10,random_state=0, n_jobs=-1)
+model_forest_fig.fit(x_train,y_train)
+[no output]
+
+=== Cell 13 ===
+ale_plot(model_forest_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Retainedearn_ratio'],)
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('留存收益资产比',fontsize = 13)
+plt.title('ALE图-随机森林',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+# ax=plt.gca() 
+# ax.spines['top'].set_visible(False)
+# ax.spines['right'].set_visible(False)
+# ax.spines['bottom'].set_visible(False)
+# ax.spines['left'].set_visible(False)
+# ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+# ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(FIG_DIR / 'retainearned-forest.png', dpi=200)
+[no output]
+
+=== Cell 14 ===
+ale_plot(model_forest_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Tax_ratio'],)
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('实际税率',fontsize = 13)
+plt.title('ALE图-随机森林',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+# ax=plt.gca() 
+# ax.spines['top'].set_visible(False)
+# ax.spines['right'].set_visible(False)
+# ax.spines['bottom'].set_visible(False)
+# ax.spines['left'].set_visible(False)
+# ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+# ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(FIG_DIR / 'taxratio-forest.png', dpi=200)
+[no output]
+
+=== Cell 15 ===
+ale_plot(model_forest_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Tax_volatility'],)
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('纳税波动性',fontsize = 13)
+plt.title('ALE图-随机森林',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+# ax=plt.gca() 
+# ax.spines['top'].set_visible(False)
+# ax.spines['right'].set_visible(False)
+# ax.spines['bottom'].set_visible(False)
+# ax.spines['left'].set_visible(False)
+# ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+# ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(FIG_DIR / 'taxvol-forest.png', dpi=200)
+[no output]
+
+=== Cell 16 ===
+ale_plot(model_forest_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Tunneling'],)
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('其他应收款资产比',fontsize = 13)
+plt.title('ALE图-随机森林',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+# ax=plt.gca() 
+# ax.spines['top'].set_visible(False)
+# ax.spines['right'].set_visible(False)
+# ax.spines['bottom'].set_visible(False)
+# ax.spines['left'].set_visible(False)
+# ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+# ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(FIG_DIR / 'tunneling-forest.png', dpi=200)
+[no output]
+
+=== Cell 17 ===
+ale_plot(model_forest_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Constraint'],)
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('融资约束程度',fontsize = 13)
+plt.title('ALE图-随机森林',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+# ax=plt.gca() 
+# ax.spines['top'].set_visible(False)
+# ax.spines['right'].set_visible(False)
+# ax.spines['bottom'].set_visible(False)
+# ax.spines['left'].set_visible(False)
+# ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+# ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(FIG_DIR / 'Constraint-forest.png', dpi=200)
+[no output]
+
+=== Cell 18 ===
+ale_plot(model_forest_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Dividend_lag'],)
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('上一期股利支付水平',fontsize = 13)
+plt.title('ALE图-随机森林',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+# ax=plt.gca() 
+# ax.spines['top'].set_visible(False)
+# ax.spines['right'].set_visible(False)
+# ax.spines['bottom'].set_visible(False)
+# ax.spines['left'].set_visible(False)
+# ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+# ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(FIG_DIR / 'Dividend_lag-forest.png', dpi=200)
+[no output]
+
+=== Cell 19 ===
+ale_plot(model_gbr_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Retainedearn_ratio'],)
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('留存收益资产比',fontsize = 13)
+plt.title('ALE图-渐进梯度回归树',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+# ax=plt.gca() 
+# ax.spines['top'].set_visible(False)
+# ax.spines['right'].set_visible(False)
+# ax.spines['bottom'].set_visible(False)
+# ax.spines['left'].set_visible(False)
+# ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+# ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(FIG_DIR / 'retainearned.png', dpi=200)
+[no output]
+
+=== Cell 20 ===
+ale_plot(model_gbr_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Tax_ratio'],)
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('实际税率',fontsize = 13)
+plt.title('ALE图-渐进梯度回归树',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+# ax=plt.gca() 
+# ax.spines['top'].set_visible(False)
+# ax.spines['right'].set_visible(False)
+# ax.spines['bottom'].set_visible(False)
+# ax.spines['left'].set_visible(False)
+# ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+# ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(FIG_DIR / 'taxratio.png', dpi=200)
+[no output]
+
+=== Cell 21 ===
+ale_plot(model_gbr_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Tax_volatility'],)
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('纳税波动性',fontsize = 13)
+plt.title('ALE图-渐进梯度回归树',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+# ax=plt.gca() 
+# ax.spines['top'].set_visible(False)
+# ax.spines['right'].set_visible(False)
+# ax.spines['bottom'].set_visible(False)
+# ax.spines['left'].set_visible(False)
+# ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+# ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(FIG_DIR / 'taxvol.png', dpi=200)
+[no output]
+
+=== Cell 22 ===
+ale_plot(model_gbr_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Tunneling'],)
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('其他应收款资产比',fontsize = 13)
+plt.title('ALE图-渐进梯度回归树',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+# ax=plt.gca() 
+# ax.spines['top'].set_visible(False)
+# ax.spines['right'].set_visible(False)
+# ax.spines['bottom'].set_visible(False)
+# ax.spines['left'].set_visible(False)
+# ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+# ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(FIG_DIR / 'tunneling.png', dpi=200)
+[no output]
+
+=== Cell 23 ===
+ale_plot(model_gbr_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Constraint'],)
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('融资约束程度',fontsize = 13)
+plt.title('ALE图-渐进梯度回归树',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+# ax=plt.gca() 
+# ax.spines['top'].set_visible(False)
+# ax.spines['right'].set_visible(False)
+# ax.spines['bottom'].set_visible(False)
+# ax.spines['left'].set_visible(False)
+# ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+# ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(FIG_DIR / 'Constraint.png', dpi=200)
+[no output]
+
+=== Cell 24 ===
+ale_plot(model_gbr_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Dividend_lag'],)
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('上一期股利支付水平',fontsize = 13)
+plt.title('ALE图-渐进梯度回归树',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+# ax=plt.gca() 
+# ax.spines['top'].set_visible(False)
+# ax.spines['right'].set_visible(False)
+# ax.spines['bottom'].set_visible(False)
+# ax.spines['left'].set_visible(False)
+# ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+# ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(FIG_DIR / 'Dividend_lag.png', dpi=200)
+[no output]
+
+=== Cell 25 ===
+###### 数据导入
+data = pd.read_csv(DATA_DIR / 'dataqian.csv', header=0)
+data = pd.DataFrame(data)
+print(data.head(3))
+print(data.shape)
+[no output]
+
+=== Cell 26 ===
+###### 数据预处理
+x = data.iloc[:, 6:]
+y = data.iloc[:, 2] #股利分配率
+# y = data.iloc[:, 1] #是否发放股利
+
+x_train1 = x.loc[data['year']==2008]
+y_train1 = y.loc[data['year']==2008]
+sc = StandardScaler()
+sc.fit(x_train1)
+x_train1 = sc.transform(x_train1)
+x_train1 = pd.DataFrame(x_train1,columns= x.columns)
+
+for i in range(2,5):
+    exec ("x_train%s=1"%i)
+    exec ("y_train%s=1"%i)
+
+x_train = [x_train1,x_train2,x_train3,x_train4]
+y_train = [y_train1,y_train2,y_train3,y_train4]
+
+for i in range(1,5):
+    j = i + 2007
+    k = i - 1
+    x_train[k] = x.loc[data['year']== j]
+    y_train[k] = y.loc[data['year']== j]
+    x_train[k] = sc.transform(x_train[k])
+    x_train[k] = pd.DataFrame(x_train[k],columns= x.columns)
+[no output]
+
+=== Cell 27 ===
+x_test = sc.transform(x)
+x_test = pd.DataFrame(x_test,columns= x.columns)
+
+names = list(x_train1.columns)
+[no output]
+
+=== Cell 28 ===
+model_gbr_fig = GradientBoostingRegressor(n_estimators =3000 , max_depth = 4,subsample = 0.7,learning_rate = 0.001,random_state=0)
+model_gbr_fig.fit(x_test,y)
+[no output]
+
+=== Cell 29 ===
+model_forest_fig = RandomForestRegressor(n_estimators=5000, max_features=10,random_state=0, n_jobs=-1)
+model_forest_fig.fit(x_train1,y_train1)
+[no output]
+
+=== Cell 30 ===
+ale_plot(model_gbr_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Institution'],)
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('机构投资者持股比例',fontsize = 13)
+plt.title('ALE图-渐进梯度回归树',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / 'institution-gbr.png', dpi=200)
+[no output]
+
+=== Cell 31 ===
+ale_plot(model_forest_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Institution'],)
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('机构投资者持股比例',fontsize = 13)
+plt.title('ALE图-随机森林',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / 'institution-forest.png', dpi=200)
+[no output]
+
+=== Cell 32 ===
+plt.rcParams['font.sans-serif']=['Times New Roman'] #用来正常显示中文标签
+plt.rcParams['font.sans-serif']=['SimHei']
+plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
+PartialDependenceDisplay.from_estimator(model_gbr_fig,x_test,['Institution'],grid_resolution=100,n_jobs = -1,method = 'brute')
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('机构投资者持股比例',fontsize = 13)
+plt.title('渐进梯度回归树',fontsize = 13) 
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / 'institution-gbr-part.png', dpi=200)
+[no output]
+
+=== Cell 33 ===
+plt.rcParams['font.sans-serif']=['Times New Roman'] #用来正常显示中文标签
+plt.rcParams['font.sans-serif']=['SimHei']
+plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
+PartialDependenceDisplay.from_estimator(model_forest_fig,x_test,['Institution'],grid_resolution=100,n_jobs = -1,method = 'brute')
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('机构投资者持股比例',fontsize = 13)
+plt.title('随机森林',fontsize = 13) 
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / 'institution-forest-part.png', dpi=200)
+[no output]
+
+=== Cell 34 ===
+###### 数据导入
+data = pd.read_csv(DATA_DIR / 'datan-bigcash.csv', header=0)
+data = pd.DataFrame(data)
+print(data.head(3))
+print(data.shape)
+[no output]
+
+=== Cell 35 ===
+###### 数据预处理
+x = data.iloc[:, 6:]
+# x = data.iloc[:, 6:38]
+y = data.iloc[:, 2] #股利分配率
+# y = data.iloc[:, 1] #是否发放股利
+
+x_train1 = x.loc[data['year']==2006]
+y_train1 = y.loc[data['year']==2006]
+sc = StandardScaler()
+sc.fit(x_train1)
+x_train1 = sc.transform(x_train1)
+x_train1 = pd.DataFrame(x_train1,columns= x.columns)
+
+for i in range(2,18):
+    exec ("x_train%s=1"%i)
+    exec ("y_train%s=1"%i)
+
+x_train = [x_train1,x_train2,x_train3,x_train4,x_train5,x_train6,x_train7,x_train8,x_train9,x_train10,x_train11,x_train12,x_train13,
+           x_train14,x_train15,x_train16,x_train17]
+y_train = [y_train1,y_train2,y_train3,y_train4,y_train5,y_train6,y_train7,y_train8,y_train9,y_train10,y_train11,y_train12,y_train13,
+          y_train14,y_train15,y_train16,y_train17]
+
+for i in range(1,18):
+    j = i + 2005
+    k = i - 1
+    x_train[k] = x.loc[data['year']== j]
+    y_train[k] = y.loc[data['year']== j]
+    x_train[k] = sc.transform(x_train[k])
+    x_train[k] = pd.DataFrame(x_train[k],columns= x.columns)
+[no output]
+
+=== Cell 36 ===
+x_test = sc.transform(x)
+x_test = pd.DataFrame(x_test,columns= x.columns)
+
+names = list(x_train1.columns)
+[no output]
+
+=== Cell 37 ===
+# model_gbr_fig = GradientBoostingRegressor(n_estimators =3000 , max_depth = 4,subsample = 0.7,learning_rate = 0.001,random_state=0)
+model_gbr_fig = GradientBoostingRegressor(n_estimators =5000 , max_depth = 6,subsample = 0.8,learning_rate = 0.001,random_state=0)
+model_gbr_fig.fit(x_test,y)
+[no output]
+
+=== Cell 38 ===
+model_forest_fig = RandomForestRegressor(n_estimators=5000, max_features=10,random_state=0, n_jobs=-1)
+model_forest_fig.fit(x_test,y)
+[no output]
+
+=== Cell 39 ===
+ale_plot(model_gbr_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Freecash2'],)
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('自由现金流',fontsize = 13)
+plt.title('ALE图-渐进梯度回归树',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / 'cash-freecash-gbr.png', dpi=200)
+[no output]
+
+=== Cell 40 ===
+ale_plot(model_forest_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Freecash2'],)
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('自由现金流',fontsize = 13)
+plt.title('ALE图-随机森林',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / 'cash-freecas-forest.png', dpi=200)
+[no output]
+
+=== Cell 41 ===
+###### 数据导入
+data = pd.read_csv(DATA_DIR / 'data-guliup.csv', header=0)
+data = pd.DataFrame(data)
+print(data.head(3))
+print(data.shape)
+[no output]
+
+=== Cell 42 ===
+###### 数据预处理
+x = data.iloc[:, 6:]
+y = data.iloc[:, 2] #股利分配率
+# y = data.iloc[:, 1] #是否发放股利
+
+x_train1 = x.loc[data['year']==2007]
+y_train1 = y.loc[data['year']==2007]
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.30,
+                                                    random_state=0)  # 划分训练集、测试集,未分年度，按y的分布混合抽样
+sc = StandardScaler()
+sc.fit(x_train)
+x_train = sc.transform(x_train) #训练集特征标准化
+x_test = sc.transform(x_test) #测试集特征标准化，使用训练集的参数进行变换，即测试集的变化与训练集保持一致
+x_train = pd.DataFrame(x_train,columns=x.columns)
+x_test = pd.DataFrame(x_test,columns=x.columns)
+names = list(x_train.columns)
+[no output]
+
+=== Cell 43 ===
+model_gbr_fig = GradientBoostingRegressor(n_estimators =3000 , max_depth = 4,subsample = 0.7,learning_rate = 0.001,random_state=0)
+model_gbr_fig.fit(x_train,y_train)
+[no output]
+
+=== Cell 44 ===
+model_forest_fig = RandomForestRegressor(n_estimators=5000, max_features=19,random_state=0, n_jobs=-1)
+model_forest_fig.fit(x_train,y_train)
+[no output]
+
+=== Cell 45 ===
+ale_plot(model_gbr_fig, train_set=x_train, monte_carlo=True, rugplot_lim=None, features=['Tunneling'],)
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('其他应收款资产比',fontsize = 13)
+plt.title('ALE图-渐进梯度回归树',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / 'tunneling-gbr-up.png', dpi=200)
+[no output]
+
+=== Cell 46 ===
+ale_plot(model_forest_fig, train_set=x_train, monte_carlo=True, rugplot_lim=None, features=['Tunneling'],)
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('其他应收款资产比',fontsize = 13)
+plt.title('ALE图-随机森林',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / 'tunneling-forest-up.png', dpi=200)
+[no output]
+
+=== Cell 47 ===
+plt.rcParams['font.sans-serif']=['Times New Roman'] #用来正常显示中文标签
+plt.rcParams['font.sans-serif']=['SimHei']
+plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
+PartialDependenceDisplay.from_estimator(model_gbr_fig,x_train,['Tunneling'],grid_resolution=100,n_jobs = -1,method = 'brute')
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('其他应收款资产比',fontsize = 13)
+plt.title('渐进梯度回归树',fontsize = 13) 
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / 'tunnelin-gbr-part.png', dpi=200)
+[no output]
+
+=== Cell 48 ===
+plt.rcParams['font.sans-serif']=['Times New Roman'] #用来正常显示中文标签
+plt.rcParams['font.sans-serif']=['SimHei']
+plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
+PartialDependenceDisplay.from_estimator(model_forest_fig,x_train,['Tunneling'],grid_resolution=100,n_jobs = -1,method = 'brute')
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('其他应收款资产比',fontsize = 13)
+plt.title('随机森林',fontsize = 13) 
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / 'tunneling-forest-part.png', dpi=200)
+[no output]
+
+=== Cell 49 ===
+import os
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score,mean_absolute_error,median_absolute_error,explained_variance_score
+from sklearn.linear_model import Lasso
+from sklearn.model_selection import GridSearchCV,KFold,StratifiedKFold,RandomizedSearchCV #交叉验证
+from sklearn.preprocessing import StandardScaler #特征标准化
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.inspection import PartialDependenceDisplay #部分依赖图
+import warnings
+warnings.filterwarnings("ignore")
+from sklearn.model_selection import train_test_split  # 划分训练集、验证集、测试集
+from sklearn.svm import SVR #支持向量机
+from sklearn.neural_network import MLPRegressor #神经网络
+from sklearn.tree import DecisionTreeRegressor #决策树
+from sklearn.svm import SVR #支持向量机
+# from xgboost.sklearn import XGBRegressor
+
+from sklearn.linear_model import LogisticRegression #Logit
+from sklearn.tree import DecisionTreeClassifier #决策树
+from sklearn.svm import SVC #支持向量机
+from sklearn.ensemble import RandomForestClassifier #随机森林
+from sklearn.ensemble import GradientBoostingClassifier #梯度提升树
+# from xgboost.sklearn import XGBClassifier #XGBoost
+from sklearn.neural_network import MLPClassifier #神经网络
+from sklearn.model_selection import GridSearchCV,StratifiedKFold,RandomizedSearchCV #交叉验证
+from sklearn.model_selection import train_test_split  # 划分训练集、验证集、测试集
+from sklearn.preprocessing import StandardScaler #特征标准化
+from sklearn.metrics import roc_curve, auc,RocCurveDisplay  # ROC曲线，计算AUC
+from sklearn.inspection import PartialDependenceDisplay #部分依赖图
+from sklearn import metrics
+from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import PrecisionRecallDisplay
+from sklearn.metrics import average_precision_score
+from sklearn.metrics import mean_squared_error, r2_score,mean_absolute_error,median_absolute_error,explained_variance_score
+import time
+import random
+from sklearn.metrics import fbeta_score
+[no output]
+
+=== Cell 50 ===
+###### 数据导入
+data = pd.read_csv(DATA_DIR / 'data.csv', header=0)
+data = pd.DataFrame(data)
+print(data.head(3))
+print(data.shape)
+[no output]
+
+=== Cell 51 ===
+###### 数据预处理
+x = data.iloc[:, 6:]
+y = data.iloc[:, 5] #是否发放股利
+
+x_train1 = x.loc[data['year']==2006]
+y_train1 = y.loc[data['year']==2006]
+sc = StandardScaler()
+sc.fit(x_train1)
+x_train1 = sc.transform(x_train1)
+x_train1 = pd.DataFrame(x_train1,columns= x.columns)
+
+for i in range(2,18):
+    exec ("x_train%s=1"%i)
+    exec ("y_train%s=1"%i)
+
+x_train = [x_train1,x_train2,x_train3,x_train4,x_train5,x_train6,x_train7,x_train8,x_train9,x_train10,x_train11,x_train12,x_train13,
+           x_train14,x_train15,x_train16,x_train17]
+y_train = [y_train1,y_train2,y_train3,y_train4,y_train5,y_train6,y_train7,y_train8,y_train9,y_train10,y_train11,y_train12,y_train13,
+          y_train14,y_train15,y_train16,y_train17]
+
+for i in range(1,18):
+    j = i + 2005
+    k = i - 1
+    x_train[k] = x.loc[data['year']== j]
+    y_train[k] = y.loc[data['year']== j]
+    x_train[k] = sc.transform(x_train[k])
+    x_train[k] = pd.DataFrame(x_train[k],columns= x.columns)
+[no output]
+
+=== Cell 52 ===
+x_test = sc.transform(x)
+x_test = pd.DataFrame(x_test,columns= x.columns)
+
+names = list(x_train1.columns)
+[no output]
+
+=== Cell 53 ===
+model_gbr_fig = GradientBoostingClassifier(n_estimators =1000 , max_depth = 2,subsample = 0.2,learning_rate = 0.01,random_state=0)
+model_gbr_fig.fit(x_test,y)
+[no output]
+
+=== Cell 54 ===
+model_forest_fig = RandomForestClassifier(n_estimators=2000, max_features=20,random_state=0, n_jobs=-1)
+model_forest_fig.fit(x_test,y)
+[no output]
+
+=== Cell 55 ===
+plt.rcParams['font.sans-serif']=['SimHei']
+plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
+PartialDependenceDisplay.from_estimator(model_forest_fig,x_test,['Analyst_num'],grid_resolution=100,method = 'brute')
+plt.ylabel('股利支付意愿',fontsize = 13)
+plt.xlabel('分析师跟踪人数',fontsize = 13)
+plt.title('随机森林',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / '分析师跟踪人数1.png', dpi=200)
+[no output]
+
+=== Cell 56 ===
+plt.rcParams['font.sans-serif']=['SimHei']
+plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
+PartialDependenceDisplay.from_estimator(model_forest_fig,x_test,['Cashflow'],grid_resolution=100,method = 'brute')
+plt.ylabel('股利支付意愿',fontsize = 13)
+plt.xlabel('每股经营活动现金流量',fontsize = 13)
+plt.title('随机森林',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / '每股经营活动现金流量1.png', dpi=200)
+[no output]
+
+=== Cell 57 ===
+plt.rcParams['font.sans-serif']=['SimHei']
+plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
+PartialDependenceDisplay.from_estimator(model_gbr_fig,x_test,['Cashflow'],grid_resolution=100,n_jobs = -1,method = 'brute')
+plt.ylabel('股利支付意愿',fontsize = 13)
+plt.xlabel('每股经营活动现金流量',fontsize = 13)
+plt.title('渐进梯度分类树',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / '每股经营活动现金流量.png', dpi=200)
+[no output]
+
+=== Cell 58 ===
+plt.rcParams['font.sans-serif']=['SimHei']
+plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
+PartialDependenceDisplay.from_estimator(model_gbr_fig,x_test,['Analyst_num'],grid_resolution=100,n_jobs = -1,method = 'brute')
+plt.ylabel('股利支付意愿',fontsize = 13)
+plt.xlabel('分析师跟踪人数',fontsize = 13)
+plt.title('渐进梯度分类树',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / '分析师跟踪人数.png', dpi=200)
+[no output]
+
+=== Cell 59 ===
+ale_plot(model_gbr_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Analyst_num'],)
+plt.ylabel('股利支付意愿',fontsize = 13)
+plt.xlabel('分析师跟踪人数',fontsize = 13)
+plt.title('ALE图-渐进梯度分类树',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / '分析师跟踪人数-ale.png', dpi=200)
+[no output]
+
+=== Cell 60 ===
+ale_plot(model_gbr_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Cashflow'],)
+plt.ylabel('股利支付意愿',fontsize = 13)
+plt.xlabel('每股经营活动现金流量',fontsize = 13)
+plt.title('ALE图-渐进梯度分类树',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / '每股经营活动现金流量-ale.png', dpi=200)
+[no output]
+
+=== Cell 61 ===
+ale_plot(model_forest_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Analyst_num'],)
+plt.ylabel('股利支付意愿',fontsize = 13)
+plt.xlabel('分析师跟踪人数',fontsize = 13)
+plt.title('ALE图-随机森林',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / '分析师跟踪人数-ale-forest.png', dpi=200)
+[no output]
+
+=== Cell 62 ===
+ale_plot(model_forest_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Cashflow'],)
+plt.ylabel('股利支付意愿',fontsize = 13)
+plt.xlabel('每股经营活动现金流量',fontsize = 13)
+plt.title('ALE图-随机森林',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / '每股经营活动现金流量-ale-forest.png', dpi=200)
+[no output]
+
+=== Cell 63 ===
+
+[no output]
+
+=== Cell 64 ===
+###### 数据导入
+data = pd.read_csv(DATA_DIR / 'datauncater.csv', header=0)
+data = pd.DataFrame(data)
+print(data.head(3))
+print(data.shape)
+[no output]
+
+=== Cell 65 ===
+###### 数据预处理
+x = data.iloc[:, 6:]
+# x = data.iloc[:, 6:38]
+y = data.iloc[:, 2] #股利分配率
+# y = data.iloc[:, 1] #是否发放股利
+
+x_train1 = x.loc[data['year']==2006]
+y_train1 = y.loc[data['year']==2006]
+sc = StandardScaler()
+sc.fit(x_train1)
+x_train1 = sc.transform(x_train1)
+x_train1 = pd.DataFrame(x_train1,columns= x.columns)
+
+for i in range(2,18):
+    exec ("x_train%s=1"%i)
+    exec ("y_train%s=1"%i)
+
+x_train = [x_train1,x_train2,x_train3,x_train4,x_train5,x_train6,x_train7,x_train8,x_train9,x_train10,x_train11,x_train12,x_train13,
+           x_train14,x_train15,x_train16,x_train17]
+y_train = [y_train1,y_train2,y_train3,y_train4,y_train5,y_train6,y_train7,y_train8,y_train9,y_train10,y_train11,y_train12,y_train13,
+          y_train14,y_train15,y_train16,y_train17]
+
+for i in range(1,18):
+    j = i + 2005
+    k = i - 1
+    x_train[k] = x.loc[data['year']== j]
+    y_train[k] = y.loc[data['year']== j]
+    x_train[k] = sc.transform(x_train[k])
+    x_train[k] = pd.DataFrame(x_train[k],columns= x.columns)
+[no output]
+
+=== Cell 66 ===
+x_test = sc.transform(x)
+x_test = pd.DataFrame(x_test,columns= x.columns)
+
+names = list(x_train1.columns)
+[no output]
+
+=== Cell 67 ===
+model_gbr_fig = GradientBoostingRegressor(n_estimators =3000 , max_depth = 4,subsample = 0.7,learning_rate = 0.001,random_state=0)
+model_gbr_fig.fit(x_test,y)
+[no output]
+
+=== Cell 68 ===
+model_forest_fig = RandomForestRegressor(n_estimators=5000, max_features=12,random_state=0, n_jobs=-1)
+model_forest_fig.fit(x_test,y)
+[no output]
+
+=== Cell 69 ===
+ale_plot(model_gbr_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Freecash2'],)
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('每股经营活动现金流量',fontsize = 13)
+plt.title('ALE图-渐进梯度回归树',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / 'uncater-cashflow-gbr.png', dpi=200)
+[no output]
+
+=== Cell 70 ===
+ale_plot(model_gbr_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Freecash2'],)
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('每股经营活动现金流量',fontsize = 13)
+plt.title('ALE图-渐进梯度回归树',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / 'uncater-cashflow-gbr.png', dpi=200)
+[no output]
+
+=== Cell 71 ===
+plt.rcParams['font.sans-serif']=['Times New Roman'] #用来正常显示中文标签
+plt.rcParams['font.sans-serif']=['SimHei']
+plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
+PartialDependenceDisplay.from_estimator(model_forest_fig,x_test,['Freecash2'],grid_resolution=100,n_jobs = -1,method = 'brute')
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('自由现金流',fontsize = 13)
+plt.title('随机森林',fontsize = 13) 
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / 'uncatwe-freecash-forest-part.png', dpi=200)
+[no output]
+
+=== Cell 72 ===
+plt.rcParams['font.sans-serif']=['Times New Roman'] #用来正常显示中文标签
+plt.rcParams['font.sans-serif']=['SimHei']
+plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
+PartialDependenceDisplay.from_estimator(model_gbr_fig,x_test,['Freecash2'],grid_resolution=100,n_jobs = -1,method = 'brute')
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('自由现金流',fontsize = 13)
+plt.title('随机森林',fontsize = 13) 
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / 'uncater-freecash-gbr-part.png', dpi=200)
+[no output]
+
+=== Cell 73 ===
+ale_plot(model_forest_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Lev'],)
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('杠杆率',fontsize = 13)
+plt.title('ALE图-随机森林',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / 'uncater-lev-forest.png', dpi=200)
+[no output]
+
+=== Cell 74 ===
+ale_plot(model_gbr_fig, train_set=x_test, monte_carlo=True, rugplot_lim=None, features=['Lev'],)
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('杠杆率',fontsize = 13)
+plt.title('ALE图-渐进梯度回归树',fontsize = 13)
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / 'uncater-lev-gbr.png', dpi=200)
+[no output]
+
+=== Cell 75 ===
+plt.rcParams['font.sans-serif']=['Times New Roman'] #用来正常显示中文标签
+plt.rcParams['font.sans-serif']=['SimHei']
+plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
+PartialDependenceDisplay.from_estimator(model_forest_fig,x_train,['Lev'],grid_resolution=100,n_jobs = -1,method = 'brute')
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('杠杆率',fontsize = 13)
+plt.title('随机森林',fontsize = 13) 
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / 'uncatwe-lev-forest-part.png', dpi=200)
+[no output]
+
+=== Cell 76 ===
+plt.rcParams['font.sans-serif']=['Times New Roman'] #用来正常显示中文标签
+plt.rcParams['font.sans-serif']=['SimHei']
+plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
+PartialDependenceDisplay.from_estimator(model_gbr_fig,x_train,['Lev'],grid_resolution=100,n_jobs = -1,method = 'brute')
+plt.ylabel('股利支付率',fontsize = 13)
+plt.xlabel('杠杆率',fontsize = 13)
+plt.title('随机森林',fontsize = 13) 
+plt.tick_params(labelsize=13)
+plt.subplots_adjust(left=0.15,bottom = 0.15)
+ax=plt.gca() 
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.yaxis.grid(linewidth=0.1,color='black',linestyle='--')
+ax.tick_params(bottom=False,top=False,left=False,right=False)
+plt.savefig(RESULT_DIR / 'uncater-lev-gbr-part.png', dpi=200)
+[no output]
+
+=== Cell 77 ===
+
+[no output]
+

@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git ls-tree:*)",
+      "Bash(git -C /Users/mac/Desktop rev-parse:*)",
+      "Bash(git -C /Users/mac/Desktop log --oneline -5)",
+      "Bash(git -C /Users/mac/Desktop branch:*)",
+      "Bash(git -C /Users/mac show HEAD --stat)",
+      "Bash(git -C /Users/mac ls-tree:*)"
+    ]
+  }
+}

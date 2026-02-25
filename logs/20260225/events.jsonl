@@ -1,0 +1,4 @@
+{"ts": "2026-02-25T15:32:35+08:00", "phase": "Phase0", "task": "task_0_1_inventory", "input": "参考文献/1, 参考文献/2", "output": "notes/data_code_inventory.md", "status": "ok", "note": "完成数据/代码清点与入口识别"}
+{"ts": "2026-02-25T15:32:35+08:00", "phase": "Phase0", "task": "task_0_2_path_audit", "input": "*.ipynb, 程序.do, 程序代码.do", "output": "notes/data_code_inventory.md#路径审计", "status": "ok", "note": "识别绝对路径与相对路径混用"}
+{"ts": "2026-02-25T15:32:35+08:00", "phase": "Phase0", "task": "task_0_3_minimal_repro", "input": "data.csv, 数据.dta", "output": "output/tables/phase0_minimal_repro_metrics.csv; notes/repro_env.md", "status": "ok", "note": "最小闭环(1 ML + 1 DID)已跑通"}
+{"ts": "2026-02-25T15:47:53+08:00", "phase": "Phase0", "task": "task_0_2_path_unify_miniconda", "input": "程序-python/*.ipynb", "output": "scripts/unify_notebook_paths.py; notes/path_unification.md", "status": "ok", "note": "19个notebook统一为Path动态定位，source绝对路径残留=0，使用Miniconda python执行"}

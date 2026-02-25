@@ -1,0 +1,8 @@
+task,metric,value
+ml_minimal_rf_2007_2008,r2_test,0.11541712194421738
+ml_minimal_rf_2007_2008,mae_test,0.19099578465880349
+ml_minimal_rf_2007_2008,mse_test,0.12054423912318027
+did_minimal_twfe_dummy,coef_did,0.08279882866590915
+did_minimal_twfe_dummy,pvalue_did,1.3501118312783876e-11
+did_minimal_twfe_rate,coef_did,0.10812598555409457
+did_minimal_twfe_rate,pvalue_did,1.4503288010862137e-10
