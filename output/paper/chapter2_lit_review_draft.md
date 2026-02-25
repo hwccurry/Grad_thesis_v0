@@ -51,3 +51,8 @@
 - H3（异质性处理效应假设）：政策效应在成熟期企业与代理问题更突出的企业中更强。
 
 对应变量、模型设定与预期符号详见 `notes/hypothesis_mapping.md`。
+
+## 2.7 文献条目与链接
+- 全部文献条目及对应链接见 [notes/literature_pool_phase1.md](/Users/mac/Desktop/Grad_thesis/notes/literature_pool_phase1.md)。
+- 近三年文献（2023-2025）已在文献池中逐条附 DOI 或 Scholar 检索链接，可直接点击核验。
+- 可直接粘贴到章节末尾的条目版见 [output/paper/chapter2_references_with_links.md](/Users/mac/Desktop/Grad_thesis/output/paper/chapter2_references_with_links.md)。

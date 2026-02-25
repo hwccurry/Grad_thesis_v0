@@ -22,3 +22,5 @@
 - [2026-02-25 09:20:31 UTC] 决策：执行 Phase1 时采用“先核验文献池后写综述”的顺序，文献以可核验来源为硬约束（DOI 直连优先，其余来自核心期刊参考文献条目）。
 - [2026-02-25 09:20:31 UTC] 日志：新增 `notes/literature_pool_phase1.md`（22篇文献池，近三年8篇，占比36.4%）与 `output/paper/chapter2_lit_review_draft.md`（第2章初稿，按5个视角组织）。
 - [2026-02-25 09:20:31 UTC] 日志：新增 `notes/hypothesis_mapping.md`，并完成 `INSTRUCTIONS.md`、`notes/checkpoints.md` 的 CHECKPOINT 1 勾选及 `logs/20260225/*` 留痕。
+- [2026-02-25 10:07:30 UTC] 纠偏：Phase1 文献池“近三年占比”存在计数不一致（表内仅4篇），已修正为 27 篇中近三年 9 篇（33.3%），并为每条文献补充可点击链接。
+- [2026-02-25 10:07:30 UTC] Zotero：已生成 `notes/phase1_refs_for_zotero.bib` 并执行导入；`zotero_get_recent` 核验显示新增 27 条 journalArticle（含中英文核心条目）。
