@@ -1,6 +1,6 @@
 # Thesis Checkpoints
 
-Last updated: 2026-02-25 15:35 +08:00
+Last updated: 2026-02-25 17:17 +08:00
 
 ## CHECKPOINT 0（Phase 0）
 - [x] 数据与代码清点完成
@@ -10,11 +10,11 @@ Last updated: 2026-02-25 15:35 +08:00
 - Status: Completed
 
 ## CHECKPOINT 1（Phase 1）
-- [ ] 文献综述初稿完成
-- [ ] 文献数量与时效满足约束
-- [ ] 文献述评能自然引出本文动机
-- [ ] H1/H2/H3 表述可检验
-- Status: Pending
+- [x] 文献综述初稿完成
+- [x] 文献数量与时效满足约束
+- [x] 文献述评能自然引出本文动机
+- [x] H1/H2/H3 表述可检验
+- Status: Completed
 
 ## CHECKPOINT 2（Phase 2）
 - [ ] 模型性能表完成

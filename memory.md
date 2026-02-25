@@ -15,3 +15,10 @@
 - [2026-02-25 07:48:13 UTC] 日志：新增 `scripts/unify_notebook_paths.py` 与 `notes/path_unification.md`，批量修复 19 个 notebook，source 绝对路径残留为 0。
 - [2026-02-25 07:49:21 UTC] 规范更新：INSTRUCTIONS.md 新增强制要求：每次完成跑数据程序后，必须交付可复现的 Python/Stata 脚本（脚本路径+执行命令+输入/输出路径）。
 - [2026-02-25 07:53:17 UTC] 规范更新：每个 Phase 完成后必须执行 Git 提交并推送远程仓库，commit message 必须包含 phase 编号与 comments（关键修改、关键结果、风险/待办）。
+- [2026-02-25 08:35:07 UTC] 决策：定位 Git 推送失败原因为双重问题——`git push` 未配置默认 push destination，且推送到 `Grad_thesis_v0/main` 时因远端存在独立初始提交触发 non-fast-forward（无 merge-base）。
+- [2026-02-25 08:35:07 UTC] 日志：执行 `git push Grad_thesis_v0 main` 复现失败；`git merge-base main Grad_thesis_v0/main` 返回空；提供两种修复路径：合并远端历史或 `--force-with-lease` 覆盖远端。
+- [2026-02-25 08:50:35 UTC] 决策：针对 `Grad_thesis_v0` 推送失败，确认为远端历史分叉 + HTTPS 在 HTTP/2 下 `git-receive-pack` 二次 POST 返回 400 的组合问题；采用“先合并无关历史，再切到 HTTP/1.1 推送”的稳定方案。
+- [2026-02-25 08:50:35 UTC] 日志：执行 `git merge --allow-unrelated-histories refs/remotes/Grad_thesis_v0/main` 生成合并提交 `d4b8112`；设置 `git config http.version HTTP/1.1` 与 `git config http.postBuffer 524288000` 后，`git push -u Grad_thesis_v0 main` 成功（`fa664d8..d4b8112`）。
+- [2026-02-25 09:20:31 UTC] 决策：执行 Phase1 时采用“先核验文献池后写综述”的顺序，文献以可核验来源为硬约束（DOI 直连优先，其余来自核心期刊参考文献条目）。
+- [2026-02-25 09:20:31 UTC] 日志：新增 `notes/literature_pool_phase1.md`（22篇文献池，近三年8篇，占比36.4%）与 `output/paper/chapter2_lit_review_draft.md`（第2章初稿，按5个视角组织）。
+- [2026-02-25 09:20:31 UTC] 日志：新增 `notes/hypothesis_mapping.md`，并完成 `INSTRUCTIONS.md`、`notes/checkpoints.md` 的 CHECKPOINT 1 勾选及 `logs/20260225/*` 留痕。
