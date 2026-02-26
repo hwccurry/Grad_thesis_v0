@@ -24,3 +24,4 @@
 - [2026-02-25 09:20:31 UTC] 日志：新增 `notes/hypothesis_mapping.md`，并完成 `INSTRUCTIONS.md`、`notes/checkpoints.md` 的 CHECKPOINT 1 勾选及 `logs/20260225/*` 留痕。
 - [2026-02-25 10:07:30 UTC] 纠偏：Phase1 文献池“近三年占比”存在计数不一致（表内仅4篇），已修正为 27 篇中近三年 9 篇（33.3%），并为每条文献补充可点击链接。
 - [2026-02-25 10:07:30 UTC] Zotero：已生成 `notes/phase1_refs_for_zotero.bib` 并执行导入；`zotero_get_recent` 核验显示新增 27 条 journalArticle（含中英文核心条目）。
+- [2026-02-26 02:00:49 UTC] 日志：新增 `output/paper/chapter2_references_gbt7714.md`（27条GB/T 7714样式+链接），并在 `output/paper/chapter2_lit_review_draft.md` 增加引用入口。
