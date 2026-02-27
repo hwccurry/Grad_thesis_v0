@@ -27,5 +27,9 @@
 - [2026-02-26 02:00:49 UTC] 日志：新增 `output/paper/chapter2_references_gbt7714.md`（27条GB/T 7714样式+链接），并在 `output/paper/chapter2_lit_review_draft.md` 增加引用入口。
 - [2026-02-27 09:07:41 UTC] 决策：文献引用格式以学校模板为准，正文采用作者-年份制（如 World Bank（1994）），章节末文献列表采用顺序编码 [1][2]...。
 - [2026-02-27 09:07:41 UTC] 日志：已更新 `INSTRUCTIONS.md` 引用规范，并将 `output/paper/chapter2_lit_review_draft.md` 中 `Rxx` 占位引用全部替换为作者-年份格式。
-- [2026-02-27 10:06:25 UTC] 决策：新增仓库文档树描述文件 `DOC_TREE.md` 作为结构基线，并将“每个Phase完成后更新文档树”写入 `INSTRUCTIONS.md` 全局规则。
+- [2026-02-27 10:06:25 UTC] 决策：新增仓库文档树描述文件 `DOC_TREE.md` 作为结构基线，并将”每个Phase完成后更新文档树”写入 `INSTRUCTIONS.md` 全局规则。
 - [2026-02-27 10:06:25 UTC] 日志：已创建 `DOC_TREE.md`，并同步日志到 `logs/20260225/run.log` 与 `events.jsonl`。
+- [2026-02-27 13:50:00 UTC] Phase2完成：第3章机器学习预测分析全部4个Task完成。
+- [2026-02-27 13:50:00 UTC] 关键结果：6模型对比(RF R²_out=0.2510最优, GBDT=0.2368次之, OLS=0.1565基准)；RF/GBDT Top3特征一致=Dividend_lag/ROA/Retainedearn_ratio；代理成本变量Tunneling进入Top10；7个子样本Top3完全稳健。
+- [2026-02-27 13:50:00 UTC] 产出清单：model_comparison_ch3.csv, feature_importance_RF/GBDT.csv, subsample_robustness_ch3.csv, 24张ALE/PDP/条形图, chapter3_ml_prediction_draft.md(~4500字)。
+- [2026-02-27 13:50:00 UTC] 脚本：scripts/phase2_ml_training.py, phase2_rf_and_summary.py, phase2_ale_pdp_plots.py, phase2_subsample.py。

@@ -1,6 +1,6 @@
 # Repository Document Tree
 
-更新时间：2026-02-27
+更新时间：2026-02-27 (Phase 2 完成后)
 维护规则：每个 Phase 完成后必须同步更新本文件。
 
 ## 根目录
@@ -50,31 +50,47 @@ notes/
 ```text
 output/
 ├── paper/
-│   ├── chapter2_lit_review_draft.md
+│   ├── chapter2_lit_review_draft.md          # 第2章文献综述草稿
 │   ├── chapter2_references_with_links.md
-│   └── chapter2_references_gbt7714.md
-└── tables/
-    └── phase0_minimal_repro_metrics.csv
+│   ├── chapter2_references_gbt7714.md
+│   └── chapter3_ml_prediction_draft.md       # [Phase2新增] 第3章ML预测分析草稿
+├── tables/
+│   ├── phase0_minimal_repro_metrics.csv
+│   ├── 变量定义表-第3章.md                    # [Phase2新增] 变量定义与样本说明
+│   ├── model_comparison_ch3.csv               # [Phase2新增] 6模型性能对比表
+│   ├── rf_yearly_r2.csv                       # [Phase2新增] RF逐年样本外R²
+│   ├── feature_importance_RF_fixed.csv        # [Phase2新增] RF特征重要性排名
+│   ├── feature_importance_GBDT.csv            # [Phase2新增] GBDT特征重要性排名
+│   └── subsample_robustness_ch3.csv           # [Phase2新增] 7子样本稳健性对比
+└── figures/
+    ├── ale_rf_*.png (10张)                    # [Phase2新增] RF ALE图(10个关键变量)
+    ├── ale_gbdt_*.png (10张)                  # [Phase2新增] GBDT ALE图(10个关键变量)
+    ├── feature_importance_bar_rf.png          # [Phase2新增] RF特征重要性条形图
+    ├── feature_importance_bar_gbdt.png        # [Phase2新增] GBDT特征重要性条形图
+    ├── pdp_grid_rf.png                        # [Phase2新增] RF PDP网格图(Top4)
+    └── pdp_grid_gbdt.png                      # [Phase2新增] GBDT PDP网格图(Top4)
 ```
-- `output/paper/`：论文草稿与参考文献输出。
-- `output/tables/`：实证结果表与中间结果。
 
 ## logs/
 ```text
 logs/
-└── 20260225/
-    ├── run.log
-    └── events.jsonl
+├── 20260225/
+│   ├── run.log
+│   └── events.jsonl
+└── 20260227/
+    ├── run.log                                # [Phase2新增]
+    └── events.jsonl                           # [Phase2新增]
 ```
-- `run.log`：可读执行日志。
-- `events.jsonl`：结构化事件日志（phase/task/input/output/status/note）。
 
 ## scripts/
 ```text
 scripts/
-└── unify_notebook_paths.py
+├── unify_notebook_paths.py
+├── phase2_ml_training.py                      # [Phase2新增] ML模型训练主脚本
+├── phase2_rf_and_summary.py                   # [Phase2新增] RF训练+汇总脚本
+├── phase2_ale_pdp_plots.py                    # [Phase2新增] ALE/PDP绘图脚本
+└── phase2_subsample.py                        # [Phase2新增] 子样本稳健性脚本
 ```
-- `unify_notebook_paths.py`：批量修复 notebook 路径脚本。
 
 ## 参考文献/
 ```text
@@ -83,13 +99,11 @@ scripts/
 │   ├── 中国上市公司分红的动因研究——基于机器学习的证据.pdf
 │   └── 20240618102625WU_FILE_1/
 └── 2/
-    ├── 现金分红“硬约束”政策与上市公司股利分配行为_卿小权.pdf
+    ├── 现金分红"硬约束"政策与上市公司股利分配行为_卿小权.pdf
     ├── 附件1：拆解数据压缩包/
     ├── 附件2：数据及程序代码/
     └── 附件3：图表.docx
 ```
-- `参考文献/1/`：第3章 ML 复刻数据与程序来源。
-- `参考文献/2/`：第4章 DID 数据、程序与图表来源。
 
 ## 更新约定
 - 新增/删除关键文件或目录后，立即更新本文件。

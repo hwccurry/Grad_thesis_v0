@@ -17,11 +17,12 @@ Last updated: 2026-02-25 17:17 +08:00
 - Status: Completed
 
 ## CHECKPOINT 2（Phase 2）
-- [ ] 模型性能表完成
-- [ ] 特征重要性与解释图完成
-- [ ] 子样本稳健性结果完成
-- [ ] 第3章文字草稿完成
-- Status: Pending
+- [x] 模型性能表完成
+- [x] 特征重要性与解释图完成
+- [x] 子样本稳健性结果完成
+- [x] 第3章文字草稿完成
+- Status: Completed
+- 更新于：2026-02-27 21:50 +08:00
 
 ## CHECKPOINT 3（Phase 3）
 - [ ] DID基准回归结果稳定

@@ -1,0 +1,4 @@
+
+[2026-02-27 20:18:32] Phase2 RF(fixed) training completed.
+RF Out-of-sample R²=0.2510
+Output: feature_importance_RF_fixed.csv, model_comparison_ch3.csv

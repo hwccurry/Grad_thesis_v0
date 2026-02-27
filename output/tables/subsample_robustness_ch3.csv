@@ -1,0 +1,8 @@
+﻿子样本,观测数,滚动窗口数,RF样本外R²,GBDT样本外R²,RF_Top1,RF_Top2,RF_Top3,GBDT_Top1,GBDT_Top2,GBDT_Top3
+全样本,31469,16,0.252,0.2368,Dividend_lag,ROA,Retainedearn_ratio,Dividend_lag,ROA,Retainedearn_ratio
+国有企业,13294,16,0.254,0.2237,Dividend_lag,ROA,Retainedearn_ratio,Dividend_lag,ROA,Retainedearn_ratio
+非国有企业,18175,16,0.2183,0.1784,Dividend_lag,ROA,Retainedearn_ratio,Dividend_lag,ROA,Retainedearn_ratio
+高现金流,15588,16,0.2452,0.1872,Dividend_lag,Retainedearn_ratio,ROA,Dividend_lag,ROA,Retainedearn_ratio
+低现金流,15588,16,0.1913,0.1735,Dividend_lag,ROA,Retainedearn_ratio,Dividend_lag,ROA,Tax_ratio
+2012年之前,5722,5,0.169,0.1516,Dividend_lag,ROA,Retainedearn_ratio,Dividend_lag,ROA,Retainedearn_ratio
+2012年及之后,22421,8,0.3303,0.3203,Dividend_lag,ROA,Retainedearn_ratio,Dividend_lag,ROA,Retainedearn_ratio
