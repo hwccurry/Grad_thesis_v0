@@ -82,3 +82,9 @@
 
 [27] Sinha RK, Damle H. Corporate integrity culture and dividend policy[J]. Journal of Behavioral and Experimental Finance, 2025, 45: 101028. DOI: 10.1016/j.jbef.2025.101028.
 链接：[https://doi.org/10.1016/j.jbef.2025.101028](https://doi.org/10.1016/j.jbef.2025.101028)
+
+[28] Lintner J. Distribution of Incomes of Corporations Among Dividends, Retained Earnings, and Taxes[J]. The Review of Economics and Statistics, 1956, 38(2): 97--113. DOI: 10.2307/1926054.
+链接：[https://doi.org/10.2307/1926054](https://doi.org/10.2307/1926054)
+
+[29] Fama EF, French KR. Disappearing dividends: Changing firm characteristics or lower propensity to pay?[J]. Journal of Financial Economics, 2001, 60(1): 3--43. DOI: 10.1016/S0304-405X(01)00038-1.
+链接：[https://doi.org/10.1016/S0304-405X(01)00038-1](https://doi.org/10.1016/S0304-405X(01)00038-1)
