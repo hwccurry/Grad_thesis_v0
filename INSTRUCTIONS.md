@@ -34,6 +34,7 @@
 10. 每次完成跑数据的程序后，必须同步交付可复现的 Python 或 Stata 程序（含脚本文件路径、执行命令、输入数据路径、输出结果路径）。
 11. 每个 Phase 完成后，必须执行 Git 交付：`git add -A`、`git commit -m "phaseX: ..."`、`git push <remote> <branch>`。
 12. 第 11 条中的 commit message 必须包含 phase 编号与 comments（本阶段关键修改、关键结果、风险/待办）。
+13. 每个 Phase 完成后，必须更新仓库文档树描述文件 `DOC_TREE.md`（新增/删除目录与关键产物必须同步反映）。
 
 ---
 

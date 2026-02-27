@@ -27,3 +27,5 @@
 - [2026-02-26 02:00:49 UTC] 日志：新增 `output/paper/chapter2_references_gbt7714.md`（27条GB/T 7714样式+链接），并在 `output/paper/chapter2_lit_review_draft.md` 增加引用入口。
 - [2026-02-27 09:07:41 UTC] 决策：文献引用格式以学校模板为准，正文采用作者-年份制（如 World Bank（1994）），章节末文献列表采用顺序编码 [1][2]...。
 - [2026-02-27 09:07:41 UTC] 日志：已更新 `INSTRUCTIONS.md` 引用规范，并将 `output/paper/chapter2_lit_review_draft.md` 中 `Rxx` 占位引用全部替换为作者-年份格式。
+- [2026-02-27 10:06:25 UTC] 决策：新增仓库文档树描述文件 `DOC_TREE.md` 作为结构基线，并将“每个Phase完成后更新文档树”写入 `INSTRUCTIONS.md` 全局规则。
+- [2026-02-27 10:06:25 UTC] 日志：已创建 `DOC_TREE.md`，并同步日志到 `logs/20260225/run.log` 与 `events.jsonl`。
