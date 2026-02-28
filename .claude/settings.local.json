@@ -7,7 +7,10 @@
       "Bash(git -C /Users/mac/Desktop branch:*)",
       "Bash(git -C /Users/mac show HEAD --stat)",
       "Bash(git -C /Users/mac ls-tree:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ]
   }
 }

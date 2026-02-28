@@ -1,101 +1,246 @@
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+# AI Thesis Workflow (适配当前毕业论文项目)
 
 ## Project Overview
 
-Chinese undergraduate thesis (商学院本科毕业论文):
+你正在完成商学院本科毕业论文：
 
 > **上市公司为何分红？——来自机器学习预测与准自然实验的证据**
 
-Investigates the "dividend puzzle" in China's A-share market through two complementary approaches:
-1. **Machine learning prediction** (Chapter 3): Random Forest + Gradient Boosting to identify key predictors of dividend payout (replicating 陈运森等, 中国工业经济 2024)
-2. **DID quasi-natural experiment** (Chapter 4): Causal effects of cash dividend "hard constraint" policies (《现金分红指引》2023 revision) using difference-in-differences (replicating 卿小权等, 财经研究 2025)
+论文采用双路径研究设计：
+1. **机器学习预测（第3章）**：识别影响分红决策的关键预测因子（参考文献1数据与代码框架）。
+2. **DID准自然实验（第4章）**：评估现金分红监管政策冲击（重点考虑《上市公司现金分红指引》2023年修订）的因果效应（参考文献2数据与代码框架）。
 
-Three hypotheses: H1 (ML feature importance screening), H2 (policy causal effect via DID), H3 (heterogeneous treatment effects by lifecycle stage and agency costs).
+核心假设（可随结果微调）：
+- H1：企业生命周期与代理成本相关变量是分红行为最重要预测因子。
+- H2：监管政策冲击显著提升企业现金分红意愿与支付水平。
+- H3：政策效应在成熟期企业或代理问题更突出的企业中更强。
 
-## Repository Structure
+---
 
-```
-参考文献/1/20240618102625WU_FILE_1/
-├── 数据/数据-python/          # 12 CSV files (data.csv = full sample, subsets by ownership/cash flow/catering/etc.)
-├── 程序/程序-python/          # ~20 Jupyter notebooks (ML analysis)
-│   ├── results/               # Output PNG figures
-│   ├── figures/               # ALE/PDP plot outputs
-│   └── _exec_logs/            # Auto-execution logs and rendered notebooks
-└── 程序/程序.do               # Stata do-file (data export from .dta to CSV)
+## 全局执行规则（必须遵守）
 
-参考文献/2/
-├── 附件1：拆解数据压缩包/     # 10 Excel files for DID analysis (2020-2024 沪深A股主板)
-├── 附件2：数据及程序代码/     # 数据.dta + 程序代码.do (Stata DID analysis)
-└── 附件3：图表.docx           # Reference tables and figures
+1. 全文中文写作，技术术语可保留英文（如 DID、Panel FE、ALE）。
+2. 不得直接复制参考论文段落；必须重写、归纳、评述。
+3. 参考文献目标约 20 篇：
+- CSSCI 或高质量期刊优先；
+- 近三年文献不少于 1/3；
+- 尽量少用学位论文。
+4. 文献综述按“研究视角”组织，不按年份堆叠，不按“国内外”机械拆分。
+5. 图表格式必须对齐 `商学院本科生毕业论文格式模板2025.01.docx`，具体规范如下：
+   - **编号方式**：全文顺序编号（表1、表2……图1、图2……），不使用章节编号（如 ~~表3-1~~）。编号与标题之间用一个半角空格分隔，如 `表1 各模型预测性能对比`。
+   - **表标题**：置于表格**上方**，居中，加粗，宋体五号。
+   - **图标题**：置于图片**下方**，居中，加粗，宋体五号。
+   - **表格样式**：三线表（顶线粗 1 磅、表头下细线 0.5 磅、底线粗 1 磅，无左右边框无纵线）。Markdown 阶段用普通表格，转 Word 时统一应用三线表样式。
+   - **注释/来源**：紧跟图/表下方，格式为 `注：xxx`，小五号（9pt），左对齐，无首行缩进。
+   - **正文引用**：必须在正文中引用每张图表，使用 `如表X所示` 或 `表X汇报了……` 格式。
+   - **当前编号进度**：第3章已使用表1—表4、图1—图8；后续章节从表5、图9开始接续。
+6. 结果不可编造；引用不可虚构；结论与实证结果保持一致。
+7. 正文文献引用必须对齐 `商学院本科生毕业论文格式模板2025.01.docx`：采用“作者-年份制”（示例：`李光龙和范贤贤（2019）`、`World Bank（1994）`、`Miller and Rock（1985）`），不得使用 `R01/R02` 等占位符。
+8. 章节末参考文献列表采用模板的顺序编码格式（`[1] [2] ...`）与标点规范，且与正文引用一一对应。
+9. 最终格式必须对齐 `商学院本科生毕业论文格式模板2025.01.docx`。
+10. 每次完成跑数据的程序后，必须同步交付可复现的 Python 或 Stata 程序（含脚本文件路径、执行命令、输入数据路径、输出结果路径）。
+11. 每个 Phase 完成后，必须执行 Git 交付：`git add -A`、`git commit -m "phaseX: ..."`、`git push <remote> <branch>`。
+12. 第 11 条中的 commit message 必须包含 phase 编号与 comments（本阶段关键修改、关键结果、风险/待办）。
+13. 每个 Phase 完成后，必须更新仓库文档树描述文件 `DOC_TREE.md`（新增/删除目录与关键产物必须同步反映）。
 
-写作框架.md                    # Thesis chapter outline from advisor
-商学院本科生毕业论文格式模板2025.01.docx  # Official format template
-memory.md                      # Session memory log
-```
+---
 
-## ML Analysis Architecture (Chapter 3)
+## 可追踪日志规范（text + jsonl）
 
-**Data layout**: `data.csv` columns are `Stkcd, year, Dividend_ratio1, Dividend_ratio2, Dividend_ratio3, Dividend, [43 features]`. Features start at column index 6; response variables are at indices 1-5.
+每个阶段都要留痕，日志目录统一为：
 
-**Column index mapping**:
-- `iloc[:, 2]` = `Dividend_ratio1` (股利支付率 / payout ratio) — primary regression target
-- `iloc[:, 5]` = `Dividend` (是否发放现金股利 / binary) — classification target
-- `iloc[:, 6:]` = all 43 predictor features (35 continuous + ind1-ind42 industry dummies with gaps)
-
-**Training paradigm — "一年期训练" (1-year rolling)**:
-- Train on year `t`, predict year `t+1`, rolling from 2006 to 2022 (16 iterations)
-- StandardScaler fitted on `x_train1` (first year), applied to all subsequent years
-- Loop: `for i in range(0,16): j=i+1; model.fit(x_train[i], y_train[i]); score(x_train[j], y_train[j])`
-
-**Models and default hyperparameters**:
-- `GradientBoostingRegressor(n_estimators=3000, max_depth=4, subsample=0.7, learning_rate=0.001)`
-- `RandomForestRegressor(n_estimators=5000, max_features=10|19)` with `RandomizedSearchCV` for tuning
-- Also benchmarked: Lasso, SVR, DecisionTree, MLP, LinearRegression (OLS)
-- Classification variants: `GradientBoostingClassifier`, `RandomForestClassifier`
-
-**Interpretability**: Custom ALE (Accumulated Local Effects) implementation in notebooks (functions `_first_order_ale_quant`, `ale_plot`); also `PartialDependenceDisplay` from sklearn.
-
-**Key feature names** (English column names → Chinese labels):
-- `Retainedearn_ratio` = 留存收益资产比, `Tunneling` = 其他应收款资产比, `Freecash2` = 自由现金流
-- `Constraint` = 融资约束程度, `Institution` = 机构投资者持股比例, `Dividend_lag` = 上一期股利水平
-- `Tax_ratio` = 实际税率, `Analyst_num` = 分析师跟踪人数, `Cashflow` = 每股经营活动现金流量
-
-**Notebook naming**: `主检验-{训练方式}-{响应变量}[-{子样本/方法}].ipynb`
-**CSV naming**: `data.csv` (full), `dataqian/datahou` (pre/post 2012), `dataguoyou/datafeiguoyou` (SOE/non-SOE), `datan-bigcash/data-smallcash` (high/low cash flow), `datacater/datauncater` (catering/non-catering), `data-guliup/data-gulidown` (dividend sentiment up/down)
-
-## DID Analysis Architecture (Chapter 4)
-
-**Stata workflow** (参考文献/2/附件2/程序代码.do):
-- Policy shock: 2023 revision of《上市公司现金分红指引》
-- Sample: 沪深A股主板 2020-2024, panel `xtset stkcd year`
-- Controls: `SIZE AGE LEV ROA GROWTH CFO TOP INDEP MH HHI_BANK MKT`
-- Core command: `reghdfe DivDummy|DivPayRate did $ctrl, a(year stkcd) cl(stkcd) keepsingletons`
-- Robustness: parallel trends (`coefplot`), placebo (1000 random permutations), Hausman-Taylor, PSM-DID (`psmatch2`), entropy balancing (`ebalance`), exclude refinancing samples
-- Heterogeneity splits: `law_high` (法治水平), `SOE` (产权性质), `agc_high` (大股东代理成本), `insinv_high` (机构持股)
-- Economic consequences: Volume, Turnover, Spread, Misvaluation
-
-## Notebook Execution
-
-Notebooks use a path-finding pattern for portability:
-```python
-TARGET_FOLDER = '参考文献/1/20240618102625WU_FILE_1'
-PROJECT_ROOT = locate_project_root()  # walks up from cwd
-DATA_DIR = PROJECT_ROOT / TARGET_FOLDER / '数据' / '数据-python'
+```text
+logs/
+  YYYYMMDD/
+    run.log
+    events.jsonl
 ```
 
-Some older notebooks still hardcode `/Users/mac/Desktop/Grad_thesis/...` or Windows paths `D:\Users\...` — these need updating to the `locate_project_root()` pattern.
+`events.jsonl` 每行一个 JSON，建议字段：
 
-**Python dependencies**: pandas, numpy, scikit-learn, matplotlib, seaborn (no requirements.txt).
+```json
+{"ts":"2026-02-25T14:40:00+08:00","phase":"Phase2","task":"train_rf","input":"data.csv","output":"rf_metrics.csv","status":"ok","note":"one-year rolling"}
+```
 
-**Chinese font rendering**: Notebooks set `plt.rcParams['font.sans-serif']=['SimHei']` and `plt.rcParams['axes.unicode_minus']=False`.
+---
 
-## Thesis Writing Constraints
+## 项目目录（当前项目语义）
 
-- Format: 商学院本科生毕业论文格式模板 2025.01
-- References: ~20 total; CSSCI journals with impact factor >= 2; at least 1/3 from recent 3 years; avoid degree theses
-- Literature review: Organize by thematic perspectives (not chronologically or domestic/foreign); include critical commentary (文献述评)
-- Plagiarism: Do not copy-paste from references; paraphrase and restructure
-- Figures/tables: Numbered consecutively; cite data sources
-- All thesis text is in Chinese
+```text
+Grad_thesis/
+├── INSTRUCTIONS.md
+├── 写作框架.md
+├── memory.md
+├── 参考文献/
+│   ├── 1/20240618102625WU_FILE_1/      # ML相关数据与notebooks
+│   └── 2/                               # DID相关数据与Stata程序
+├── output/
+│   ├── tables/
+│   ├── figures/
+│   └── paper/
+├── notes/
+└── logs/
+```
+
+---
+
+## 🛑 STOP AND CHECK 机制
+
+每个阶段结束后必须：
+1. 总结已完成内容；
+2. 展示关键输出（表/图/回归结果/草稿）；
+3. 列出问题与风险；
+4. 如本阶段包含数据跑数，提交可复现的 Python 或 Stata 脚本与运行命令；
+5. 在本文件对应 `CHECKPOINT` 中勾选已完成项（`[ ] -> [x]`）并标注更新时间；
+6. 完成 Git 提交并推送远程仓库，且在 commit message 写清 phase comments；
+7. **等待人工确认后再进入下一阶段**。
+
+---
+
+## PHASE 0：项目校准与数据盘点
+
+### Task 0.1 数据与代码清点
+- 盘点参考文献1（ML）与参考文献2（DID）的数据文件、变量、脚本入口。
+- 输出 `notes/data_code_inventory.md`（含文件清单、用途、关键变量）。
+
+### Task 0.2 环境与路径统一
+- 检查 notebook/脚本中的硬编码路径（如旧目录或 Windows 路径）。
+- 统一为项目相对路径或项目根目录定位方案。
+
+### Task 0.3 复现最小闭环
+- 跑通一个最小样例（1个ML模型 + 1个DID基准回归）验证环境可用。
+- 记录依赖与执行命令到 `notes/repro_env.md`。
+
+### 🛑 CHECKPOINT 0
+- [x] 数据与代码清点完成
+- [x] 路径统一策略明确
+- [x] 最小复现闭环跑通
+- [x] 日志目录与规范已启用
+- 更新于：2026-02-25 15:47 +08:00
+
+---
+
+## PHASE 1：文献综述与研究假设定稿（第2章）
+
+### Task 1.1 文献筛选与核验
+- 建立候选文献池，核验题名、作者、年份、期刊、卷期页码。
+- 只保留可核验来源文献。
+
+### Task 1.2 视角化综述写作
+- 按“经典股利理论、公司治理与代理成本、生命周期与融资约束、政策监管与市场反应、方法论（ML与DID）”等视角归类。
+- 每类形成“共识 + 分歧 + 可改进点”。
+
+### Task 1.3 研究假设与理论框架
+- 写出 H1/H2/H3 的理论依据、可检验命题与变量映射。
+- 输出 `notes/hypothesis_mapping.md`（假设-变量-方法-预期符号）。
+
+### 🛑 CHECKPOINT 1
+- [x] 文献综述初稿完成
+- [x] 文献数量与时效满足约束
+- [x] 文献述评能自然引出本文动机
+- [x] H1/H2/H3 表述可检验
+- 更新于：2026-02-25 17:17 +08:00
+
+---
+
+## PHASE 2：机器学习预测分析（第3章）
+
+### Task 2.1 样本与变量定义
+- 明确样本范围、清洗规则、缺失值处理、winsorize规则（如使用）。
+- 输出变量定义表到 `output/tables/变量定义表-第3章.xlsx`（或 `.md`）。
+
+### Task 2.2 模型设定与训练
+- 按“一年期训练（t 训练，t+1 测试）”执行滚动预测。
+- 至少比较：Random Forest、Gradient Boosting（可补充 Lasso/OLS 作为基准）。
+- 输出模型对比表（R2、MSE、MAE 或分类指标）。
+
+### Task 2.3 特征重要性与可解释性
+- 输出特征重要性排序（Top N）。
+- 对核心变量绘制 ALE/PDP 图，解释经济含义。
+
+### Task 2.4 稳健性与扩展
+- 按子样本（如国有/非国有、高/低现金流等）做稳定性比较。
+- 总结关键动因是否稳健。
+
+### 🛑 CHECKPOINT 2
+- [x] 模型性能表完成
+- [x] 特征重要性与解释图完成
+- [x] 子样本稳健性结果完成
+- [x] 第3章文字草稿完成
+- 更新于：2026-02-27 21:50 +08:00
+
+---
+
+## PHASE 3：政策冲击DID评估（第4章）
+
+### Task 3.1 准自然实验设计
+- 明确政策时点、处理组/对照组划分逻辑与外生性论证。
+- 输出 `notes/did_design.md`。
+
+### Task 3.2 基准回归
+- 估计双向固定效应 DID（公司 FE + 年份 FE，标准误聚类到公司层面）。
+- 被解释变量至少包含：分红意愿（DivDummy）与分红水平（DivPayRate）。
+
+### Task 3.3 识别有效性检验
+- 平行趋势检验（事件研究图/回归）。
+- 稳健性检验：窗口调整、替换变量、placebo、PSM-DID（按数据可得性选择）。
+
+### Task 3.4 异质性与机制（可选增强）
+- 按生命周期、代理成本、产权性质、机构持股等维度做异质性分析。
+- 如可行，补充市场后果变量分析（流动性、估值偏离等）。
+
+### 🛑 CHECKPOINT 3
+- [ ] DID基准回归结果稳定
+- [ ] 平行趋势与稳健性检验完成
+- [ ] 异质性结果可解释
+- [ ] 第4章文字草稿完成
+
+---
+
+## PHASE 4：全文章节整合（第1/5章 + 统稿）
+
+### Task 4.1 绪论（第1章）
+- 研究背景、问题、方法、技术路线、创新与不足。
+
+### Task 4.2 结论与启示（第5章）
+- 回答研究问题，提炼政策启示，说明局限与未来研究方向。
+
+### Task 4.3 一致性校验
+- 检查“研究问题-方法-结果-结论”闭环是否一致。
+- 检查 H1/H2/H3 是否均被结果有效回应。
+
+### 🛑 CHECKPOINT 4
+- [ ] 五章草稿完整
+- [ ] 摘要与正文一致
+- [ ] 结论不超出证据边界
+
+---
+
+## PHASE 5：格式与答辩前质检
+
+### Task 5.1 格式规范
+- 对齐学校模板（目录、标题层级、图表、注释、参考文献格式）。
+
+### Task 5.2 风险排查
+- 查重风险段落重写；
+- 图表来源与口径复核；
+- 关键回归结果可重复运行。
+
+### Task 5.3 交付包
+- `output/paper/论文完整版.md`（或 `.docx` 导出版）
+- `output/tables/` 与 `output/figures/`
+- `notes/` 全部方法与决策说明
+- `logs/` 完整执行日志（text + jsonl）
+
+### 🛑 FINAL CHECKPOINT
+- [ ] 论文可提交版本完成
+- [ ] 全部图表与结论可追溯
+- [ ] 日志与复现材料齐全
+
+---
+
+## 执行优先级与容错策略
+
+1. 优先保证“可复现 + 可解释 + 可提交”，再追求扩展分析。
+2. 如数据缺失或口径不一致，先保留基准可运行版本，并在 `notes/` 记录限制。
+3. 如 ML 与 DID 结论不一致，必须在讨论部分解释潜在机制，不得强行统一结论。

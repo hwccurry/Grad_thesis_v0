@@ -33,3 +33,5 @@
 - [2026-02-27 13:50:00 UTC] 关键结果：6模型对比(RF R²_out=0.2510最优, GBDT=0.2368次之, OLS=0.1565基准)；RF/GBDT Top3特征一致=Dividend_lag/ROA/Retainedearn_ratio；代理成本变量Tunneling进入Top10；7个子样本Top3完全稳健。
 - [2026-02-27 13:50:00 UTC] 产出清单：model_comparison_ch3.csv, feature_importance_RF/GBDT.csv, subsample_robustness_ch3.csv, 24张ALE/PDP/条形图, chapter3_ml_prediction_draft.md(~4500字)。
 - [2026-02-27 13:50:00 UTC] 脚本：scripts/phase2_ml_training.py, phase2_rf_and_summary.py, phase2_ale_pdp_plots.py, phase2_subsample.py。
+- [2026-02-28 07:14:41 UTC] 决策：按用户请求执行仓库状态快照检查，使用 `git status --short --branch` 作为单点事实源。
+- [2026-02-28 07:14:41 UTC] 日志：当前分支 `main` 相对 `Grad_thesis_v0/main` 为 `ahead 1`；未暂存修改 3 个文件：`.claude/CLAUDE.md`、`.claude/settings.local.json`、`output/paper/chapter3_ml_prediction_draft.md`。
