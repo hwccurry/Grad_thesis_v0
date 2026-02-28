@@ -1,6 +1,6 @@
 # Repository Document Tree
 
-更新时间：2026-02-27 (Phase 2 完成后)
+更新时间：2026-02-28 (Phase 2 PCA补充后)
 维护规则：每个 Phase 完成后必须同步更新本文件。
 
 ## 根目录
@@ -61,14 +61,19 @@ output/
 │   ├── rf_yearly_r2.csv                       # [Phase2新增] RF逐年样本外R²
 │   ├── feature_importance_RF_fixed.csv        # [Phase2新增] RF特征重要性排名
 │   ├── feature_importance_GBDT.csv            # [Phase2新增] GBDT特征重要性排名
-│   └── subsample_robustness_ch3.csv           # [Phase2新增] 7子样本稳健性对比
+│   ├── subsample_robustness_ch3.csv           # [Phase2新增] 7子样本稳健性对比
+│   ├── pca_explained_variance.csv             # [Phase2-PCA] 各主成分解释方差
+│   ├── pca_loadings_top.csv                   # [Phase2-PCA] 载荷矩阵+Top3变量
+│   └── pca_model_comparison.csv               # [Phase2-PCA] PCA vs 原始特征预测对比
 └── figures/
     ├── ale_rf_*.png (10张)                    # [Phase2新增] RF ALE图(10个关键变量)
     ├── ale_gbdt_*.png (10张)                  # [Phase2新增] GBDT ALE图(10个关键变量)
     ├── feature_importance_bar_rf.png          # [Phase2新增] RF特征重要性条形图
     ├── feature_importance_bar_gbdt.png        # [Phase2新增] GBDT特征重要性条形图
     ├── pdp_grid_rf.png                        # [Phase2新增] RF PDP网格图(Top4)
-    └── pdp_grid_gbdt.png                      # [Phase2新增] GBDT PDP网格图(Top4)
+    ├── pdp_grid_gbdt.png                      # [Phase2新增] GBDT PDP网格图(Top4)
+    ├── pca_scree_plot.png                     # [Phase2-PCA] 碎石图(图9)
+    └── pca_loading_heatmap.png                # [Phase2-PCA] 载荷热力图(图10)
 ```
 
 ## logs/
@@ -77,9 +82,12 @@ logs/
 ├── 20260225/
 │   ├── run.log
 │   └── events.jsonl
-└── 20260227/
-    ├── run.log                                # [Phase2新增]
-    └── events.jsonl                           # [Phase2新增]
+├── 20260227/
+│   ├── run.log                                # [Phase2新增]
+│   └── events.jsonl                           # [Phase2新增]
+└── 20260228/
+    ├── run.log                                # [Phase2-PCA]
+    └── events.jsonl                           # [Phase2-PCA]
 ```
 
 ## scripts/
@@ -89,7 +97,8 @@ scripts/
 ├── phase2_ml_training.py                      # [Phase2新增] ML模型训练主脚本
 ├── phase2_rf_and_summary.py                   # [Phase2新增] RF训练+汇总脚本
 ├── phase2_ale_pdp_plots.py                    # [Phase2新增] ALE/PDP绘图脚本
-└── phase2_subsample.py                        # [Phase2新增] 子样本稳健性脚本
+├── phase2_subsample.py                        # [Phase2新增] 子样本稳健性脚本
+└── phase2_pca_analysis.py                     # [Phase2-PCA] PCA降维+碎石图+热力图+预测对比
 ```
 
 ## 参考文献/

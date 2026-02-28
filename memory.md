@@ -35,3 +35,7 @@
 - [2026-02-27 13:50:00 UTC] 脚本：scripts/phase2_ml_training.py, phase2_rf_and_summary.py, phase2_ale_pdp_plots.py, phase2_subsample.py。
 - [2026-02-28 07:14:41 UTC] 决策：按用户请求执行仓库状态快照检查，使用 `git status --short --branch` 作为单点事实源。
 - [2026-02-28 07:14:41 UTC] 日志：当前分支 `main` 相对 `Grad_thesis_v0/main` 为 `ahead 1`；未暂存修改 3 个文件：`.claude/CLAUDE.md`、`.claude/settings.local.json`、`output/paper/chapter3_ml_prediction_draft.md`。
+- [2026-02-28 08:21:00 UTC] 决策：在第3章新增PCA主成分分析（3.6节），作为论文创新点——从降维角度揭示35个金融特征的潜在经济维度，补充单变量特征重要性分析。
+- [2026-02-28 08:21:00 UTC] 关键结果：PCA K=18（累积方差81.36%），PC1=盈利能力与市场关注度(ROA/分析师/留存收益)，PC2=规模与估值(BM/Top1/Lnsize)，PC3=市场情绪与外部监督(Sentiment/Institution)，PC6=现金充裕度(Cashflow/Freecash2)。降维后RF R²从0.2510降至0.0576，GBDT从0.2368降至0.0818——行业哑变量和非线性交互贡献显著。
+- [2026-02-28 08:21:00 UTC] 产出清单：scripts/phase2_pca_analysis.py, pca_explained_variance.csv, pca_loadings_top.csv, pca_model_comparison.csv, pca_scree_plot.png(图9), pca_loading_heatmap.png(图10)。
+- [2026-02-28 08:21:00 UTC] 编号更新：第3章现使用表1—表6、图1—图10；原3.6→3.7、原3.7→3.8；新增3.6节(~1000字)含3.6.1碎石分析+3.6.2载荷解读+3.6.3降维预测对比；3.8本章小结新增"第五"段落并修改过渡段为"双重验证"。
