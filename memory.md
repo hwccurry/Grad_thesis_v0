@@ -39,3 +39,10 @@
 - [2026-02-28 08:21:00 UTC] 关键结果：PCA K=18（累积方差81.36%），PC1=盈利能力与市场关注度(ROA/分析师/留存收益)，PC2=规模与估值(BM/Top1/Lnsize)，PC3=市场情绪与外部监督(Sentiment/Institution)，PC6=现金充裕度(Cashflow/Freecash2)。降维后RF R²从0.2510降至0.0576，GBDT从0.2368降至0.0818——行业哑变量和非线性交互贡献显著。
 - [2026-02-28 08:21:00 UTC] 产出清单：scripts/phase2_pca_analysis.py, pca_explained_variance.csv, pca_loadings_top.csv, pca_model_comparison.csv, pca_scree_plot.png(图9), pca_loading_heatmap.png(图10)。
 - [2026-02-28 08:21:00 UTC] 编号更新：第3章现使用表1—表6、图1—图10；原3.6→3.7、原3.7→3.8；新增3.6节(~1000字)含3.6.1碎石分析+3.6.2载荷解读+3.6.3降维预测对比；3.8本章小结新增"第五"段落并修改过渡段为"双重验证"。
+- [2026-02-28 08:50:00 UTC] Phase3完成：第4章DID准自然实验因果评估全部4个Task完成。
+- [2026-02-28 08:50:00 UTC] 决策：使用Python linearmodels.PanelOLS替代Stata reghdfe（本机无Stata），实现等价的TWFE DID（公司FE+年份FE，公司层面聚类标准误）。
+- [2026-02-28 08:50:00 UTC] 关键结果：基准DID——DivDummy did=0.0828***(t=6.764), DivPayRate did=0.1081***(t=6.412)；平行趋势——pre_3/pre_2在99%CI下均不显著(DivPayRate两期均不显著, DivDummy pre_3在5%显著但99%CI包含零)；安慰剂检验——500次模拟,真实系数远离安慰剂分布；PSM-DID——结果稳健(0.0828/0.1082)；排除替代解释——交互项均不显著；剔除再融资——稳健(0.0854/0.1078)。
+- [2026-02-28 08:50:00 UTC] 异质性关键发现：代理成本维度组间差异显著(DivDummy diff=0.0529*, DivPayRate diff=0.0644*)——H3部分得到支持；产权/机构持股/法治水平维度方向一致但组间差异不显著。
+- [2026-02-28 08:50:00 UTC] 经济后果：交易量+0.0754**(当月), 换手率+0.1785**(当月), 错误定价-0.0510**(当月)/-0.0530**(次月)——政策改善市场流动性和定价效率。
+- [2026-02-28 08:50:00 UTC] 产出清单：scripts/phase3_did_analysis.py, did_descriptive_stats.csv, did_baseline_regression.csv, did_event_study_*.csv, did_placebo_*.csv, did_robustness_checks.csv, did_heterogeneity.csv, did_economic_consequences.csv, did_parallel_trends.png(图11), did_placebo_test.png(图12), chapter4_did_evaluation_draft.md(~5000字)。
+- [2026-02-28 08:50:00 UTC] 编号更新：第4章使用表7—表11、图11—图12；后续第5章从表12、图13开始接续。
