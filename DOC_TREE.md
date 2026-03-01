@@ -1,6 +1,6 @@
 # Repository Document Tree
 
-更新时间：2026-02-28 (Phase 3 DID完成后)
+更新时间：2026-03-01 (Phase 3 收口复核后)
 维护规则：每个 Phase 完成后必须同步更新本文件。
 
 ## 根目录
@@ -37,7 +37,9 @@ notes/
 ├── literature_pool_phase1.md
 ├── hypothesis_mapping.md
 ├── phase1_refs_for_zotero.bib
-└── did_design.md                                 # [Phase3新增] DID准自然实验设计文档
+├── did_design.md                                 # [Phase3新增] DID准自然实验设计文档
+├── phase3_review_report.md                       # [Phase3收口] 风险审阅与答辩口径
+└── phase3_reference_do_comparison_20260301.md   # [Phase3收口] 与参考do复跑对照
 ```
 - `checkpoints.md`：各阶段完成状态。
 - `data_code_inventory.md`：数据/代码盘点。
@@ -47,6 +49,8 @@ notes/
 - `hypothesis_mapping.md`：H1/H2/H3 映射。
 - `phase1_refs_for_zotero.bib`：Zotero 导入用 BibTeX。
 - `did_design.md`：Phase3 DID实验设计（政策背景、处理组定义、模型设定、检验策略）。
+- `phase3_review_report.md`：Phase3 风险复核、答辩解释口径与收口结论。
+- `phase3_reference_do_comparison_20260301.md`：参考文献2 do-file 复跑对照与剩余参数差异说明。
 
 ## output/
 ```text
@@ -72,8 +76,8 @@ output/
 │   ├── did_baseline_regression.csv            # [Phase3新增] 基准DID回归(表8)
 │   ├── did_event_study_DivDummy.csv           # [Phase3新增] 事件研究系数(DivDummy)
 │   ├── did_event_study_DivPayRate.csv         # [Phase3新增] 事件研究系数(DivPayRate)
-│   ├── did_placebo_DivDummy.csv               # [Phase3新增] 安慰剂检验系数(500次)
-│   ├── did_placebo_DivPayRate.csv             # [Phase3新增] 安慰剂检验系数(500次)
+│   ├── did_placebo_DivDummy.csv               # [Phase3收口] 安慰剂检验系数(100次，policy-year-only)
+│   ├── did_placebo_DivPayRate.csv             # [Phase3收口] 安慰剂检验系数(100次，policy-year-only)
 │   ├── did_robustness_checks.csv              # [Phase3新增] 稳健性检验汇总(表9)
 │   ├── did_heterogeneity.csv                  # [Phase3新增] 异质性分析(表10)
 │   └── did_economic_consequences.csv          # [Phase3新增] 经济后果分析(表11)
@@ -99,9 +103,11 @@ logs/
 ├── 20260227/
 │   ├── run.log                                # [Phase2]
 │   └── events.jsonl                           # [Phase2]
-└── 20260228/
-    ├── run.log                                # [Phase2-PCA + Phase3 DID]
-    └── events.jsonl                           # [Phase2-PCA + Phase3 DID]
+├── 20260228/
+│   ├── run.log                                # [Phase2-PCA + Phase3 DID]
+│   └── events.jsonl                           # [Phase2-PCA + Phase3 DID]
+└── 20260301/
+    └── events.jsonl                           # [Phase3复跑与收口]
 ```
 
 ## scripts/
@@ -113,7 +119,9 @@ scripts/
 ├── phase2_ale_pdp_plots.py                    # [Phase2] ALE/PDP绘图脚本
 ├── phase2_subsample.py                        # [Phase2] 子样本稳健性脚本
 ├── phase2_pca_analysis.py                     # [Phase2-PCA] PCA降维+碎石图+热力图+预测对比
-└── phase3_did_analysis.py                     # [Phase3新增] DID全流程分析(基准+平行趋势+安慰剂+PSM+异质性+后果)
+├── phase3_did_stata_replication.do            # [Phase3收口] Stata高一致度复现主脚本
+├── phase3_placebo_stata100.do                 # [Phase3收口] placebo 100次真实回归导出脚本
+└── phase3_placebo_plot.py                     # [Phase3收口] 基于CSV实测系数绘制图12
 ```
 
 ## 参考文献/

@@ -114,7 +114,7 @@ $$Y_{it} = \alpha_i + \lambda_t + \beta \cdot did_{it} + \gamma X_{it} + \vareps
 
 ## 7. 实现方案
 
-- **工具**：Python（linearmodels.PanelOLS 替代 Stata reghdfe）
+- **工具**：Stata（主复现）+ Python（placebo 图绘制）
 - **数据**：`参考文献/2/附件2：数据及程序代码/数据.dta`
-- **脚本**：`scripts/phase3_did_analysis.py`
+- **脚本**：`scripts/phase3_did_stata_replication.do`、`scripts/phase3_placebo_plot.py`
 - **输出**：`output/tables/` (CSV) + `output/figures/` (PNG)

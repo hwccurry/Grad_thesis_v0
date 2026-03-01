@@ -31,8 +31,8 @@
 | 分析项 | 原差异 | 修正方案 | 修正后结果 | 状态 |
 |--------|--------|---------|-----------|------|
 | PSM-DID | Python sklearn vs Stata psmatch2 | 改用 Stata psmatch2 | DivDummy=0.0837 DivPayRate=0.1089 N=8937 | ✅ 已对齐 |
-| 安慰剂检验 | 500次+随机treat vs 参考100次+随机policy_year | 改用 Stata 参考同口径100次 | DivDummy: mean=-0.0027 sd=0.0085; DivPayRate: mean=-0.0026 sd=0.0108 | ✅ 已对齐 |
-| 组间差异检验 | Wald z检验 vs bdiff bootstrap | 改用 Stata bdiff (200 reps, seed=123) | agc: p=0.025/0.020; SOE: p=0.130/0.315; law: p=0.265/0.115; ins: p=0.340/0.385 | ✅ 已对齐 |
+| 安慰剂检验 | 500次+随机treat vs 参考100次+随机policy_year | 改用 Stata 参考同口径100次 | DivDummy: mean=-0.0040 sd=0.0091; DivPayRate: mean=0.0003 sd=0.0092 | ✅ 已对齐 |
+| 组间差异检验 | Wald z检验 vs bdiff bootstrap | 改用 Stata bdiff (200 reps, seed=123) | agc: p=0.025/0.020; SOE: p=0.130/0.315; law: p=0.265/0.115; ins: p=0.340/0.385 | ⚠️ 参数近似对齐（reps与参考不同） |
 | Hausman-Taylor | 未实现 | Stata xthtaylor endog(did) | DivDummy=0.0798*** DivPayRate=0.0960*** N=9004 | ✅ 已补充 |
 | 熵平衡匹配 | 未实现 | Stata ebalance + pweight | DivDummy=0.0917*** DivPayRate=0.1106*** N=9004 | ✅ 已补充 |
 
@@ -57,12 +57,11 @@
 | 排除替代解释 | ✅ 完全对齐 |
 | 剔除再融资 | ✅ 完全对齐 |
 | 异质性分组回归 | ✅ 完全对齐 |
-| 异质性组间差异 | ✅ 完全对齐（bdiff bootstrap） |
+| 异质性组间差异 | ⚠️ 方法对齐（bdiff），参数近似（reps=200 vs 1000） |
 | 经济后果 | ✅ 完全对齐 |
 
-**总评：10/10 项完全对齐，0 项缺失。** Phase 3 已严格复现参考文献2的全部分析。
+**总评：核心环节全部对齐，1项参数设置近似（bdiff reps=200 vs 参考1000）。** Phase 3 已实现高一致度复现，但不宜表述为“逐参数完全一致”。
 
 ## 5) 复现脚本
 - Stata 完整复现脚本：`scripts/phase3_did_stata_replication.do`
 - Python 安慰剂图：`scripts/phase3_placebo_plot.py`
-- 原始 Python 分析（保留作为参考）：`scripts/phase3_did_analysis.py`

@@ -1,0 +1,530 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/mac/Desktop/Grad_thesis/scripts/phase3_placebo_stata100_mcp
+> .log
+  log type:  text
+ opened on:   1 Mar 2026, 21:55:58
+
+. clear all
+
+. set more off
+
+. 
+. local datapath "/Users/mac/Desktop/Grad_thesis/参考文献/2/附件2：数据及程序代
+> 码/数据.dta"
+
+. local outdir "/Users/mac/Desktop/Grad_thesis/output/tables"
+
+. 
+. global ctrl SIZE AGE LEV ROA GROWTH CFO TOP INDEP MH HHI_BANK MKT
+
+. 
+. set seed 123
+
+. 
+. tempfile match_id
+
+. tempfile placebo_divdummy_dta
+
+. tempfile placebo_divpayrate_dta
+
+. 
+. tempname post_divdummy
+
+. postfile `post_divdummy' placebo_coef using "`placebo_divdummy_dta'", replace
+(file
+    /var/folders/r3/_70yflbx3mg61flb11bzsbvr0000gn/T/stata_worker_default_0tz
+    > ihg7x/St80368.00000c not found)
+
+. 
+. forvalues i = 1/100 {
+  2.     quietly {
+  3.         use "`datapath'", clear
+  4.         xtset stkcd year
+  5.         sample 1, count by(stkcd)
+  6.         keep stkcd year
+  7.         rename year policy_year
+  8.         save "`match_id'", replace
+  9. 
+.         merge 1:m stkcd using "`datapath'"
+ 10.         xtset stkcd year
+ 11.         gen treatment = (_merge == 3)
+ 12.         gen period = (year >= policy_year)
+ 13.         gen did0 = treatment * period
+ 14. 
+.         reghdfe DivDummy did0 $ctrl, a(year stkcd) cl(stkcd) keepsingletons
+ 15.         post `post_divdummy' (_b[did0])
+ 16.     }
+ 17. }
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+
+. postclose `post_divdummy'
+
+. 
+. use "`placebo_divdummy_dta'", clear
+
+. export delimited placebo_coef using "`outdir'/did_placebo_DivDummy.csv", repl
+> ace
+file /Users/mac/Desktop/Grad_thesis/output/tables/did_placebo_DivDummy.csv save
+> d
+
+. summarize placebo_coef
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+placebo_coef |        100   -.0039709    .0090558  -.0253852   .0158268
+
+. display "PLACEBO100|DivDummy|mean=" %9.6f r(mean) "|sd=" %9.6f r(sd) "|n=" r(
+> N)
+PLACEBO100|DivDummy|mean=-0.003971|sd= 0.009056|n=100
+
+. 
+. tempname post_divpay
+
+. postfile `post_divpay' placebo_coef using "`placebo_divpayrate_dta'", replace
+(file
+    /var/folders/r3/_70yflbx3mg61flb11bzsbvr0000gn/T/stata_worker_default_0tz
+    > ihg7x/St80368.00000d not found)
+
+. 
+. forvalues i = 1/100 {
+  2.     quietly {
+  3.         use "`datapath'", clear
+  4.         xtset stkcd year
+  5.         sample 1, count by(stkcd)
+  6.         keep stkcd year
+  7.         rename year policy_year
+  8.         save "`match_id'", replace
+  9. 
+.         merge 1:m stkcd using "`datapath'"
+ 10.         xtset stkcd year
+ 11.         gen treatment = (_merge == 3)
+ 12.         gen period = (year >= policy_year)
+ 13.         gen did0 = treatment * period
+ 14. 
+.         reghdfe DivPayRate did0 $ctrl, a(year stkcd) cl(stkcd) keepsingletons
+ 15.         post `post_divpay' (_b[did0])
+ 16.     }
+ 17. }
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+WARNING: Singleton observations not dropped; statistical significance is biased
+>  (link)
+
+. postclose `post_divpay'
+
+. 
+. use "`placebo_divpayrate_dta'", clear
+
+. export delimited placebo_coef using "`outdir'/did_placebo_DivPayRate.csv", re
+> place
+file /Users/mac/Desktop/Grad_thesis/output/tables/did_placebo_DivPayRate.csv sa
+> ved
+
+. summarize placebo_coef
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+placebo_coef |        100    .0002987    .0092057  -.0212769    .020685
+
+. display "PLACEBO100|DivPayRate|mean=" %9.6f r(mean) "|sd=" %9.6f r(sd) "|n=" 
+> r(N)
+PLACEBO100|DivPayRate|mean= 0.000299|sd= 0.009206|n=100
+
+. 
+. capture log close _all

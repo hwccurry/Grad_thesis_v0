@@ -1,8 +1,9 @@
 /*==============================================================================
-  Phase 3: DID准自然实验 —— Stata 严格复现脚本
+  Phase 3: DID准自然实验 —— Stata 高一致度复现脚本
 
-  说明：本脚本严格复现参考文献2的全部分析，使用 Stata reghdfe/psmatch2/
-       ebalance/xthtaylor/bdiff 等命令，确保方法论与参考文献完全对齐。
+  说明：本脚本按参考文献2的 Stata 路径复现核心分析，使用
+       reghdfe/psmatch2/ebalance/xthtaylor/bdiff 等命令。
+       当前 bdiff 默认 reps(200) 作为计算折中（参考 do 为 reps(1000)）。
 
   数据：参考文献/2/附件2：数据及程序代码/数据.dta
   执行：逐段通过 Stata MCP (stata_run_selection) 执行，或本地 Stata 全量执行
@@ -16,6 +17,7 @@ set more off
 * ─── 路径与全局宏 ──────────────────────────────────────────
 local datapath "/Users/mac/Desktop/Grad_thesis/参考文献/2/附件2：数据及程序代码/数据.dta"
 global ctrl SIZE AGE LEV ROA GROWTH CFO TOP INDEP MH HHI_BANK MKT
+local bdiff_reps 200
 
 
 *==============================================================================
@@ -183,47 +185,48 @@ reghdfe DivPayRate did $ctrl if refinance==0, a(year stkcd) cl(stkcd) keepsingle
 
 *==============================================================================
 * 10. 异质性分析 + Bootstrap组间差异检验
+* 注：当前默认 reps(200) 为计算折中；如需逐参数严格同参考 do，可改为 reps(1000)
 *==============================================================================
 
 * 10a. 代理成本 (agc_high)
 use "`datapath'", clear
 reghdfe DivDummy did $ctrl if agc_high==0, a(year stkcd) cl(stkcd) keepsingletons
 reghdfe DivDummy did $ctrl if agc_high==1, a(year stkcd) cl(stkcd) keepsingletons
-bdiff, group(agc_high) model(cap reghdfe DivDummy did $ctrl, absorb(year stkcd) cl(stkcd) keepsingletons) seed(123) reps(200) bs
+bdiff, group(agc_high) model(cap reghdfe DivDummy did $ctrl, absorb(year stkcd) cl(stkcd) keepsingletons) seed(123) reps(`bdiff_reps') bs
 
 reghdfe DivPayRate did $ctrl if agc_high==0, a(year stkcd) cl(stkcd) keepsingletons
 reghdfe DivPayRate did $ctrl if agc_high==1, a(year stkcd) cl(stkcd) keepsingletons
-bdiff, group(agc_high) model(cap reghdfe DivPayRate did $ctrl, absorb(year stkcd) cl(stkcd) keepsingletons) seed(123) reps(200) bs
+bdiff, group(agc_high) model(cap reghdfe DivPayRate did $ctrl, absorb(year stkcd) cl(stkcd) keepsingletons) seed(123) reps(`bdiff_reps') bs
 
 * 10b. 产权性质 (SOE)
 use "`datapath'", clear
 reghdfe DivDummy did $ctrl if SOE==0, a(year stkcd) cl(stkcd) keepsingletons
 reghdfe DivDummy did $ctrl if SOE==1, a(year stkcd) cl(stkcd) keepsingletons
-bdiff, group(SOE) model(cap reghdfe DivDummy did $ctrl, absorb(year stkcd) cl(stkcd) keepsingletons) seed(123) reps(200) bs
+bdiff, group(SOE) model(cap reghdfe DivDummy did $ctrl, absorb(year stkcd) cl(stkcd) keepsingletons) seed(123) reps(`bdiff_reps') bs
 
 reghdfe DivPayRate did $ctrl if SOE==0, a(year stkcd) cl(stkcd) keepsingletons
 reghdfe DivPayRate did $ctrl if SOE==1, a(year stkcd) cl(stkcd) keepsingletons
-bdiff, group(SOE) model(cap reghdfe DivPayRate did $ctrl, absorb(year stkcd) cl(stkcd) keepsingletons) seed(123) reps(200) bs
+bdiff, group(SOE) model(cap reghdfe DivPayRate did $ctrl, absorb(year stkcd) cl(stkcd) keepsingletons) seed(123) reps(`bdiff_reps') bs
 
 * 10c. 法治化水平 (law_high)
 use "`datapath'", clear
 reghdfe DivDummy did $ctrl if law_high==0, a(year stkcd) cl(stkcd) keepsingletons
 reghdfe DivDummy did $ctrl if law_high==1, a(year stkcd) cl(stkcd) keepsingletons
-bdiff, group(law_high) model(cap reghdfe DivDummy did $ctrl, absorb(year stkcd) cl(stkcd) keepsingletons) seed(123) reps(200) bs
+bdiff, group(law_high) model(cap reghdfe DivDummy did $ctrl, absorb(year stkcd) cl(stkcd) keepsingletons) seed(123) reps(`bdiff_reps') bs
 
 reghdfe DivPayRate did $ctrl if law_high==0, a(year stkcd) cl(stkcd) keepsingletons
 reghdfe DivPayRate did $ctrl if law_high==1, a(year stkcd) cl(stkcd) keepsingletons
-bdiff, group(law_high) model(cap reghdfe DivPayRate did $ctrl, absorb(year stkcd) cl(stkcd) keepsingletons) seed(123) reps(200) bs
+bdiff, group(law_high) model(cap reghdfe DivPayRate did $ctrl, absorb(year stkcd) cl(stkcd) keepsingletons) seed(123) reps(`bdiff_reps') bs
 
 * 10d. 机构持股 (insinv_high)
 use "`datapath'", clear
 reghdfe DivDummy did $ctrl if insinv_high==0, a(year stkcd) cl(stkcd) keepsingletons
 reghdfe DivDummy did $ctrl if insinv_high==1, a(year stkcd) cl(stkcd) keepsingletons
-bdiff, group(insinv_high) model(cap reghdfe DivDummy did $ctrl, absorb(year stkcd) cl(stkcd) keepsingletons) seed(123) reps(200) bs
+bdiff, group(insinv_high) model(cap reghdfe DivDummy did $ctrl, absorb(year stkcd) cl(stkcd) keepsingletons) seed(123) reps(`bdiff_reps') bs
 
 reghdfe DivPayRate did $ctrl if insinv_high==0, a(year stkcd) cl(stkcd) keepsingletons
 reghdfe DivPayRate did $ctrl if insinv_high==1, a(year stkcd) cl(stkcd) keepsingletons
-bdiff, group(insinv_high) model(cap reghdfe DivPayRate did $ctrl, absorb(year stkcd) cl(stkcd) keepsingletons) seed(123) reps(200) bs
+bdiff, group(insinv_high) model(cap reghdfe DivPayRate did $ctrl, absorb(year stkcd) cl(stkcd) keepsingletons) seed(123) reps(`bdiff_reps') bs
 
 
 *==============================================================================

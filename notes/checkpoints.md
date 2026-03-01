@@ -1,6 +1,6 @@
 # Thesis Checkpoints
 
-Last updated: 2026-02-25 17:17 +08:00
+Last updated: 2026-03-01 22:08 +08:00
 
 ## CHECKPOINT 0（Phase 0）
 - [x] 数据与代码清点完成
@@ -25,11 +25,12 @@ Last updated: 2026-02-25 17:17 +08:00
 - 更新于：2026-02-27 21:50 +08:00
 
 ## CHECKPOINT 3（Phase 3）
-- [ ] DID基准回归结果稳定
-- [ ] 平行趋势与稳健性检验完成
-- [ ] 异质性结果可解释
-- [ ] 第4章文字草稿完成
-- Status: Pending
+- [x] DID基准回归结果稳定
+- [x] 平行趋势与稳健性检验完成
+- [x] 异质性结果可解释
+- [x] 第4章文字草稿完成
+- Status: Completed
+- 更新于：2026-03-01 22:08 +08:00
 
 ## CHECKPOINT 4（Phase 4）
 - [ ] 五章草稿完整
