@@ -1,6 +1,6 @@
 # Repository Document Tree
 
-更新时间：2026-03-01 (Phase 4 部分收口，摘要待补)
+更新时间：2026-03-01 (Phase 4 完整收口)
 维护规则：每个 Phase 完成后必须同步更新本文件。
 
 ## 根目录
@@ -40,7 +40,7 @@ notes/
 ├── did_design.md                                 # [Phase3新增] DID准自然实验设计文档
 ├── phase3_review_report.md                       # [Phase3收口] 风险审阅与答辩口径
 ├── phase3_reference_do_comparison_20260301.md   # [Phase3收口] 与参考do复跑对照
-└── phase4_consistency_check.md                   # [Phase4新增] 统稿一致性校验（摘要除外）
+└── phase4_consistency_check.md                   # [Phase4] 统稿一致性校验（含摘要复核）
 ```
 - `checkpoints.md`：各阶段完成状态。
 - `data_code_inventory.md`：数据/代码盘点。
@@ -52,19 +52,20 @@ notes/
 - `did_design.md`：Phase3 DID实验设计（政策背景、处理组定义、模型设定、检验策略）。
 - `phase3_review_report.md`：Phase3 风险复核、答辩解释口径与收口结论。
 - `phase3_reference_do_comparison_20260301.md`：参考文献2 do-file 复跑对照与剩余参数差异说明。
-- `phase4_consistency_check.md`：Phase4 一致性校验记录（研究闭环、H1-H3映射、证据边界、摘要待办）。
+- `phase4_consistency_check.md`：Phase4 一致性校验记录（研究闭环、H1-H3映射、证据边界、摘要一致性复核）。
 
 ## output/
 ```text
 output/
 ├── paper/
-│   ├── chapter2_lit_review_draft.md          # 第2章文献综述草稿
+│   ├── chapter2_lit_review_nonmain.md        # 第2章文献综述材料（非正文，供Phase5参考）
 │   ├── chapter2_references_with_links.md
-│   ├── chapter2_references_gbt7714.md
+│   ├── chapter2_references_gbt7714_nonmain.md # 第2章参考文献材料（非正文，供Phase5参考）
 │   ├── chapter3_ml_prediction_draft.md       # [Phase2] 第3章ML预测分析草稿
 │   ├── chapter4_did_evaluation_draft.md      # [Phase3新增] 第4章DID因果评估草稿
 │   ├── chapter1_introduction_draft.md        # [Phase4新增] 第1章绪论草稿
-│   └── chapter5_conclusion_draft.md          # [Phase4新增] 第5章结论与启示草稿
+│   ├── chapter5_conclusion_draft.md          # [Phase4新增] 第5章结论与启示草稿
+│   └── abstract_draft.md                     # [Phase4收口] 中英文摘要
 ├── tables/
 │   ├── phase0_minimal_repro_metrics.csv
 │   ├── 变量定义表-第3章.md                    # [Phase2] 变量定义与样本说明

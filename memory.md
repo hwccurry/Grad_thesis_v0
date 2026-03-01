@@ -20,13 +20,13 @@
 - [2026-02-25 08:50:35 UTC] 决策：针对 `Grad_thesis_v0` 推送失败，确认为远端历史分叉 + HTTPS 在 HTTP/2 下 `git-receive-pack` 二次 POST 返回 400 的组合问题；采用“先合并无关历史，再切到 HTTP/1.1 推送”的稳定方案。
 - [2026-02-25 08:50:35 UTC] 日志：执行 `git merge --allow-unrelated-histories refs/remotes/Grad_thesis_v0/main` 生成合并提交 `d4b8112`；设置 `git config http.version HTTP/1.1` 与 `git config http.postBuffer 524288000` 后，`git push -u Grad_thesis_v0 main` 成功（`fa664d8..d4b8112`）。
 - [2026-02-25 09:20:31 UTC] 决策：执行 Phase1 时采用“先核验文献池后写综述”的顺序，文献以可核验来源为硬约束（DOI 直连优先，其余来自核心期刊参考文献条目）。
-- [2026-02-25 09:20:31 UTC] 日志：新增 `notes/literature_pool_phase1.md`（22篇文献池，近三年8篇，占比36.4%）与 `output/paper/chapter2_lit_review_draft.md`（第2章初稿，按5个视角组织）。
+- [2026-02-25 09:20:31 UTC] 日志：新增 `notes/literature_pool_phase1.md`（22篇文献池，近三年8篇，占比36.4%）与 `output/paper/chapter2_lit_review_draft.md`（第2章初稿，按5个视角组织；现文件名为 `output/paper/chapter2_lit_review_nonmain.md`）。
 - [2026-02-25 09:20:31 UTC] 日志：新增 `notes/hypothesis_mapping.md`，并完成 `INSTRUCTIONS.md`、`notes/checkpoints.md` 的 CHECKPOINT 1 勾选及 `logs/20260225/*` 留痕。
 - [2026-02-25 10:07:30 UTC] 纠偏：Phase1 文献池“近三年占比”存在计数不一致（表内仅4篇），已修正为 27 篇中近三年 9 篇（33.3%），并为每条文献补充可点击链接。
 - [2026-02-25 10:07:30 UTC] Zotero：已生成 `notes/phase1_refs_for_zotero.bib` 并执行导入；`zotero_get_recent` 核验显示新增 27 条 journalArticle（含中英文核心条目）。
-- [2026-02-26 02:00:49 UTC] 日志：新增 `output/paper/chapter2_references_gbt7714.md`（27条GB/T 7714样式+链接），并在 `output/paper/chapter2_lit_review_draft.md` 增加引用入口。
+- [2026-02-26 02:00:49 UTC] 日志：新增 `output/paper/chapter2_references_gbt7714.md`（27条GB/T 7714样式+链接；现文件名为 `output/paper/chapter2_references_gbt7714_nonmain.md`），并在 `output/paper/chapter2_lit_review_draft.md` 增加引用入口（现文件名为 `output/paper/chapter2_lit_review_nonmain.md`）。
 - [2026-02-27 09:07:41 UTC] 决策：文献引用格式以学校模板为准，正文采用作者-年份制（如 World Bank（1994）），章节末文献列表采用顺序编码 [1][2]...。
-- [2026-02-27 09:07:41 UTC] 日志：已更新 `INSTRUCTIONS.md` 引用规范，并将 `output/paper/chapter2_lit_review_draft.md` 中 `Rxx` 占位引用全部替换为作者-年份格式。
+- [2026-02-27 09:07:41 UTC] 日志：已更新 `INSTRUCTIONS.md` 引用规范，并将 `output/paper/chapter2_lit_review_draft.md` 中 `Rxx` 占位引用全部替换为作者-年份格式（现文件名为 `output/paper/chapter2_lit_review_nonmain.md`）。
 - [2026-02-27 10:06:25 UTC] 决策：新增仓库文档树描述文件 `DOC_TREE.md` 作为结构基线，并将”每个Phase完成后更新文档树”写入 `INSTRUCTIONS.md` 全局规则。
 - [2026-02-27 10:06:25 UTC] 日志：已创建 `DOC_TREE.md`，并同步日志到 `logs/20260225/run.log` 与 `events.jsonl`。
 - [2026-02-27 13:50:00 UTC] Phase2完成：第3章机器学习预测分析全部4个Task完成。
@@ -81,3 +81,5 @@
 - [2026-03-01 14:28:35 UTC] 日志：新增 `logs/20260301/run.log`；提交内容覆盖 Phase3 最终口径统一（checkpoint/doc tree/review report）、placebo100 实测结果链路、旧脚本清理与引用修复。
 - [2026-03-01 15:03:27 UTC] 决策：按用户请求执行 Phase4 完成状态核验，采用“规则源文件（INSTRUCTIONS）+阶段状态文件（notes/checkpoints）+产物目录（output/paper）+交付闭环（git/log）”四层口径。
 - [2026-03-01 15:03:27 UTC] 日志：核验结果为“文稿层面基本完成、流程层面未完成”：`notes/checkpoints.md` 将 CHECKPOINT 4 标为 Completed，但 `INSTRUCTIONS.md` 的 CHECKPOINT 4 仍未勾选；`output/paper` 已有第1-5章草稿文件（含新增 chapter1/chapter5），但未发现摘要文件；`git log` 尚无 `phase4:` 提交且工作区含未提交改动（含 chapter1/chapter5 新文件）。
+- [2026-03-01 15:43:18 UTC] 决策：将 `output/paper/chapter2_lit_review_draft.md` 与 `output/paper/chapter2_references_gbt7714.md` 明确标记为“非正文材料”，避免 Phase5 统稿时误作为正文章节输入。
+- [2026-03-01 15:43:18 UTC] 日志：已重命名为 `output/paper/chapter2_lit_review_nonmain.md`、`output/paper/chapter2_references_gbt7714_nonmain.md`，并同步更新 `DOC_TREE.md` 索引。
