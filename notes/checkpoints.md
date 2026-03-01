@@ -1,6 +1,6 @@
 # Thesis Checkpoints
 
-Last updated: 2026-03-01 22:08 +08:00
+Last updated: 2026-03-01 (Phase 4)
 
 ## CHECKPOINT 0（Phase 0）
 - [x] 数据与代码清点完成
@@ -33,10 +33,11 @@ Last updated: 2026-03-01 22:08 +08:00
 - 更新于：2026-03-01 22:08 +08:00
 
 ## CHECKPOINT 4（Phase 4）
-- [ ] 五章草稿完整
+- [x] 五章草稿完整
 - [ ] 摘要与正文一致
-- [ ] 结论不超出证据边界
-- Status: Pending
+- [x] 结论不超出证据边界
+- Status: In Progress
+- 更新于：2026-03-01 23:08 +08:00（摘要待 Claude Code 补写后复核）
 
 ## FINAL CHECKPOINT（Phase 5）
 - [ ] 论文可提交版本完成

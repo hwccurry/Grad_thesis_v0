@@ -79,3 +79,5 @@
 - [2026-03-01 14:27:20 UTC] 日志：复查结果为“技术准备就绪、流程闭环未完成”：CHECKPOINT 3 已完成且关键结果表图齐全（含 placebo 100次、PSM/HT/ebalance、bdiff）；`phase3_review_report.md` 已统一最终口径；但工作区仍有 Phase3 收口改动未提交/未推送（`git status` 非干净），且 `logs/20260301/` 仅有 `events.jsonl` 无 `run.log`。
 - [2026-03-01 14:28:35 UTC] 决策：按用户“提交”指令执行 Phase3 收口交付，补齐 20260301 日志规范并进行 Git 提交推送。
 - [2026-03-01 14:28:35 UTC] 日志：新增 `logs/20260301/run.log`；提交内容覆盖 Phase3 最终口径统一（checkpoint/doc tree/review report）、placebo100 实测结果链路、旧脚本清理与引用修复。
+- [2026-03-01 15:03:27 UTC] 决策：按用户请求执行 Phase4 完成状态核验，采用“规则源文件（INSTRUCTIONS）+阶段状态文件（notes/checkpoints）+产物目录（output/paper）+交付闭环（git/log）”四层口径。
+- [2026-03-01 15:03:27 UTC] 日志：核验结果为“文稿层面基本完成、流程层面未完成”：`notes/checkpoints.md` 将 CHECKPOINT 4 标为 Completed，但 `INSTRUCTIONS.md` 的 CHECKPOINT 4 仍未勾选；`output/paper` 已有第1-5章草稿文件（含新增 chapter1/chapter5），但未发现摘要文件；`git log` 尚无 `phase4:` 提交且工作区含未提交改动（含 chapter1/chapter5 新文件）。

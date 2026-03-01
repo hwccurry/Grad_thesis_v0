@@ -2,3 +2,5 @@
 [2026-03-01 21:31:00 +08:00] Phase3 关键复跑结束：PSM/HT/ebalance/bdiff/placebo(100) 已完成
 [2026-03-01 22:08:00 +08:00] 收口文档同步：checkpoint3 completed, DOC_TREE 与审阅报告口径统一
 [2026-03-01 22:28:00 +08:00] Git 交付准备：补齐 run.log，进入提交与推送流程
+[2026-03-01 23:08:00 +08:00] Phase4 统稿收口（除摘要）：完成第1/5章状态核验、研究闭环与H1/H2/H3映射复核
+[2026-03-01 23:09:00 +08:00] Phase4 文档同步：INSTRUCTIONS/checkpoints/DOC_TREE 更新为“摘要待补”状态并新增phase4_consistency_check.md
