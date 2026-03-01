@@ -1,4 +1,10 @@
 检验,被解释变量,变量,系数,t值,p值,显著性,N
+PSM-DID(psmatch2),DivDummy,did,0.0837,7.9200,0.0000,***,8937
+PSM-DID(psmatch2),DivPayRate,did,0.1089,7.4500,0.0000,***,8937
+Hausman-Taylor估计,DivDummy,did,0.0798,8.5900,0.0000,***,9004
+Hausman-Taylor估计,DivPayRate,did,0.0960,7.7900,0.0000,***,9004
+熵平衡匹配,DivDummy,did,0.0917,7.3100,0.0000,***,9004
+熵平衡匹配,DivPayRate,did,0.1106,5.7100,0.0000,***,9004
 排除资本留存,DivDummy,did,0.0851,6.7019,0.0000,***,9004
 排除资本留存,DivDummy,did_CapAR,-0.0104,-0.4460,0.6556,,9004
 排除资本留存,DivPayRate,did,0.1099,6.2188,0.0000,***,9004
@@ -9,5 +15,3 @@
 排除资产增长,DivPayRate,did_AssetGR,0.0533,1.4125,0.1578,,9004
 剔除再融资,DivDummy,did,0.0854,6.8145,0.0000,***,8845
 剔除再融资,DivPayRate,did,0.1078,6.2837,0.0000,***,8845
-PSM-DID,DivDummy,did,0.0828,6.8022,0.0000,***,8816
-PSM-DID,DivPayRate,did,0.1082,6.4505,0.0000,***,8816

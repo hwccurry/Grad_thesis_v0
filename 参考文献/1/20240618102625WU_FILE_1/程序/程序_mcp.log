@@ -1,0 +1,18 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/mac/Desktop/Grad_thesis/参考文献/1/20240618102625WU_FILE_1/
+> 程序/程序_mcp.log
+  log type:  text
+ opened on:   1 Mar 2026, 20:36:30
+
+. global dir0 "D:\111学习资料\111论文\股利分配理论\陈运森+论文附件\数据"
+
+. global dir1 "D:\111学习资料\111论文\股利分配理论\陈运森+论文附件\程序"
+
+. 
+. cd $dir1
+unable to change to D:\111学习资料\111论文\股利分配理论\陈运森+论文附件\程序
+r(170);
+r(170);
+
+. capture log close _all

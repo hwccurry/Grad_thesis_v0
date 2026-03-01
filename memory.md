@@ -46,3 +46,22 @@
 - [2026-02-28 08:50:00 UTC] 经济后果：交易量+0.0754**(当月), 换手率+0.1785**(当月), 错误定价-0.0510**(当月)/-0.0530**(次月)——政策改善市场流动性和定价效率。
 - [2026-02-28 08:50:00 UTC] 产出清单：scripts/phase3_did_analysis.py, did_descriptive_stats.csv, did_baseline_regression.csv, did_event_study_*.csv, did_placebo_*.csv, did_robustness_checks.csv, did_heterogeneity.csv, did_economic_consequences.csv, did_parallel_trends.png(图11), did_placebo_test.png(图12), chapter4_did_evaluation_draft.md(~5000字)。
 - [2026-02-28 08:50:00 UTC] 编号更新：第4章使用表7—表11、图11—图12；后续第5章从表12、图13开始接续。
+- [2026-02-28 11:35:33 UTC] 审核：完成 `notes/phase3_review_report.md` 风险复核，并对照 `参考文献/2/附件2：数据及程序代码/程序代码.do` 与 `参考文献/2/附件3：图表.docx` 做一致性检查。
+- [2026-02-28 11:35:33 UTC] 关键发现：与参考文献2存在方法差异（placebo 500次且随机treat、PSM实现口径不同、异质性组间差异用Wald替代bdiff bootstrap、未复现Hausman-Taylor与熵平衡）；部分显著性结论与附件3表格不一致（尤其经济后果与机构持股高组）。
+- [2026-02-28 11:35:33 UTC] 决策建议：答辩前优先人工复核 placebo/PSM/显著性口径，并在正文区分“严格复刻参考文献2结果”与“Python扩展实现结果”，避免将两者表述为完全等价。
+- [2026-02-28 12:49:39 UTC] 日志：按用户要求在 `notes/phase3_review_report.md` 增加显式风险标注（`【需你审核】/【与参考文献2不一致】/【建议改进】`），并新增“重点标注清单”用于答辩前逐项确认。
+- [2026-02-28 13:50:14 UTC] 决策：按用户请求直接实跑仓库内 `.do` 文件，使用本机可执行文件 `/Applications/StataNow/StataMP.app/Contents/MacOS/StataMP` 以 batch 模式执行。
+- [2026-02-28 13:50:14 UTC] 日志：`参考文献/2/附件2：数据及程序代码/程序代码.do` 执行到 `sum2docx` 报 `r(199)`（未安装 user-written command）；`参考文献/1/20240618102625WU_FILE_1/程序/程序.do` 在 `cd $dir1` 报 `r(170)`（硬编码 Windows 路径不可用）。
+- [2026-02-28 14:44:24 UTC] 决策：按用户给定仓库 `hanlulong/stata-mcp` 路线重装，Codex 配置回退为 README 推荐项：`[mcp_servers.stata-mcp] command="mcp-proxy" args=["http://localhost:4000/mcp"]`。
+- [2026-02-28 14:44:24 UTC] 日志：已确认 VS Code 扩展 `deepecon.stata-mcp-0.4.9` 已安装，并补齐其 `.venv` 缺失依赖（`ensurepip` + `pip install -r src/requirements.txt`）。
+- [2026-02-28 14:44:24 UTC] 阻塞：本机终端环境下 `pystata.config.init('mp')` 在 `/Applications/StataNow` 场景会直接导致 Python 进程退出（非可捕获异常），引发 `session default init timeout`，因此本轮仍无法在本会话内稳定拉起 `localhost:4000/mcp`。
+- [2026-03-01 06:04:02 UTC] 决策：按用户请求验证 `stata-mcp` 是否可在当前仓库执行 `.do`，采用“双路径”测试：先跑仓库现有 dofile，再跑最小 smoke dofile（`stata_mcp_smoke.do`）。
+- [2026-03-01 06:04:02 UTC] 日志：`mcp__stata-mcp__stata_do` 对两类 dofile 均返回“`Failed to read logfile ... No such file or directory`”，`/Users/mac/Documents/stata-mcp-folder/stata-mcp-log` 无任何生成日志；终端直连 `stata-mp` 复现 `Cannot find license file stata.lic`，确认当前会话下 Stata CLI 许可证/运行时路径不可用，导致 `stata-mcp` 无法完成实际执行。
+- [2026-03-01 12:38:49 UTC] 决策：按用户“用 Stata MCP 跑一次 do 文件试试”的请求，优先选择仓库根目录的最小测试脚本 `stata_mcp_smoke.do` 做 smoke test，避免外部路径/依赖干扰。
+- [2026-03-01 12:38:49 UTC] 日志：调用 `mcp__stata-mcp__stata_run_file` 执行 `/Users/mac/Desktop/Grad_thesis/stata_mcp_smoke.do` 成功，返回输出 `stata-mcp smoke test ok`。
+- [2026-03-01 12:50:59 UTC] 决策：按用户请求用 Stata MCP 复跑参考文献2 do 程序并对照 Phase3，采用“分段执行关键块”策略（`stata_run_selection`），规避 `stata_run_file` 的 120s 超时限制。
+- [2026-03-01 12:50:59 UTC] 日志：在 `参考文献/2/附件2：数据及程序代码/程序代码.do` 所需依赖中补齐 `sum2docx`、`psmatch2`、`ebalance`、`bdiff`；复跑结果显示基准DID/平行趋势/替代解释/再融资剔除/经济后果/异质性分组系数与 `output/tables/*.csv` 一致，PSM与组间差异检验存在口径差异；确认原 do 含 `bdiff, group(high1)` 变量名错误（`r(111)`）；对照结论落地到 `notes/phase3_reference_do_comparison_20260301.md`。
+- [2026-03-01 12:53:31 UTC] 决策：按用户同意新增“可一键执行”的参考 do 副本，不改动原始 `程序代码.do`，通过修复明显报错点并内置依赖检查提升可执行性。
+- [2026-03-01 12:53:31 UTC] 日志：新增并修改 `参考文献/2/附件2：数据及程序代码/程序代码_mcp_fixed.do`：添加 `set more off`、`log using 程序代码_mcp_fixed.log`、`sum2docx/psmatch2/ebalance/bdiff` 自动安装、`xthtaylor` 前 `xtset stkcd year`，并将 `bdiff, group(high1)` 修正为 `group(law_high)`；已用 `bdiff ... group(law_high)`（reps=10）实测通过，无 `r(111)`。
+- [2026-03-01 12:56:37 UTC] 决策：按用户要求复核 `high1` 变量含义，采用“代码+数据双证据”核验：仓库全文搜索 + `数据.dta` 变量字典检查。
+- [2026-03-01 12:56:37 UTC] 日志：`rg` 显示 `high1` 仅出现在 `程序代码.do` 的 `bdiff, group(high1)` 一行；Stata `ds *high*` 仅有 `law_high/agc_high/insinv_high`，`confirm variable high1` 返回不存在；结合该行位于“异质性分析——法治化水平”段落，判定 `high1` 为笔误，应为 `law_high`。
