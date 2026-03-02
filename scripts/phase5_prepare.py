@@ -23,7 +23,7 @@ NOTES_DIR = ROOT / "notes"
 FULL_PAPER_PARTS = [
     ("摘要", PAPER_DIR / "abstract_draft.md"),
     ("第一章 绪论", PAPER_DIR / "chapter1_introduction_draft.md"),
-    ("第二章 文献综述与理论基础", PAPER_DIR / "chapter2_lit_review_nonmain.md"),
+    ("第二章 文献综述与理论基础", PAPER_DIR / "chapter2_lit_review.md"),
     ("第三章 机器学习预测分析", PAPER_DIR / "chapter3_ml_prediction_draft.md"),
     ("第四章 DID因果评估", PAPER_DIR / "chapter4_did_evaluation_draft.md"),
     ("第五章 结论与启示", PAPER_DIR / "chapter5_conclusion_draft.md"),

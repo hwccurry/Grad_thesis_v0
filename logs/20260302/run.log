@@ -23,3 +23,17 @@ Model comparison: skipped (--plots-only)
 PCA Analysis (Phase5 v2) - 2026-03-02 19:00:07
 K=18, cumulative_var=0.8136
 Model comparison: skipped (--plots-only)
+[2026-03-02 19:58:22 +0800] Phase6 Task6.1: 修复主稿图链接为 figures_v2，修复 scripts/phase5_prepare.py 第2章源路径，重新导出 output/paper/论文完整版_phase6.docx。
+[2026-03-02 19:58:22 +0800] Phase6 Task6.2: 执行 scripts/phase5_did_quickcheck.py 复验 DID 核心系数，与 did_baseline_regression.csv 一致。
+[2026-03-02 19:58:22 +0800] Phase6 Task6.2: 新建并执行 scripts/phase6_audit.py，输出 notes/phase6_delivery_audit.md（图像DPI/编号连续性/占位符/Docx结构均通过）。
+[2026-03-02 19:58:22 +0800] Phase6 风险控制: 完成第1章与第2章开头段落降重改写；INSTRUCTIONS.md 与 DOC_TREE.md 已同步 Phase6 进行中状态。
+
+[2026-03-02 22:15:37 +0800] Phase6 completion session:
+  - Ran phase6_format_tables.py: 11 tables formatted with three-line borders
+  - Added reference list (23 entries) to 论文完整版.md
+  - Fixed duplicate figure captions (12 figures)
+  - Rewrote 8 HIGH plagiarism risk paragraphs (Ch1.1, Ch2.1, Ch2.2.3, Ch2.2.4, Ch3.1, Ch3.3.1, Ch4.1.1)
+  - Regenerated DOCX with pandoc + reference-doc template
+  - Re-applied three-line table formatting
+  - Updated INSTRUCTIONS.md checklist and DOC_TREE.md
+  - Remaining: page numbers/headers need manual Word verification

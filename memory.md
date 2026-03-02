@@ -138,3 +138,15 @@
 - [2026-03-02 11:45:22 UTC] 日志：执行 `git push Grad_thesis_v0 main` 返回 `Everything up-to-date`；当前仍存在本地未提交修改与未跟踪文件，尚未形成可推送的新提交。
 - [2026-03-02 11:47:25 UTC] 决策：按用户确认执行 `git add + commit + push` 收口当前改动，采用“保留业务改动、排除超大模型文件与临时缓存”策略。
 - [2026-03-02 11:47:25 UTC] 日志：已提交 `6d27fb1` 并推送到 `Grad_thesis_v0/main`（`b948138..6d27fb1`）；提交包含 Phase5 图表规范化产物（`output/figures_v2`/`v3`）、脚本更新、日志与文档同步；`output/models/`、`scripts/__pycache__/` 与 Office 锁文件未入库。
+
+- [2026-03-02 11:58:52 UTC] 决策：按用户“检查仓库状态，没问题则开始 Phase6”请求，先执行仓库健康核验（git 状态/关键产物/Phase6前置条件），再进入 Phase6 自动化执行链路。
+- [2026-03-02 11:58:52 UTC] 日志：发现并修复两项一致性问题：`scripts/phase5_prepare.py` 第2章源文件路径改为 `chapter2_lit_review.md`；第3/4章及 `论文完整版.md` 图链接统一切换到 `output/figures_v2/`。
+- [2026-03-02 11:58:52 UTC] 日志：新增 `scripts/phase6_audit.py`，产出 `notes/phase6_delivery_audit.md`；完成 `pandoc` 模板导出 `output/paper/论文完整版_phase6.docx`；自动审计通过（占位符=0、图12张 DPI>=300、表图编号连续、DID复验一致）。
+- [2026-03-02 11:58:52 UTC] 状态同步：已更新 `INSTRUCTIONS.md`（Phase6进行中勾选）、`DOC_TREE.md`（新增 phase6 脚本/审计/docx 索引）、`logs/20260302/run.log` 与 `events.jsonl`；并完成第1章与第2章开头段落一轮降重改写。
+- [2026-03-02 13:15:40 UTC] 决策：按用户要求检索“经济学论文三线表格式”，采用“期刊官方作者指南 + 排版权威文档”双来源口径，优先给出可直接执行的 Word/LaTeX 规则。
+- [2026-03-02 13:15:40 UTC] 日志：已核验 AEA AER submission style（表格仅保留 horizontal rules、标题/注释位置、统计呈现约束）与 CTAN booktabs 指南（top/mid/bottom 三线、禁用 vertical/double rules），并补充中文学术期刊写作规范来源用于“三线表”中文口径说明；输出面向经济学论文的最小可执行模板与期刊差异提醒。
+- [2026-03-02 13:43:50 UTC] 决策：按用户“核查 Phase6 完成情况并整理最简新文件夹”请求，采用“状态核查 + 最小交付打包 + 仓库树与依赖关系文档化”三步执行，优先复用现有审计与追溯产物。
+- [2026-03-02 13:43:50 UTC] 日志：新建 `output/phase6_minimal_bundle/`，最简收敛包含 `paper/`（`论文完整版.md` + `论文完整版_phase6.docx`）、`figures/`（主稿实际引用12图）、`tables/`（关键结果表16个CSV）、`scripts/`（最小复现脚本）、`dependencies/`（`requirements_min.txt` + `system_dependencies.md`）、`docs/`（`phase6_completion_check.md` + `repo_tree_and_dependency_map.md` + 审计/追溯文档）。
+- [2026-03-02 13:43:50 UTC] 结论：Phase6 当前为“进行中未闭环”——Task 6.2 与 6.3 已完成且自动化审计通过，但 Task 6.1 的 Word 人工终检项与 FINAL CHECKPOINT“论文可提交版本完成”尚未勾选。
+- [2026-03-02 13:52:18 UTC] 决策：按用户请求增强 /Users/mac/Desktop/phase6_minimal_bundle/README.md，补充最简交付包文档树、文件作用、文件交叉联系与图表-主稿映射。
+- [2026-03-02 13:52:18 UTC] 日志：README 已新增 6 个结构化板块（目标、文档树、各文件作用、核心依赖链、图1-图12映射、表1-表11映射）；并明确标注最简包当前未单独附带的表源文件（rf_yearly_r2.csv、did_descriptive_stats.csv），避免追溯歧义。

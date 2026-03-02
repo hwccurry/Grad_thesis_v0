@@ -65,7 +65,7 @@ $$Y_{it} = \alpha_i + \lambda_t + \beta \cdot DID_{it} + \gamma' X_{it} + \varep
 
 图11展示了DivDummy和DivPayRate的事件研究系数及其99%置信区间。
 
-![图11 平行趋势检验（事件研究图）](../figures/did_parallel_trends.png)
+![图11 平行趋势检验（事件研究图）](../figures_v2/did_parallel_trends.png)
 
 **图11 平行趋势检验（事件研究图）**
 
@@ -97,7 +97,7 @@ $$Y_{it} = \alpha_i + \lambda_t + \beta \cdot DID_{it} + \gamma' X_{it} + \varep
 
 **（一）安慰剂检验。** 为排除基准结果由随机因素驱动的可能性，本章参照参考文献的做法进行100次随机政策时间的安慰剂检验：每次迭代中，对每家公司随机抽取一个年份作为伪政策时点，据此重新构造伪DID变量并估计系数。该检验仅随机化政策时间而保持处理组身份不变，严格遵循"反事实政策时间"的安慰剂逻辑。图12展示了安慰剂系数的核密度分布。
 
-![图12 安慰剂检验（100次模拟）](../figures/did_placebo_test.png)
+![图12 安慰剂检验（100次模拟）](../figures_v2/did_placebo_test.png)
 
 **图12 安慰剂检验（100次随机模拟）**
 

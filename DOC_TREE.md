@@ -1,6 +1,6 @@
 # Repository Document Tree
 
-更新时间：2026-03-02 (Phase 5 收口状态同步)
+更新时间：2026-03-02 (Phase 6 主体完成：三线表格式化、参考文献补齐、查重段落改写)
 维护规则：每个 Phase 完成后必须同步更新本文件。
 
 ## 根目录
@@ -29,7 +29,6 @@ Grad_thesis/
 ## notes/
 ```text
 notes/
-├── checkpoints.md
 ├── data_code_inventory.md
 ├── path_unification.md
 ├── repro_env.md
@@ -40,9 +39,11 @@ notes/
 ├── phase3_review_report.md                       # [Phase3收口] 风险审阅与答辩口径
 ├── phase3_reference_do_comparison_20260301.md   # [Phase3收口] 与参考do复跑对照
 ├── phase4_consistency_check.md                   # [Phase4] 统稿一致性校验（含摘要复核）
-└── phase5_traceability_matrix.md                 # [Phase5收口] 结论-图表-脚本追溯矩阵
+├── phase5_traceability_matrix.md                 # [Phase5收口] 结论-图表-脚本追溯矩阵
+├── phase5_test/                                  # [Phase5测试] 图表质量测试与对比样图
+├── phase6_benchmark/                             # [Phase6基准] 学校模板页面渲染样图
+└── phase6_delivery_audit.md                      # [Phase6新增] 自动化交付审计报告
 ```
-- `checkpoints.md`：各阶段完成状态。
 - `data_code_inventory.md`：数据/代码盘点。
 - `path_unification.md`：路径统一策略与改造记录。
 - `repro_env.md`：最小复现环境与命令。
@@ -54,6 +55,9 @@ notes/
 - `phase3_reference_do_comparison_20260301.md`：参考文献2 do-file 复跑对照与剩余参数差异说明。
 - `phase4_consistency_check.md`：Phase4 一致性校验记录（研究闭环、H1-H3映射、证据边界、摘要一致性复核）。
 - `phase5_traceability_matrix.md`：Phase5 图表-结论-脚本追溯关系表（已切换至 `figures_v2`）。
+- `phase5_test/`：Phase5 图表质量测试资产（DPI/字体/尺寸验证脚本与截图）。
+- `phase6_benchmark/`：Phase6 模板对照图（用于 Word 排版基准比对）。
+- `phase6_delivery_audit.md`：Phase6 自动化审计（图像、编号、DID复验、docx 结构摘要）。
 
 ## output/
 ```text
@@ -67,7 +71,8 @@ output/
 │   ├── chapter1_introduction_draft.md        # [Phase4新增] 第1章绪论草稿
 │   ├── chapter5_conclusion_draft.md          # [Phase4新增] 第5章结论与启示草稿
 │   ├── abstract_draft.md                     # [Phase4收口] 中英文摘要
-│   └── 论文完整版.md                          # [Phase5准备] 合并主稿（待模板排版）
+│   ├── 论文完整版.md                          # [Phase6完成] 合并主稿（含参考文献列表23篇+查重改写）
+│   └── 论文完整版_phase6.docx                # [Phase6完成] 模板导出版（三线表+标题格式化）
 ├── tables/
 │   ├── phase0_minimal_repro_metrics.csv
 │   ├── 变量定义表-第3章.md                    # [Phase2] 变量定义与样本说明
@@ -111,6 +116,8 @@ output/
 │   ├── pca_loading_heatmap.png                # [Phase5] PCA载荷热力图（灰度色板）
 │   ├── did_parallel_trends.png                # [Phase5] DID平行趋势图（Python独立脚本生成）
 │   └── did_placebo_test.png                   # [Phase5] 安慰剂检验图（灰色直方图+黑色KDE）
+├── figures_v3/                                    # [Phase5测试] 备份迭代图（保留，不用于正文引用）
+│   └── *.png
 └── models/                                        # [Phase5] 持久化训练模型（避免重训）
     ├── rf_model.joblib                        # RF 5000 trees 模型
     └── gbdt_model.joblib                      # GBDT 3000 trees 模型
@@ -132,8 +139,12 @@ logs/
 │   ├── run.log                                # [Phase3收口 + Phase4统稿留痕]
 │   └── events.jsonl                           # [Phase3复跑收口 + Phase4统稿留痕]
 └── 20260302/
-    ├── run.log                                # [Phase5准备] 主稿合并/追溯矩阵
-    ├── events.jsonl                           # [Phase5准备] 过程化事件留痕
+    ├── run.log                                # [Phase5/6] 主稿合并、审计与复验留痕
+    ├── events.jsonl                           # [Phase5/6] 过程化事件留痕
+    ├── phase5_v3figure_run.log                # [Phase5测试] v3图批量生成日志
+    ├── stata_update_all.log                   # [Phase5排障] Stata 更新与Mata修复入口日志
+    ├── stata_restore_mata_funcs.log           # [Phase5排障] Mata函数恢复日志
+    ├── stata_mata_function_battery2.log       # [Phase5排障] Mata函数兼容性测试日志
     ├── stata_phase5_smoke.log                 # [Phase5准备] Stata CLI smoke 结果
     ├── stata_phase5_baseline_check.log        # [Phase5准备] Stata reghdfe 报错留痕(r3499)
     └── stata_phase5_baseline_xtreg_check.log  # [Phase5准备] Stata xtreg 报错留痕(r3499)
@@ -155,7 +166,10 @@ scripts/
 ├── phase3_placebo_plot.py                     # [Phase5改写] 安慰剂检验密度图
 ├── phase5_did_trends_plot.py                  # [Phase5新建] DID平行趋势事件研究图
 ├── phase5_prepare.py                          # [Phase5准备] 生成完整版/追溯矩阵
-└── phase5_did_quickcheck.py                   # [Phase5准备] PanelOLS复验DID基准系数
+├── phase5_did_quickcheck.py                   # [Phase5准备] PanelOLS复验DID基准系数
+├── phase6_audit.py                            # [Phase6新增] 自动化交付审计脚本
+├── phase6_format_tables.py                    # [Phase6新增] DOCX三线表格式化脚本
+└── stata_mata_compat.do                       # [Phase5排障] Mata 库兼容修复脚本
 ```
 
 ## 参考文献/
