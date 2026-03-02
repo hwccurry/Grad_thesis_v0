@@ -1,0 +1,21 @@
+---------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/mac/Desktop/Grad_thesis/logs/20260302/stata_mata_tokenget_test.log
+  log type:  text
+ opened on:   2 Mar 2026, 19:26:19
+
+. capture noisily mata: st_numscalar("__a", rows(tokenget("a b")))
+                 <istmt>:  3499  tokenget() not found
+
+. noi di "tokenget_rc=" _rc
+tokenget_rc=3499
+
+. capture noisily di "rows=" scalar(__a)
+rows=__a not found
+
+. log close
+      name:  <unnamed>
+       log:  /Users/mac/Desktop/Grad_thesis/logs/20260302/stata_mata_tokenget_test.log
+  log type:  text
+ closed on:   2 Mar 2026, 19:26:19
+---------------------------------------------------------------------------------------------------------------

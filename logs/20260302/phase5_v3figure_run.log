@@ -1,0 +1,36 @@
+===== phase5 v3 figure run log =====
+Date: 2026-03-02 (+08:00)
+Goal: 生成 output/figures_v3 备份版（允许彩色，300 DPI，复用既有模型）
+
+[Step A] 脚本参数化改造（默认行为不变）
+- scripts/phase2_ale_pdp_plots.py
+  - 新增 THESIS_FIG_SUBDIR（默认 figures_v2）
+  - 新增 THESIS_COLOR_MODE（mono/color）
+  - 保留“优先加载 output/models/*.joblib，否则训练并持久化”逻辑
+- scripts/phase2_pca_analysis.py
+  - 新增 THESIS_FIG_SUBDIR（默认 figures_v2）
+- scripts/phase3_placebo_plot.py
+  - 新增 THESIS_FIG_SUBDIR 与 THESIS_COLOR_MODE
+- scripts/phase5_did_trends_plot.py
+  - 新增 THESIS_FIG_SUBDIR 与 THESIS_COLOR_MODE
+
+[Step B] 运行说明
+- 曾尝试全量运行 `phase2_ale_pdp_plots.py` 到 figures_v3（彩色模式），
+  ALE + feature importance 22 张已写出；PDP brute-force 计算耗时过长后停止该进程。
+- 为保证本轮及时可用：
+  - 复用已验证的 v2 PDP 图（2 张）复制到 figures_v3；
+  - 运行以下命令补齐其余图：
+    THESIS_FIG_SUBDIR=figures_v3 THESIS_COLOR_MODE=color /Users/mac/miniconda3/bin/python scripts/phase2_pca_analysis.py --plots-only
+    THESIS_FIG_SUBDIR=figures_v3 THESIS_COLOR_MODE=color /Users/mac/miniconda3/bin/python scripts/phase3_placebo_plot.py
+    THESIS_FIG_SUBDIR=figures_v3 THESIS_COLOR_MODE=color /Users/mac/miniconda3/bin/python scripts/phase5_did_trends_plot.py
+
+[Step C] 验收
+- output/figures_v3: 28 张 PNG（缺失 0）
+- DPI: 全部 >= 300（PIL 检测）
+- 彩色性: 关键图（feature_importance/did/pca）检测到非灰度像素
+- 模型复用: output/models/rf_model.joblib 与 gbdt_model.joblib 时间戳未更新
+  - rf_model.joblib: 2026-03-02 17:14:30
+  - gbdt_model.joblib: 2026-03-02 17:08:48
+
+Notes:
+- v3 中 PDP 两张图来自 v2 复制（不影响分辨率与尺寸；若你要“PDP 也彩色并且全量重算”，可单独继续跑 phase2_ale_pdp_plots.py 的 PDP 段）。

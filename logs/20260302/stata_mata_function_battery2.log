@@ -1,0 +1,112 @@
+---------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/mac/Desktop/Grad_thesis/logs/20260302/stata_mata_function_battery2.log
+  log type:  text
+ opened on:   2 Mar 2026, 19:25:20
+
+. 
+. noi di "=== mata function battery2 ==="
+=== mata function battery2 ===
+
+. 
+. capture noisily mata: st_numscalar("__tmp", 1+1)
+
+. noi di "1+1 rc=" _rc
+1+1 rc=0
+
+. capture noisily di "val=" scalar(__tmp)
+val=2
+
+. 
+. capture noisily mata: st_numscalar("__tmp", sqrt(4))
+
+. noi di "sqrt rc=" _rc
+sqrt rc=0
+
+. capture noisily di "val=" scalar(__tmp)
+val=2
+
+. 
+. capture noisily mata: st_numscalar("__tmp", abs(-3))
+
+. noi di "abs rc=" _rc
+abs rc=0
+
+. capture noisily di "val=" scalar(__tmp)
+val=3
+
+. 
+. capture noisily mata: st_numscalar("__tmp", rows((1,2,3)))
+
+. noi di "rows rc=" _rc
+rows rc=0
+
+. capture noisily di "val=" scalar(__tmp)
+val=1
+
+. 
+. capture noisily mata: st_numscalar("__tmp", cols((1,2,3)))
+
+. noi di "cols rc=" _rc
+cols rc=0
+
+. capture noisily di "val=" scalar(__tmp)
+val=3
+
+. 
+. capture noisily mata: st_local("__tok", invtokens(tokens("a b"), ","))
+                 <istmt>:  3499  invtokens() not found
+
+. noi di "tokens rc=" _rc
+tokens rc=3499
+
+. capture noisily di "tok=`__tok'"
+tok=
+
+. 
+. capture noisily mata: st_numscalar("__tmp", max((1,2,3)))
+                 <istmt>:  3499  max() not found
+
+. noi di "max rc=" _rc
+max rc=3499
+
+. capture noisily di "val=" scalar(__tmp)
+val=3
+
+. 
+. capture noisily mata: st_numscalar("__tmp", min((1,2,3)))
+                 <istmt>:  3499  min() not found
+
+. noi di "min rc=" _rc
+min rc=3499
+
+. capture noisily di "val=" scalar(__tmp)
+val=3
+
+. 
+. capture noisily mata: st_local("__pl", invtokens(pathlist(), ";"))
+                 <istmt>:  3499  pathlist() not found
+
+. noi di "pathlist rc=" _rc
+pathlist rc=3499
+
+. capture noisily di "pathlist=`__pl'"
+pathlist=
+
+. 
+. capture noisily mata: st_numscalar("__tmp", strtoreal("1.2"))
+                 <istmt>:  3499  strtoreal() not found
+
+. noi di "strtoreal rc=" _rc
+strtoreal rc=3499
+
+. capture noisily di "val=" scalar(__tmp)
+val=3
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/mac/Desktop/Grad_thesis/logs/20260302/stata_mata_function_battery2.log
+  log type:  text
+ closed on:   2 Mar 2026, 19:25:20
+---------------------------------------------------------------------------------------------------------------

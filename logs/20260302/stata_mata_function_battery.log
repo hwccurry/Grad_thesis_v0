@@ -1,0 +1,27 @@
+---------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/mac/Desktop/Grad_thesis/logs/20260302/stata_mata_function_battery.log
+  log type:  text
+ opened on:   2 Mar 2026, 19:25:01
+
+. 
+. noi di "=== mata function battery ==="
+=== mata function battery ===
+
+. 
+. local tests "(1+1) sqrt(4) abs(-3) rows((1,2,3)) cols((1,2,3)) tokens(\"a b\") max((1,2,3)) min((1,2,3)) path
+> list() strtoreal(\"1.2\")"
+
+. 
+. mata:
+------------------------------------------------- mata (type end to exit) -------------------------------------
+: void test_one(string scalar expr) {
+>     real scalar rc
+>     rc = _stata(sprintf("capture mata: st_numscalar(\"__tmp\", %s)", expr), 1)
+invalid expression
+(5 lines skipped)
+---------------------------------------------------------------------------------------------------------------
+r(3000);
+
+end of do-file
+r(3000);

@@ -1,0 +1,122 @@
+---------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/mac/Desktop/Grad_thesis/logs/20260302/stata_env_diag.log
+  log type:  text
+ opened on:   2 Mar 2026, 19:14:37
+
+. 
+. noi di "=== ENV DIAG START ==="
+=== ENV DIAG START ===
+
+. noi di "c(version)=" c(version)
+c(version)=18
+
+. noi di "c(stata_version)=" c(stata_version)
+c(stata_version)=18
+
+. noi di "c(flavor)=" c(flavor)
+c(flavor)=IC
+
+. noi di "c(os)=" c(os)
+c(os)=MacOSX
+
+. noi di "c(sysdir_stata)=" c(sysdir_stata)
+c(sysdir_stata)=/Applications/Stata/
+
+. noi di "c(sysdir_base)=" c(sysdir_base)
+c(sysdir_base)=/Applications/Stata/ado/base/
+
+. noi di "c(sysdir_plus)=" c(sysdir_plus)
+c(sysdir_plus)=/Users/mac/Library/Application Support/Stata/ado/plus/
+
+. noi di "c(sysdir_personal)=" c(sysdir_personal)
+c(sysdir_personal)=/Users/mac/Documents/Stata/ado/personal/
+
+. noi di "c(sysdir_oldplace)=" c(sysdir_oldplace)
+c(sysdir_oldplace)=~/ado/
+
+. 
+. capture noisily which _coef_table
+/Applications/Stata/ado/base/_/_coef_table.ado
+*! version 4.3.16  16feb2023
+
+. capture noisily which xtreg
+/Applications/Stata/ado/base/x/xtreg.ado
+*! version 1.9.1  10feb2021
+
+. capture noisily which reghdfe
+/Users/mac/Library/Application Support/Stata/ado/plus/r/reghdfe.ado
+*! version 6.12.5 27Dec2023
+
+. capture noisily which findfile
+/Applications/Stata/ado/base/f/findfile.ado
+*! version 1.0.6  20oct2005
+
+. capture noisily which strtoreal
+command strtoreal not found as either built-in or ado-file
+
+. 
+. noi di "--- adopath ---"
+--- adopath ---
+
+. adopath
+  [1]  (BASE)      "/Applications/Stata/ado/base/"
+  [2]  (SITE)      "/Applications/Stata/ado/site/"
+  [3]              "."
+  [4]  (PERSONAL)  "/Users/mac/Documents/Stata/ado/personal/"
+  [5]  (PLUS)      "/Users/mac/Library/Application Support/Stata/ado/plus/"
+  [6]  (OLDPLACE)  "~/ado/"
+
+. 
+. noi di "--- mata quick test ---"
+--- mata quick test ---
+
+. capture noisily mata: st_numscalar("__m1", strtoreal("1.23"))
+                 <istmt>:  3499  strtoreal() not found
+
+. noi di "mata_strtoreal_rc=" _rc
+mata_strtoreal_rc=3499
+
+. capture noisily di "mata_strtoreal_val=" scalar(__m1)
+mata_strtoreal_val=__m1 not found
+
+. 
+. noi di "--- minimal regression test ---"
+--- minimal regression test ---
+
+. clear
+
+. set obs 20
+Number of observations (_N) was 0, now 20.
+
+. gen id = ceil(_n/4)
+
+. gen t = mod(_n-1,4)+1
+
+. gen y = rnormal()
+
+. gen x = rnormal()
+
+. xtset id t
+
+Panel variable: id (strongly balanced)
+ Time variable: t, 1 to 4
+         Delta: 1 unit
+
+. capture noisily xtreg y x i.t, fe vce(cluster id)
+           _coef_table():  3499  strtoreal() not found
+                 <istmt>:     -  function returned error
+
+. noi di "xtreg_rc=" _rc
+xtreg_rc=3499
+
+. 
+. noi di "=== ENV DIAG END ==="
+=== ENV DIAG END ===
+
+. log close
+      name:  <unnamed>
+       log:  /Users/mac/Desktop/Grad_thesis/logs/20260302/stata_env_diag.log
+  log type:  text
+ closed on:   2 Mar 2026, 19:14:37
+---------------------------------------------------------------------------------------------------------------

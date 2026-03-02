@@ -1,6 +1,6 @@
 # Repository Document Tree
 
-更新时间：2026-03-02 (Phase 5 准备复查)
+更新时间：2026-03-02 (Phase 5 收口状态同步)
 维护规则：每个 Phase 完成后必须同步更新本文件。
 
 ## 根目录
@@ -40,8 +40,7 @@ notes/
 ├── phase3_review_report.md                       # [Phase3收口] 风险审阅与答辩口径
 ├── phase3_reference_do_comparison_20260301.md   # [Phase3收口] 与参考do复跑对照
 ├── phase4_consistency_check.md                   # [Phase4] 统稿一致性校验（含摘要复核）
-├── phase5_traceability_matrix.md                 # [Phase5准备] 结论-图表-脚本追溯矩阵
-└── phase5_preflight_check.md                     # [Phase5准备] 格式/风险/交付包预检报告
+└── phase5_traceability_matrix.md                 # [Phase5收口] 结论-图表-脚本追溯矩阵
 ```
 - `checkpoints.md`：各阶段完成状态。
 - `data_code_inventory.md`：数据/代码盘点。
@@ -54,8 +53,7 @@ notes/
 - `phase3_review_report.md`：Phase3 风险复核、答辩解释口径与收口结论。
 - `phase3_reference_do_comparison_20260301.md`：参考文献2 do-file 复跑对照与剩余参数差异说明。
 - `phase4_consistency_check.md`：Phase4 一致性校验记录（研究闭环、H1-H3映射、证据边界、摘要一致性复核）。
-- `phase5_traceability_matrix.md`：Phase5 图表-结论-脚本追溯关系表。
-- `phase5_preflight_check.md`：Phase5 准备阶段预检清单与剩余风险。
+- `phase5_traceability_matrix.md`：Phase5 图表-结论-脚本追溯关系表（已切换至 `figures_v2`）。
 
 ## output/
 ```text
@@ -103,7 +101,16 @@ output/
 │   ├── did_parallel_trends.png                # [Phase3新增] 平行趋势事件研究图(图11)
 │   └── did_placebo_test.png                   # [Phase3新增] 安慰剂检验核密度图(图12)
 ├── figures_v2/                                    # [Phase5] 重新生成（300 DPI + serif + 灰度友好）
-│   └── (Phase5 执行后填充，文件名与 figures/ 一致)
+│   ├── ale_rf_*.png (10张)                    # [Phase5] RF ALE图（300 DPI, serif, black line）
+│   ├── ale_gbdt_*.png (10张)                  # [Phase5] GBDT ALE图
+│   ├── feature_importance_bar_rf.png          # [Phase5] RF特征重要性Top10（灰色条形图）
+│   ├── feature_importance_bar_gbdt.png        # [Phase5] GBDT特征重要性Top10
+│   ├── pdp_grid_rf.png                        # [Phase5] RF PDP网格（中文标签, 黑色线）
+│   ├── pdp_grid_gbdt.png                      # [Phase5] GBDT PDP网格
+│   ├── pca_scree_plot.png                     # [Phase5] PCA碎石图（灰度友好）
+│   ├── pca_loading_heatmap.png                # [Phase5] PCA载荷热力图（灰度色板）
+│   ├── did_parallel_trends.png                # [Phase5] DID平行趋势图（Python独立脚本生成）
+│   └── did_placebo_test.png                   # [Phase5] 安慰剂检验图（灰色直方图+黑色KDE）
 └── models/                                        # [Phase5] 持久化训练模型（避免重训）
     ├── rf_model.joblib                        # RF 5000 trees 模型
     └── gbdt_model.joblib                      # GBDT 3000 trees 模型
@@ -125,7 +132,7 @@ logs/
 │   ├── run.log                                # [Phase3收口 + Phase4统稿留痕]
 │   └── events.jsonl                           # [Phase3复跑收口 + Phase4统稿留痕]
 └── 20260302/
-    ├── run.log                                # [Phase5准备] 主稿合并/追溯矩阵/预检报告
+    ├── run.log                                # [Phase5准备] 主稿合并/追溯矩阵
     ├── events.jsonl                           # [Phase5准备] 过程化事件留痕
     ├── stata_phase5_smoke.log                 # [Phase5准备] Stata CLI smoke 结果
     ├── stata_phase5_baseline_check.log        # [Phase5准备] Stata reghdfe 报错留痕(r3499)
@@ -135,17 +142,19 @@ logs/
 ## scripts/
 ```text
 scripts/
+├── thesis_plot_config.py                      # [Phase5] 共享绘图配置（300 DPI, serif, 灰度色板）
 ├── unify_notebook_paths.py
 ├── phase2_ml_training.py                      # [Phase2] ML模型训练主脚本
 ├── phase2_rf_and_summary.py                   # [Phase2] RF训练+汇总脚本
-├── phase2_ale_pdp_plots.py                    # [Phase2] ALE/PDP绘图脚本
+├── phase2_ale_pdp_plots.py                    # [Phase5改写] ALE/PDP/FI绘图+模型持久化
 ├── phase2_subsample.py                        # [Phase2] 子样本稳健性脚本
-├── phase2_pca_analysis.py                     # [Phase2-PCA] PCA降维+碎石图+热力图+预测对比
+├── phase2_pca_analysis.py                     # [Phase5改写] PCA碎石图+热力图+预测对比
 ├── phase3_did_stata_replication.do            # [Phase3收口] Stata高一致度复现主脚本
 ├── phase3_placebo_stata100.do                 # [Phase3收口] placebo 100次真实回归导出脚本
 ├── phase3_placebo_stata100_mcp.log            # [Phase3收口] placebo实跑日志留档
-├── phase3_placebo_plot.py                     # [Phase3收口] 基于CSV实测系数绘制图12
-├── phase5_prepare.py                          # [Phase5准备] 生成完整版/追溯矩阵/预检报告
+├── phase3_placebo_plot.py                     # [Phase5改写] 安慰剂检验密度图
+├── phase5_did_trends_plot.py                  # [Phase5新建] DID平行趋势事件研究图
+├── phase5_prepare.py                          # [Phase5准备] 生成完整版/追溯矩阵
 └── phase5_did_quickcheck.py                   # [Phase5准备] PanelOLS复验DID基准系数
 ```
 

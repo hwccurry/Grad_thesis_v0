@@ -1,0 +1,95 @@
+---------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/mac/Desktop/Grad_thesis/logs/20260302/stata_restore_mata_funcs.log
+  log type:  text
+ opened on:   2 Mar 2026, 19:18:37
+
+. 
+. noi di "=== restore mata funcs start ==="
+=== restore mata funcs start ===
+
+. 
+. * Step 1: compile and load missing Mata helpers from official source files
+. capture noisily run "/Applications/Stata/ado/base/s/strtoreal.mata"
+
+. noi di "run_strtoreal_rc=" _rc
+run_strtoreal_rc=0
+
+. capture noisily run "/Applications/Stata/ado/base/f/findfile.mata"
+
+. noi di "run_findfile_rc=" _rc
+run_findfile_rc=0
+
+. 
+. * Step 2: quick function test
+. capture noisily mata: st_numscalar("__m2", strtoreal("2.5"))
+
+. noi di "mata_strtoreal_rc=" _rc
+mata_strtoreal_rc=0
+
+. capture noisily di "mata_strtoreal_val=" scalar(__m2)
+mata_strtoreal_val=2.5
+
+. capture noisily mata: st_local("__ff", findfile("xtreg.ado"))
+              findfile():  3499  pathlist() not found
+                 <istmt>:     -  function returned error
+
+. noi di "mata_findfile_rc=" _rc
+mata_findfile_rc=3499
+
+. capture noisily di "mata_findfile_val=" "`__ff'"
+mata_findfile_val=
+
+. 
+. * Step 3: regression smoke test
+. clear
+
+. set obs 20
+Number of observations (_N) was 0, now 20.
+
+. gen id = ceil(_n/4)
+
+. gen t = mod(_n-1,4)+1
+
+. gen y = rnormal()
+
+. gen x = rnormal()
+
+. xtset id t
+
+Panel variable: id (strongly balanced)
+ Time variable: t, 1 to 4
+         Delta: 1 unit
+
+. capture noisily xtreg y x i.t, fe vce(cluster id)
+           _coef_table():  3499  max() not found
+                 <istmt>:     -  function returned error
+
+. noi di "xtreg_rc=" _rc
+xtreg_rc=3499
+
+. 
+. * Step 4: reghdfe load test
+. capture noisily which reghdfe
+/Users/mac/Library/Application Support/Stata/ado/plus/r/reghdfe.ado
+*! version 6.12.5 27Dec2023
+
+. capture noisily reghdfe y x, absorb(id t) vce(cluster id) keepsingletons
+              findfile():  3499  pathlist() not found
+           get_version():     -  function returned error
+                 <istmt>:     -  function returned error
+(error occurred while loading reghdfe.ado)
+
+. noi di "reghdfe_rc=" _rc
+reghdfe_rc=3499
+
+. 
+. noi di "=== restore mata funcs end ==="
+=== restore mata funcs end ===
+
+. log close
+      name:  <unnamed>
+       log:  /Users/mac/Desktop/Grad_thesis/logs/20260302/stata_restore_mata_funcs.log
+  log type:  text
+ closed on:   2 Mar 2026, 19:18:37
+---------------------------------------------------------------------------------------------------------------

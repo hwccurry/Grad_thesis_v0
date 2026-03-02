@@ -1,0 +1,96 @@
+---------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/mac/Desktop/Grad_thesis/logs/20260302/stata_reindex_mlib.log
+  log type:  text
+ opened on:   2 Mar 2026, 19:19:14
+
+. 
+. noi di "=== reindex mlib start ==="
+=== reindex mlib start ===
+
+. 
+. * Rebuild Mata library index (official repair path)
+. capture noisily mata mlib index
+invalid expression
+
+. noi di "mlib_index_rc=" _rc
+mlib_index_rc=3000
+
+. 
+. * Check key Mata functions
+. capture noisily mata: st_numscalar("__m3", strtoreal("3.14"))
+                 <istmt>:  3499  strtoreal() not found
+
+. noi di "strtoreal_rc=" _rc
+strtoreal_rc=3499
+
+. capture noisily di "strtoreal_val=" scalar(__m3)
+strtoreal_val=__m3 not found
+
+. 
+. capture noisily mata: st_local("__ff2", findfile("xtreg.ado"))
+                 <istmt>:  3499  findfile() not found
+
+. noi di "findfile_rc=" _rc
+findfile_rc=3499
+
+. capture noisily di "findfile_val=`__ff2'"
+findfile_val=
+
+. 
+. capture noisily mata: st_numscalar("__m4", max((1,2,3)))
+                 <istmt>:  3499  max() not found
+
+. noi di "max_rc=" _rc
+max_rc=3499
+
+. capture noisily di "max_val=" scalar(__m4)
+max_val=__m4 not found
+
+. 
+. * Regression smoke test
+. clear
+
+. set obs 20
+Number of observations (_N) was 0, now 20.
+
+. gen id = ceil(_n/4)
+
+. gen t = mod(_n-1,4)+1
+
+. gen y = rnormal()
+
+. gen x = rnormal()
+
+. xtset id t
+
+Panel variable: id (strongly balanced)
+ Time variable: t, 1 to 4
+         Delta: 1 unit
+
+. capture noisily xtreg y x i.t, fe vce(cluster id)
+           _coef_table():  3499  strtoreal() not found
+                 <istmt>:     -  function returned error
+
+. noi di "xtreg_rc=" _rc
+xtreg_rc=3499
+
+. 
+. capture noisily reghdfe y x, absorb(id t) vce(cluster id) keepsingletons
+           get_version():  3499  findfile() not found
+                 <istmt>:     -  function returned error
+(error occurred while loading reghdfe.ado)
+
+. noi di "reghdfe_rc=" _rc
+reghdfe_rc=3499
+
+. 
+. noi di "=== reindex mlib end ==="
+=== reindex mlib end ===
+
+. log close
+      name:  <unnamed>
+       log:  /Users/mac/Desktop/Grad_thesis/logs/20260302/stata_reindex_mlib.log
+  log type:  text
+ closed on:   2 Mar 2026, 19:19:14
+---------------------------------------------------------------------------------------------------------------

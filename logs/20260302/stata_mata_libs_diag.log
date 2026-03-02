@@ -1,0 +1,41 @@
+---------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/mac/Desktop/Grad_thesis/logs/20260302/stata_mata_libs_diag.log
+  log type:  text
+ opened on:   2 Mar 2026, 19:15:23
+
+. noi di "=== MATA LIBS DIAG ==="
+=== MATA LIBS DIAG ===
+
+. capture noisily mata: mata query
+---------------------------------------------------------------------------------------------------------------
+    Mata settings
+      set matastrict       off
+      set matalnum         off
+      set mataoptimize     on
+      set matafavor        space      may be space or speed
+      set matacache        2000       kilobytes
+      set matalibs         lmatabase;lmatamcmc;lmatabma;lmatacollect;lmatatab;lmataivqreg;lmatamixlog;lmatami;l
+> matasem;lmatagsem;lmatasp;lmatapss;lmatalasso;lmatapostest;lmatapath;lmatameta;lmataopt;lmatasvy;lmatajm;lmat
+> anumlib;lmatahetdid;lmataado;lmataerm;lmatafc;livreg2;lxsmle
+      set matamofirst      off
+      set matasolvetol     .          may be . or any double-precision number
+
+. capture noisily mata: mata set matalibs
+invalid syntax
+
+. capture noisily mata: mata mlib dir
+dir:  invalid mlib subcommand
+
+. capture noisily mata: mata which strtoreal()
+function strtoreal() not found
+
+. noi di "rc_which=" _rc
+rc_which=111
+
+. log close
+      name:  <unnamed>
+       log:  /Users/mac/Desktop/Grad_thesis/logs/20260302/stata_mata_libs_diag.log
+  log type:  text
+ closed on:   2 Mar 2026, 19:15:24
+---------------------------------------------------------------------------------------------------------------

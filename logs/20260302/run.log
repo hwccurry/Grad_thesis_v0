@@ -2,3 +2,24 @@
 [2026-03-02 13:16:55 +08:00] Phase5 Task5.2: 执行 scripts/phase5_did_quickcheck.py，输出 output/tables/phase5_did_repro_check.csv；DID 核心系数与既有结果一致。
 [2026-03-02 13:18:40 +08:00] 风险记录: Stata 终端批处理在回归阶段报 r(3499)，已保留日志到 logs/20260302/stata_phase5_*.log，待单独修复 ado 环境。
 [2026-03-02 13:20:00 +08:00] Phase5 状态更新: notes/checkpoints.md 设为 In Progress，DOC_TREE.md 同步新增 Phase5 产物索引。
+
+============================================================
+PCA Analysis (Phase5 v2) - 2026-03-02 17:35:44
+K=18, cumulative_var=0.8136
+Model comparison:
+                   样本内R²   样本外R²     MSE     MAE   MedAE     EVS
+模型-特征组合                                                         
+RF(fixed)-原始71特征  0.9018  0.2510  0.0776  0.1624  0.0984  0.2703
+RF(fixed)-PCA特征   0.8814  0.0576  0.0958  0.2003  0.1449  0.0937
+GBDT-原始71特征       0.6075  0.2368  0.0790  0.1646  0.1008  0.2518
+GBDT-PCA特征        0.4741  0.0818  0.0940  0.1988  0.1489  0.1021
+
+============================================================
+PCA Analysis (Phase5 v2) - 2026-03-02 18:37:06
+K=18, cumulative_var=0.8136
+Model comparison: skipped (--plots-only)
+
+============================================================
+PCA Analysis (Phase5 v2) - 2026-03-02 19:00:07
+K=18, cumulative_var=0.8136
+Model comparison: skipped (--plots-only)

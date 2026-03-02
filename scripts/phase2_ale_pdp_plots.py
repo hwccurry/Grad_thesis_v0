@@ -1,20 +1,34 @@
 """
-Phase 2 - Task 2.3: ALE + PDP plots for top features
-训练 GBDT 和 RF 在全样本上, 对 Top-6 关键变量绘制 ALE 图。
-输出到 output/figures/
+Phase 5 - Task 5.2: ALE + PDP + Feature Importance plots (v2)
+Rewritten for thesis format: 300 DPI, serif fonts, grayscale-friendly, A4 figsize.
+Models saved to output/models/ for future reuse.
+All figures output to output/figures_v2/ by default.
+
+Optional env:
+  THESIS_FIG_SUBDIR=figures_v3
+  THESIS_COLOR_MODE=color  # default: mono
 """
 
+import sys
+import os
 import pandas as pd
 import numpy as np
-import matplotlib
-matplotlib.use('Agg')  # non-interactive backend
-import matplotlib.pyplot as plt
-from matplotlib import font_manager
 from pathlib import Path
+
+# Ensure scripts/ is on path for thesis_plot_config import
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from thesis_plot_config import apply_thesis_style, GRAY_BAR, GRAY_BAR_EDGE, BLACK_LINE
+
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+apply_thesis_style()
+
 from sklearn.ensemble import GradientBoostingRegressor, RandomForestRegressor
 from sklearn.preprocessing import StandardScaler
-from sklearn.inspection import PartialDependenceDisplay
+from sklearn.inspection import partial_dependence
 from sklearn.model_selection import train_test_split
+import joblib
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -30,14 +44,28 @@ def locate_project_root(target_folder=TARGET_FOLDER):
 
 PROJECT_ROOT = locate_project_root()
 DATA_DIR = PROJECT_ROOT / TARGET_FOLDER / '数据' / '数据-python'
-FIG_DIR = PROJECT_ROOT / 'output' / 'figures'
+FIG_SUBDIR = os.getenv('THESIS_FIG_SUBDIR', 'figures_v2')
+FIG_DIR = PROJECT_ROOT / 'output' / FIG_SUBDIR
+MODEL_DIR = PROJECT_ROOT / 'output' / 'models'
 FIG_DIR.mkdir(parents=True, exist_ok=True)
+MODEL_DIR.mkdir(parents=True, exist_ok=True)
+COLOR_MODE = os.getenv('THESIS_COLOR_MODE', 'mono').lower()
+if COLOR_MODE == 'color':
+    LINE_COLOR_RF = '#4E79A7'
+    LINE_COLOR_GBDT = '#E15759'
+    BAR_COLOR_RF = '#4E79A7'
+    BAR_COLOR_GBDT = '#E15759'
+    BAR_EDGE_RF = '#2F4B6A'
+    BAR_EDGE_GBDT = '#9C2F2F'
+else:
+    LINE_COLOR_RF = BLACK_LINE
+    LINE_COLOR_GBDT = BLACK_LINE
+    BAR_COLOR_RF = GRAY_BAR
+    BAR_COLOR_GBDT = GRAY_BAR
+    BAR_EDGE_RF = GRAY_BAR_EDGE
+    BAR_EDGE_GBDT = GRAY_BAR_EDGE
 
-# ── Chinese font setup ──
-plt.rcParams['font.sans-serif'] = ['Arial Unicode MS', 'SimHei', 'Heiti SC', 'PingFang SC']
-plt.rcParams['axes.unicode_minus'] = False
-
-# ── ALE helper functions (from reference notebook) ──
+# ── ALE helper functions ──
 def _get_quantiles(train_set, feature, bins):
     quantiles = np.unique(
         np.quantile(train_set[feature], np.linspace(0, 1, bins + 1), method="lower")
@@ -66,22 +94,21 @@ def _first_order_ale_quant(predictor, train_set, feature, bins):
     ale -= np.sum(ale * index_groupby.size() / train_set.shape[0])
     return ale, quantiles
 
-def ale_plot(model, train_set, feature, feature_cn, model_name, save_path, bins=10):
-    """Plot ALE for a single feature."""
-    fig, ax = plt.subplots(figsize=(5, 4))
+def ale_plot(model, train_set, feature, feature_cn, model_name, save_path, line_color, bins=10):
+    """Plot ALE for a single feature — thesis format."""
+    fig, ax = plt.subplots(figsize=(3.5, 2.8))
     ale, quantiles = _first_order_ale_quant(model.predict, train_set, feature, bins)
     centres = _get_centres(quantiles)
-    ax.plot(centres, ale, color='black', linewidth=1.5)
+    ax.plot(centres, ale, color=line_color, linewidth=1.2)
     ax.set_xlim(train_set[feature].min(), train_set[feature].max())
     min_ale, max_ale = min(ale), max(ale)
     buffer = (max_ale - min_ale) * 0.1 if max_ale != min_ale else 0.01
     ax.set_ylim(min_ale - buffer, max_ale + buffer)
-    ax.set_xlabel(feature_cn, fontsize=13)
-    ax.set_ylabel('股利支付率', fontsize=13)
-    ax.set_title(f'ALE图-{model_name}', fontsize=13)
-    ax.tick_params(labelsize=11)
+    ax.set_xlabel(feature_cn)
+    ax.set_ylabel('股利支付率')
+    ax.set_title(f'ALE图\u2014{model_name}')
     plt.tight_layout()
-    plt.savefig(save_path, dpi=200, bbox_inches='tight')
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close()
     print(f'  Saved: {save_path.name}')
 
@@ -96,7 +123,7 @@ sc.fit(x_train)
 x_train_sc = pd.DataFrame(sc.transform(x_train), columns=x.columns)
 x_test_sc = pd.DataFrame(sc.transform(x_test), columns=x.columns)
 
-# ── Top features to plot (based on reference paper + H1 hypothesis) ──
+# ── Top features to plot ──
 top_features = [
     ('Retainedearn_ratio', '留存收益资产比'),
     ('Tunneling',          '其他应收款资产比'),
@@ -111,32 +138,40 @@ top_features = [
 ]
 
 # ── Train GBDT ──
-print('Training GBDT for ALE/PDP plots...')
-model_gbdt = GradientBoostingRegressor(
-    n_estimators=3000, max_depth=4, subsample=0.7,
-    learning_rate=0.001, random_state=0
-)
-model_gbdt.fit(x_train_sc, y_train)
-print('  GBDT done.')
+gbdt_model_path = MODEL_DIR / 'gbdt_model.joblib'
+rf_model_path = MODEL_DIR / 'rf_model.joblib'
+if gbdt_model_path.exists() and rf_model_path.exists():
+    print('Loading existing models from output/models/ ...')
+    model_gbdt = joblib.load(gbdt_model_path)
+    model_rf = joblib.load(rf_model_path)
+    print(f'  Loaded: {gbdt_model_path.name}, {rf_model_path.name}')
+else:
+    print('Training GBDT (n_estimators=3000)...')
+    model_gbdt = GradientBoostingRegressor(
+        n_estimators=3000, max_depth=4, subsample=0.7,
+        learning_rate=0.001, random_state=0
+    )
+    model_gbdt.fit(x_train_sc, y_train)
+    joblib.dump(model_gbdt, gbdt_model_path)
+    print(f'  GBDT done. Saved to {gbdt_model_path}')
 
-# ── Train RF ──
-print('Training RF for ALE/PDP plots...')
-model_rf = RandomForestRegressor(n_estimators=5000, max_features=19, random_state=0, n_jobs=-1)
-model_rf.fit(x_train_sc, y_train)
-print('  RF done.')
+    print('Training RF (n_estimators=5000)...')
+    model_rf = RandomForestRegressor(n_estimators=5000, max_features=19, random_state=0, n_jobs=-1)
+    model_rf.fit(x_train_sc, y_train)
+    joblib.dump(model_rf, rf_model_path)
+    print(f'  RF done. Saved to {rf_model_path}')
 
-# ── Generate ALE plots ──
-print('\nGenerating ALE plots...')
+# ── Generate ALE plots (20 figures) ──
+print('\nGenerating ALE plots (20 figures)...')
 for feat, feat_cn in top_features:
     ale_plot(model_rf, x_test_sc, feat, feat_cn, '随机森林',
-             FIG_DIR / f'ale_rf_{feat}.png')
+             FIG_DIR / f'ale_rf_{feat}.png', line_color=LINE_COLOR_RF)
     ale_plot(model_gbdt, x_test_sc, feat, feat_cn, '梯度提升树',
-             FIG_DIR / f'ale_gbdt_{feat}.png')
+             FIG_DIR / f'ale_gbdt_{feat}.png', line_color=LINE_COLOR_GBDT)
 
-# ── Generate feature importance bar chart ──
-print('\nGenerating feature importance bar charts...')
+# ── Feature importance bar chart (Top 10, 2 figures) ──
+print('\nGenerating feature importance bar charts (Top 10)...')
 
-# English→Chinese mapping for non-dummy features
 en_to_cn = {
     'Managefee_ratio': '管理费用率', 'Manageshare': '管理层持股比例',
     'Indep_ratio': '独立董事比例', 'Bgender': '董事会女性比例',
@@ -158,50 +193,54 @@ en_to_cn = {
     'Market_idx': '市场化程度',
 }
 
-for model, model_name, fname in [
-    (model_rf, '随机森林', 'feature_importance_bar_rf.png'),
-    (model_gbdt, '梯度提升树', 'feature_importance_bar_gbdt.png'),
+for model, model_name, fname, bar_color, edge_color in [
+    (model_rf, '随机森林', 'feature_importance_bar_rf.png', BAR_COLOR_RF, BAR_EDGE_RF),
+    (model_gbdt, '梯度提升树', 'feature_importance_bar_gbdt.png', BAR_COLOR_GBDT, BAR_EDGE_GBDT),
 ]:
     imp = model.feature_importances_
     feat_imp = pd.DataFrame({'feature': x.columns, 'importance': imp})
-    # Only show non-dummy features (top 20)
     feat_imp = feat_imp[~feat_imp['feature'].str.startswith('ind')]
-    feat_imp = feat_imp.sort_values('importance', ascending=True).tail(20)
+    feat_imp = feat_imp.sort_values('importance', ascending=True).tail(10)
     feat_imp['feature_cn'] = feat_imp['feature'].map(en_to_cn).fillna(feat_imp['feature'])
 
-    fig, ax = plt.subplots(figsize=(7, 8))
-    ax.barh(feat_imp['feature_cn'], feat_imp['importance'], color='steelblue')
-    ax.set_xlabel('特征重要性', fontsize=13)
-    ax.set_title(f'{model_name}特征重要性排名（非行业变量Top 20）', fontsize=13)
-    ax.tick_params(labelsize=11)
+    fig, ax = plt.subplots(figsize=(4.5, 3.5))
+    ax.barh(feat_imp['feature_cn'], feat_imp['importance'],
+            color=bar_color, edgecolor=edge_color, linewidth=0.5)
+    ax.set_xlabel('特征重要性')
+    ax.set_title(f'{model_name}特征重要性排名（Top 10）')
     plt.tight_layout()
-    plt.savefig(FIG_DIR / fname, dpi=200, bbox_inches='tight')
+    plt.savefig(FIG_DIR / fname, dpi=300, bbox_inches='tight')
     plt.close()
     print(f'  Saved: {fname}')
 
-# ── PDP for top 4 features (2x2 grid) for each model ──
+# ── PDP grid (2x2) for each model (2 figures) ──
 print('\nGenerating PDP grid plots...')
 top4 = ['Retainedearn_ratio', 'Tunneling', 'Dividend_lag', 'Constraint']
 top4_cn = ['留存收益资产比', '其他应收款资产比', '上一期股利水平', '融资约束程度']
 
-for model, model_name, fname in [
-    (model_rf, '随机森林', 'pdp_grid_rf.png'),
-    (model_gbdt, '梯度提升树', 'pdp_grid_gbdt.png'),
+for model, model_name, fname, line_color in [
+    (model_rf, '随机森林', 'pdp_grid_rf.png', LINE_COLOR_RF),
+    (model_gbdt, '梯度提升树', 'pdp_grid_gbdt.png', LINE_COLOR_GBDT),
 ]:
-    fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+    fig, axes = plt.subplots(2, 2, figsize=(6.3, 5.0))
     for idx, (feat, feat_cn) in enumerate(zip(top4, top4_cn)):
         ax = axes[idx // 2][idx % 2]
-        PartialDependenceDisplay.from_estimator(
-            model, x_test_sc, [feat],
-            grid_resolution=50, n_jobs=-1, method='brute', ax=ax
+        # Compute PDP manually to control labels and line color
+        pdp_result = partial_dependence(
+            model, x_test_sc, features=[feat],
+            grid_resolution=50, method='brute'
         )
-        ax.set_xlabel(feat_cn, fontsize=11)
-        ax.set_ylabel('偏依赖值', fontsize=11)
-        ax.set_title(f'{model_name} - {feat_cn}', fontsize=11)
-    plt.suptitle(f'{model_name}偏依赖图（PDP）', fontsize=14, y=1.02)
+        grid_values = pdp_result['grid_values'][0]
+        avg_preds = pdp_result['average'][0]
+        ax.plot(grid_values, avg_preds, color=line_color, linewidth=1.2)
+        ax.set_xlabel(feat_cn)
+        ax.set_ylabel('偏依赖值')
+        ax.set_title(f'{model_name}\u2014{feat_cn}')
+    plt.suptitle(f'{model_name}偏依赖图（PDP）', fontsize=12, y=1.02)
     plt.tight_layout()
-    plt.savefig(FIG_DIR / fname, dpi=200, bbox_inches='tight')
+    plt.savefig(FIG_DIR / fname, dpi=300, bbox_inches='tight')
     plt.close()
     print(f'  Saved: {fname}')
 
-print('\nAll ALE/PDP plots generated in output/figures/')
+print(f'\nAll ALE/PDP/FI plots generated in {FIG_DIR}/')
+print(f'Models saved in {MODEL_DIR}/')

@@ -1,0 +1,91 @@
+---------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/mac/Desktop/Grad_thesis/logs/20260302/stata_update_all.log
+  log type:  text
+ opened on:   2 Mar 2026, 19:28:41
+
+. 
+. noi di "=== update all start ==="
+=== update all start ===
+
+. capture noisily update query
+(contacting https://www.stata.com)
+bad serial number
+
+. noi di "update_query_rc=" _rc
+update_query_rc=197
+
+. capture noisily update all
+(contacting https://www.stata.com)
+bad serial number
+
+. noi di "update_all_rc=" _rc
+update_all_rc=197
+
+. capture noisily update query
+(contacting https://www.stata.com)
+bad serial number
+
+. noi di "update_query_after_rc=" _rc
+update_query_after_rc=197
+
+. 
+. * post-check
+. capture noisily mata: st_numscalar("__m5", strtoreal("5.1"))
+                 <istmt>:  3499  strtoreal() not found
+
+. noi di "strtoreal_rc=" _rc
+strtoreal_rc=3499
+
+. capture noisily mata: st_numscalar("__m6", max((1,2,3)))
+                 <istmt>:  3499  max() not found
+
+. noi di "max_rc=" _rc
+max_rc=3499
+
+. 
+. clear
+
+. set obs 20
+Number of observations (_N) was 0, now 20.
+
+. gen id = ceil(_n/4)
+
+. gen t = mod(_n-1,4)+1
+
+. gen y = rnormal()
+
+. gen x = rnormal()
+
+. xtset id t
+
+Panel variable: id (strongly balanced)
+ Time variable: t, 1 to 4
+         Delta: 1 unit
+
+. capture noisily xtreg y x i.t, fe vce(cluster id)
+           _coef_table():  3499  strtoreal() not found
+                 <istmt>:     -  function returned error
+
+. noi di "xtreg_rc=" _rc
+xtreg_rc=3499
+
+. 
+. capture noisily reghdfe y x, absorb(id t) vce(cluster id) keepsingletons
+           get_version():  3499  findfile() not found
+                 <istmt>:     -  function returned error
+(error occurred while loading reghdfe.ado)
+
+. noi di "reghdfe_rc=" _rc
+reghdfe_rc=3499
+
+. 
+. noi di "=== update all end ==="
+=== update all end ===
+
+. log close
+      name:  <unnamed>
+       log:  /Users/mac/Desktop/Grad_thesis/logs/20260302/stata_update_all.log
+  log type:  text
+ closed on:   2 Mar 2026, 19:28:55
+---------------------------------------------------------------------------------------------------------------
