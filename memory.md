@@ -106,3 +106,5 @@
 - [2026-03-02 08:28:49 UTC] 日志：已更新 `INSTRUCTIONS.md`（Phase5 问题表与 Task 5.2/5.3/5.4/CHECKPOINT 文案），保留 300DPI、serif、中文标签与版面尺寸等硬约束不变。
 - [2026-03-02 08:43:11 UTC] 决策：按用户“检查是否准备好开始Phase5”执行仓库就绪性核验，判定为“可开始 Phase5 执行（准备包已就绪），但当前并未完成 Phase5 启动项，不能视为已进入可交付状态”。
 - [2026-03-02 08:43:11 UTC] 日志：已核对 `notes/checkpoints.md`、`notes/phase5_preflight_check.md`、`notes/phase5_test/phase56_format_audit_20260302.md` 并复跑 `notes/phase5_test/test_figure_quality.py`；确认现有主绘图脚本仍为 `font.sans-serif` + `dpi=200`、`scripts/thesis_plot_config.py` 与 `scripts/phase5_did_trends_plot.py` 缺失、`output/figures_v2/` 与 `output/models/` 未落地，且 Stata 基线复跑日志仍有 `r(3499)` 风险未闭环。
+- [2026-03-02 08:48:47 UTC] 决策：按用户要求在 `INSTRUCTIONS.md` 文件末尾新增“Phase 5/6 执行后仍可能存在的残余风险”小节，单列执行后仍需人工把控或环境约束导致的风险项。
+- [2026-03-02 08:48:47 UTC] 日志：已提交并推送当前仓库到远程 `Grad_thesis_v0/main`，提交 `a05b38e`（含 Phase5/6 图表审查材料、基准截图、INSTRUCTIONS 更新等）；提交时排除了 Office 临时锁文件 `参考文献/2/~$附件3：图表.docx`。
