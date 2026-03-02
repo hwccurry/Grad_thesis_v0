@@ -61,7 +61,7 @@ notes/
 ```text
 output/
 ├── paper/
-│   ├── chapter2_lit_review_nonmain.md        # 第2章文献综述材料（非正文，供Phase5参考）
+│   ├── chapter2_lit_review.md                # [Phase1]第2章文献综述材料
 │   ├── references_with_links.md
 │   ├── references_gbt7714_nonmain.md         # 参考文献材料（非正文，供Phase5参考）
 │   ├── chapter3_ml_prediction_draft.md       # [Phase2] 第3章ML预测分析草稿
@@ -91,17 +91,22 @@ output/
 │   ├── did_heterogeneity.csv                  # [Phase3新增] 异质性分析(表10)
 │   ├── did_economic_consequences.csv          # [Phase3新增] 经济后果分析(表11)
 │   └── phase5_did_repro_check.csv             # [Phase5准备] DID基准快速复验系数
-└── figures/
-    ├── ale_rf_*.png (10张)                    # [Phase2] RF ALE图(10个关键变量)
-    ├── ale_gbdt_*.png (10张)                  # [Phase2] GBDT ALE图(10个关键变量)
-    ├── feature_importance_bar_rf.png          # [Phase2] RF特征重要性条形图
-    ├── feature_importance_bar_gbdt.png        # [Phase2] GBDT特征重要性条形图
-    ├── pdp_grid_rf.png                        # [Phase2] RF PDP网格图(Top4)
-    ├── pdp_grid_gbdt.png                      # [Phase2] GBDT PDP网格图(Top4)
-    ├── pca_scree_plot.png                     # [Phase2-PCA] 碎石图(图9)
-    ├── pca_loading_heatmap.png                # [Phase2-PCA] 载荷热力图(图10)
-    ├── did_parallel_trends.png                # [Phase3新增] 平行趋势事件研究图(图11)
-    └── did_placebo_test.png                   # [Phase3新增] 安慰剂检验核密度图(图12)
+├── figures/                                       # [Phase2–4 原始图，200 DPI，存档保留]
+│   ├── ale_rf_*.png (10张)                    # [Phase2] RF ALE图(10个关键变量)
+│   ├── ale_gbdt_*.png (10张)                  # [Phase2] GBDT ALE图(10个关键变量)
+│   ├── feature_importance_bar_rf.png          # [Phase2] RF特征重要性条形图
+│   ├── feature_importance_bar_gbdt.png        # [Phase2] GBDT特征重要性条形图
+│   ├── pdp_grid_rf.png                        # [Phase2] RF PDP网格图(Top4)
+│   ├── pdp_grid_gbdt.png                      # [Phase2] GBDT PDP网格图(Top4)
+│   ├── pca_scree_plot.png                     # [Phase2-PCA] 碎石图(图9)
+│   ├── pca_loading_heatmap.png                # [Phase2-PCA] 载荷热力图(图10)
+│   ├── did_parallel_trends.png                # [Phase3新增] 平行趋势事件研究图(图11)
+│   └── did_placebo_test.png                   # [Phase3新增] 安慰剂检验核密度图(图12)
+├── figures_v2/                                    # [Phase5] 重新生成（300 DPI + serif + 灰度友好）
+│   └── (Phase5 执行后填充，文件名与 figures/ 一致)
+└── models/                                        # [Phase5] 持久化训练模型（避免重训）
+    ├── rf_model.joblib                        # RF 5000 trees 模型
+    └── gbdt_model.joblib                      # GBDT 3000 trees 模型
 ```
 
 ## logs/

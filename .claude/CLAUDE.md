@@ -76,7 +76,9 @@ Grad_thesis/
 │   └── 2/                               # DID相关数据与Stata程序
 ├── output/
 │   ├── tables/
-│   ├── figures/
+│   ├── figures/                          # Phase2–4 原始图（200 DPI，存档不删）
+│   ├── figures_v2/                       # Phase5 重新生成图（300 DPI + serif）
+│   ├── models/                           # Phase5 持久化模型（rf/gbdt joblib）
 │   └── paper/
 ├── notes/
 └── logs/
@@ -218,94 +220,68 @@ Grad_thesis/
 
 ---
 
-## PHASE 5：格式与答辩前质检
+## PHASE 5：图表格式规范化（重新生成全部图表）
 
-### Task 5.1 格式规范
-- 对齐学校模板（目录、标题层级、图表、注释、参考文献格式）。
+### Phase 5 质量测试结论（2026-03-02 测试）
 
-#### 5.1.1 回归结果表（Stata / Python 输出 → Word 三线表）
+全部 28 张 PNG 均不达标，必须重新生成。核心问题：
+- DPI：全部 200（要求 ≥300）
+- 字体：sans-serif（要求 Songti SC + Times New Roman serif）
+- 配色：彩色为主（要求黑白/灰度优先）
+- PDP 图标签为英文（要求中文）
+- figsize 偏大（要求 A4 单栏 ~8-10cm / 双栏 ~15-17cm）
 
-**通用规范（适用于所有回归结果表）**：
-- **三线表**：顶线 1 磅、表头下细线 0.5 磅、底线 1 磅，无左右边框、无纵线。必要时可加辅助线（如分隔面板），仍称三线表。
-- **系数精度**：统一保留 3–4 位小数（`%9.3f` 或 `%9.4f`），同一张表内位数一致。
-- **括号内容**：默认报告**标准误**（se），置于系数正下方圆括号中。若报告 t/z 统计量需在注释说明。
-- **显著性星号**：`*** p<0.01, ** p<0.05, * p<0.1`，星号跟在系数后方（不在括号内）。注释置于表格底部。
-- **控制变量/固定效应行**：用 `Yes` / `No` 标注，不输出系数。
-- **底部统计量**：至少报告 N（观测值数）、R²（或 adj-R²/Pseudo-R²），可选 F 统计量。
-- **数字对齐**：小数点对齐，缺失值用 `—` 而非空白。
-- **变量标签**：使用中文经济含义标签（如"资产负债率"而非 `Lev`），英文缩写可在首次出现处括注。
+详细报告与测试对比图：`notes/phase5_test/`
 
-**Stata 侧工具链**：
-- 推荐 `esttab`（`estout` 包）或 `outreg2`，输出 `.rtf` 后在 Word 中微调。
-- 常用命令模板：
-  ```stata
-  esttab m1 m2 m3 using "table.rtf", replace ///
-      b(%9.3f) se(%9.3f) star(* 0.1 ** 0.05 *** 0.01) ///
-      r2 ar2 N compress nogap ///
-      mtitles("模型1" "模型2" "模型3") ///
-      title("表X 基准回归结果") ///
-      note("注：括号内为聚类稳健标准误；*** p<0.01, ** p<0.05, * p<0.1。")
-  ```
-- 输出 `.rtf` 后用 Word 打开 → 全选表格 → 套用三线表样式 → 调整字体为宋体五号/Times New Roman 10.5pt。
+### 已验证绘图参数（`scripts/thesis_plot_config.py`）
 
-**Python 侧工具链**：
-- 推荐 `stargazer`（`pip install stargazer`）输出 HTML → 粘贴到 Word；或用 `pandas.DataFrame.to_latex()` + LaTeX 编译。
-- 替代方案：`statsmodels` 的 `summary2.summary_col()` 合并多模型 → `.as_latex()` 或手动转 DataFrame → `.to_csv()` → Excel → Word。
-- 图表（matplotlib）保存时统一 `plt.savefig("fig.png", dpi=300, bbox_inches='tight')`。
+```python
+THESIS_RCPARAMS = {
+    'font.family': 'serif',
+    'font.serif': ['Songti SC', 'SimSong', 'Times New Roman'],
+    'font.size': 10, 'axes.labelsize': 10, 'axes.titlesize': 11,
+    'xtick.labelsize': 9, 'ytick.labelsize': 9,
+    'axes.unicode_minus': False,
+    'figure.dpi': 300, 'savefig.dpi': 300, 'savefig.bbox': 'tight',
+}
+# 灰度色板：GRAY_BAR=#555555, BLACK_LINE=black, GRAY_HIST=#888888
+```
 
-#### 5.1.2 图形规范（Python matplotlib / Stata graph）
+### Phase 5 关键约定
+- **新图输出目录**：所有重新生成的图统一输出到 `output/figures_v2/`（旧图保留在 `output/figures/` 存档不删）。
+- **模型持久化**：训练完成后保存 RF/GBDT 模型到 `output/models/`（`rf_model.joblib` + `gbdt_model.joblib`），后续若需重绘可直接加载，无需重训。
 
-- **分辨率**：位图不低于 300 dpi（学位论文印刷标准）；优先导出 PDF/EPS 矢量格式，打印时不失真。
-- **字体**：中文宋体或黑体，英文 Times New Roman 或 Arial，字号 8–10 pt，坐标轴标签加粗。
-- **配色**：优先黑白/灰度方案（保证黑白打印可辨认）；如用彩色需确保色差对比鲜明，避免红绿搭配。
-- **坐标轴**：必须包含变量名 + 单位，刻度 5–8 个为宜；纵轴起点视数据而定，不得截断误导。
-- **图例**：放在图内空白区域或图下方，避免遮挡数据。
-- **尺寸**：单栏图宽约 8–10 cm，双栏图宽约 15–17 cm（A4 版面）；高宽比建议 0.618–0.75。
-- **Python matplotlib 模板**：
-  ```python
-  import matplotlib.pyplot as plt
-  plt.rcParams.update({
-      'font.family': 'serif',
-      'font.serif': ['SimSun', 'Times New Roman'],
-      'font.size': 10,
-      'axes.labelsize': 10,
-      'axes.titlesize': 11,
-      'xtick.labelsize': 9,
-      'ytick.labelsize': 9,
-      'figure.dpi': 300,
-      'savefig.dpi': 300,
-      'savefig.bbox': 'tight',
-  })
-  ```
+### Task 5.1–5.6（详见 INSTRUCTIONS.md）
+- 5.1 创建共享绘图配置
+- 5.2 修改并重跑 `phase2_ale_pdp_plots.py`（24 张图 → `output/figures_v2/`，模型 → `output/models/`）
+- 5.3 修改并重跑 `phase2_pca_analysis.py`（2 张图 → `output/figures_v2/`）
+- 5.4 修改并重跑 `phase3_placebo_plot.py`（1 张图 → `output/figures_v2/`）
+- 5.5 新建 DID 平行趋势绘图脚本（1 张图 → `output/figures_v2/`）
+- 5.6 验证全部输出（DPI / 字体 / 配色 / 尺寸 / 模型文件）
 
-#### 5.1.3 描述性统计与相关系数表
+### 🛑 CHECKPOINT 5
+- [ ] 全部 28 张图重新生成至 `output/figures_v2/`（300 DPI + serif）
+- [ ] PDP 图中文标签修复
+- [ ] DID 平行趋势图由独立 Python 脚本生成
+- [ ] 训练模型已持久化至 `output/models/`（rf_model.joblib + gbdt_model.joblib）
+- [ ] 逐图验证通过
 
-- 同样使用三线表格式。
-- 描述性统计至少报告：N、Mean、SD、Min、Median、Max。
-- 相关系数矩阵：下三角列出 Pearson 相关系数，上三角列出 Spearman（如适用），对角线为 1 或空。
-- 显著性用星号标注，规则同回归表。
+---
 
-#### 5.1.4 Markdown → Word 转换检查清单
+## PHASE 6：风险排查与最终交付
 
-转排版时逐项检查：
-- [ ] 所有表格已转为三线表（Word 表格设计 → 仅保留顶线/表头线/底线）
-- [ ] 表标题在表上方居中、图标题在图下方居中
-- [ ] 字体统一：正文宋体小四 / 表内宋体五号 / 英文数字 Times New Roman
-- [ ] 注释格式 `注：xxx` 小五号左对齐
-- [ ] 页码、页眉、目录已按模板设置
-- [ ] 参考文献格式对齐 GB/T 7714 或学校模板
-- [ ] 图片分辨率 ≥ 300 dpi，无模糊/锯齿
+### Task 6.1 Markdown → Word 转换与格式校对
+- [ ] 三线表、标题位置、字体、注释、页码页眉、参考文献格式、图片 DPI
 
-### Task 5.2 风险排查
-- 查重风险段落重写；
-- 图表来源与口径复核；
-- 关键回归结果可重复运行。
+### Task 6.2 风险排查
+- 查重风险段落重写
+- 图表来源与口径复核
+- 关键回归结果可重复运行
 
-### Task 5.3 交付包
-- `output/paper/论文完整版.md`（或 `.docx` 导出版）
+### Task 6.3 交付包
+- `output/paper/论文完整版.md`（或 `.docx`）
 - `output/tables/` 与 `output/figures/`
-- `notes/` 全部方法与决策说明
-- `logs/` 完整执行日志（text + jsonl）
+- `notes/` 与 `logs/`
 
 ### 🛑 FINAL CHECKPOINT
 - [ ] 论文可提交版本完成

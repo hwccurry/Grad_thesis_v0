@@ -98,3 +98,11 @@
 - [2026-03-02 06:05:00 UTC] 日志：标准流程为 1) `codex mcp get stata-mcp` 确认配置；2) `lsof -nP -iTCP:4000 -sTCP:LISTEN` + `curl http://127.0.0.1:4000/openapi.json` 判定服务活性；3) 若端口监听但接口超时，`kill -9 <pid>` 后重启 `stata_mcp_server.py`；4) 用 `POST /run_selection` 执行 `display 1+1` 验证执行链路；5) 若当前线程 `list_mcp_resources` 无 `stata-mcp`，需新开会话热加载 MCP 工具。
 - [2026-03-02 07:32:33 UTC] 决策：按用户“再检查并维护文档树”要求，执行仓库现状复核并仅修正 `DOC_TREE.md` 与真实文件不一致项，不改动其他业务内容。
 - [2026-03-02 07:32:33 UTC] 日志：`DOC_TREE.md` 已完成同步：移除不存在的 `CLAUDE.md`、将 `output/paper` 旧文件名 `chapter2_references_*` 更新为 `references_*`、补录 `scripts/phase3_placebo_stata100_mcp.log`，更新时间标记为“2026-03-02 (Phase 5 准备复查)”。
+- [2026-03-02 08:14:45 UTC] 决策：按用户要求执行“参考文献图表截图 + 联网标准核验 + Phase5/6 图表规范审查”，采用“双证据”口径：本地产物批量检测（DPI/色彩/脚本配置）+ 官方标准页面（GB/T 7713.1/7714 更新状态与期日、Springer 图表技术规范）。
+- [2026-03-02 08:14:45 UTC] 日志：已生成截图 `notes/phase5_test/reference_charts_screenshot.png` 与 `notes/phase5_test/phase56_current_figures_screenshot.png`；检测到 `output/figures` 28/28 张仍为约 200 DPI、`scripts/phase5_did_trends_plot.py` 不存在；联网核验确认 `GB/T 7713.1-2025` 已于 2026-02-01 实施并替代 2006 版，`GB/T 7714-2025` 将于 2026-07-01 实施（当前日期 2026-03-02 仍以 2015 版为现行）。
+- [2026-03-02 08:20:35 UTC] 决策：按用户“用 agent-browser 看硕士论文图表样式”请求先尝试浏览器直开学校 PDF；因站点对 PDF 响应为强制下载（agent-browser `Download is starting`）改为“下载模板 PDF + 抽取图表示例页截图”方案。
+- [2026-03-02 08:20:35 UTC] 日志：已下载 `上海交通大学硕士学位论文格式模板`（`/tmp/sjtu_master_template.pdf`），并提取第10-11页为 `notes/phase6_benchmark/sjtu_master_template-10.png`、`sjtu_master_template-11.png`，用于对照硕士论文图题/表题/子图/三线表版式。
+- [2026-03-02 08:28:49 UTC] 决策：按用户确认调整 Phase5/6 图表配色口径，不再强制“黑白/灰度”，改为“可彩色，但需保证灰度打印可辨认”。
+- [2026-03-02 08:28:49 UTC] 日志：已更新 `INSTRUCTIONS.md`（Phase5 问题表与 Task 5.2/5.3/5.4/CHECKPOINT 文案），保留 300DPI、serif、中文标签与版面尺寸等硬约束不变。
+- [2026-03-02 08:43:11 UTC] 决策：按用户“检查是否准备好开始Phase5”执行仓库就绪性核验，判定为“可开始 Phase5 执行（准备包已就绪），但当前并未完成 Phase5 启动项，不能视为已进入可交付状态”。
+- [2026-03-02 08:43:11 UTC] 日志：已核对 `notes/checkpoints.md`、`notes/phase5_preflight_check.md`、`notes/phase5_test/phase56_format_audit_20260302.md` 并复跑 `notes/phase5_test/test_figure_quality.py`；确认现有主绘图脚本仍为 `font.sans-serif` + `dpi=200`、`scripts/thesis_plot_config.py` 与 `scripts/phase5_did_trends_plot.py` 缺失、`output/figures_v2/` 与 `output/models/` 未落地，且 Stata 基线复跑日志仍有 `r(3499)` 风险未闭环。
