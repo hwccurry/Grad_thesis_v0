@@ -1,6 +1,6 @@
 # Repository Document Tree
 
-更新时间：2026-03-01 (Phase 4 完整收口)
+更新时间：2026-03-02 (Phase 5 准备复查)
 维护规则：每个 Phase 完成后必须同步更新本文件。
 
 ## 根目录
@@ -8,7 +8,6 @@
 Grad_thesis/
 ├── INSTRUCTIONS.md
 ├── DOC_TREE.md
-├── CLAUDE.md
 ├── README.md
 ├── memory.md
 ├── 写作框架.md
@@ -40,7 +39,9 @@ notes/
 ├── did_design.md                                 # [Phase3新增] DID准自然实验设计文档
 ├── phase3_review_report.md                       # [Phase3收口] 风险审阅与答辩口径
 ├── phase3_reference_do_comparison_20260301.md   # [Phase3收口] 与参考do复跑对照
-└── phase4_consistency_check.md                   # [Phase4] 统稿一致性校验（含摘要复核）
+├── phase4_consistency_check.md                   # [Phase4] 统稿一致性校验（含摘要复核）
+├── phase5_traceability_matrix.md                 # [Phase5准备] 结论-图表-脚本追溯矩阵
+└── phase5_preflight_check.md                     # [Phase5准备] 格式/风险/交付包预检报告
 ```
 - `checkpoints.md`：各阶段完成状态。
 - `data_code_inventory.md`：数据/代码盘点。
@@ -53,19 +54,22 @@ notes/
 - `phase3_review_report.md`：Phase3 风险复核、答辩解释口径与收口结论。
 - `phase3_reference_do_comparison_20260301.md`：参考文献2 do-file 复跑对照与剩余参数差异说明。
 - `phase4_consistency_check.md`：Phase4 一致性校验记录（研究闭环、H1-H3映射、证据边界、摘要一致性复核）。
+- `phase5_traceability_matrix.md`：Phase5 图表-结论-脚本追溯关系表。
+- `phase5_preflight_check.md`：Phase5 准备阶段预检清单与剩余风险。
 
 ## output/
 ```text
 output/
 ├── paper/
 │   ├── chapter2_lit_review_nonmain.md        # 第2章文献综述材料（非正文，供Phase5参考）
-│   ├── chapter2_references_with_links.md
-│   ├── chapter2_references_gbt7714_nonmain.md # 第2章参考文献材料（非正文，供Phase5参考）
+│   ├── references_with_links.md
+│   ├── references_gbt7714_nonmain.md         # 参考文献材料（非正文，供Phase5参考）
 │   ├── chapter3_ml_prediction_draft.md       # [Phase2] 第3章ML预测分析草稿
 │   ├── chapter4_did_evaluation_draft.md      # [Phase3新增] 第4章DID因果评估草稿
 │   ├── chapter1_introduction_draft.md        # [Phase4新增] 第1章绪论草稿
 │   ├── chapter5_conclusion_draft.md          # [Phase4新增] 第5章结论与启示草稿
-│   └── abstract_draft.md                     # [Phase4收口] 中英文摘要
+│   ├── abstract_draft.md                     # [Phase4收口] 中英文摘要
+│   └── 论文完整版.md                          # [Phase5准备] 合并主稿（待模板排版）
 ├── tables/
 │   ├── phase0_minimal_repro_metrics.csv
 │   ├── 变量定义表-第3章.md                    # [Phase2] 变量定义与样本说明
@@ -85,7 +89,8 @@ output/
 │   ├── did_placebo_DivPayRate.csv             # [Phase3收口] 安慰剂检验系数(100次，policy-year-only)
 │   ├── did_robustness_checks.csv              # [Phase3新增] 稳健性检验汇总(表9)
 │   ├── did_heterogeneity.csv                  # [Phase3新增] 异质性分析(表10)
-│   └── did_economic_consequences.csv          # [Phase3新增] 经济后果分析(表11)
+│   ├── did_economic_consequences.csv          # [Phase3新增] 经济后果分析(表11)
+│   └── phase5_did_repro_check.csv             # [Phase5准备] DID基准快速复验系数
 └── figures/
     ├── ale_rf_*.png (10张)                    # [Phase2] RF ALE图(10个关键变量)
     ├── ale_gbdt_*.png (10张)                  # [Phase2] GBDT ALE图(10个关键变量)
@@ -111,9 +116,15 @@ logs/
 ├── 20260228/
 │   ├── run.log                                # [Phase2-PCA + Phase3 DID]
 │   └── events.jsonl                           # [Phase2-PCA + Phase3 DID]
-└── 20260301/
-    ├── run.log                                # [Phase3收口 + Phase4统稿留痕]
-    └── events.jsonl                           # [Phase3复跑收口 + Phase4统稿留痕]
+├── 20260301/
+│   ├── run.log                                # [Phase3收口 + Phase4统稿留痕]
+│   └── events.jsonl                           # [Phase3复跑收口 + Phase4统稿留痕]
+└── 20260302/
+    ├── run.log                                # [Phase5准备] 主稿合并/追溯矩阵/预检报告
+    ├── events.jsonl                           # [Phase5准备] 过程化事件留痕
+    ├── stata_phase5_smoke.log                 # [Phase5准备] Stata CLI smoke 结果
+    ├── stata_phase5_baseline_check.log        # [Phase5准备] Stata reghdfe 报错留痕(r3499)
+    └── stata_phase5_baseline_xtreg_check.log  # [Phase5准备] Stata xtreg 报错留痕(r3499)
 ```
 
 ## scripts/
@@ -127,7 +138,10 @@ scripts/
 ├── phase2_pca_analysis.py                     # [Phase2-PCA] PCA降维+碎石图+热力图+预测对比
 ├── phase3_did_stata_replication.do            # [Phase3收口] Stata高一致度复现主脚本
 ├── phase3_placebo_stata100.do                 # [Phase3收口] placebo 100次真实回归导出脚本
-└── phase3_placebo_plot.py                     # [Phase3收口] 基于CSV实测系数绘制图12
+├── phase3_placebo_stata100_mcp.log            # [Phase3收口] placebo实跑日志留档
+├── phase3_placebo_plot.py                     # [Phase3收口] 基于CSV实测系数绘制图12
+├── phase5_prepare.py                          # [Phase5准备] 生成完整版/追溯矩阵/预检报告
+└── phase5_did_quickcheck.py                   # [Phase5准备] PanelOLS复验DID基准系数
 ```
 
 ## 参考文献/

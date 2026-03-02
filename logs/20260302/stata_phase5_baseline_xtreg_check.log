@@ -19,19 +19,23 @@ Notes:
       1. Stata is running in batch mode.
       2. Unicode is supported; see help unicode_advice.
       3. More than 2 billion observations are allowed; see help obs_advice.
-      4. Maximum number of variables is set to 5,000 but can be increased; see help set_maxvar.
+      4. Maximum number of variables is set to 5,000 but can be increased;
+          see help set_maxvar.
 
-. do 程序代码.do 
+. do tmp/stata_phase5_baseline_xtreg_check.do 
 
-. use 数据.dta,clear
+. set more off
 
-. global ctrl SIZE AGE LEV ROA GROWTH CFO TOP INDEP MH HHI_BANK MKT
+. use "/Users/mac/Desktop/Grad_thesis/tmp/data_phase5_check.dta", clear
 
-. 
-. *描述性统计
-. sum2docx DivDummy DivPayRate treat post $ctrl using 1.docx , replace stats(N mean sd min p25 median p75 max) 
-> title("表 1: 描述性统计") 
-        docx_clear_wrk():  3499  strtoreal() not found
+. xtset stkcd year
+
+Panel variable: stkcd (unbalanced)
+ Time variable: year, 2020 to 2024, but with gaps
+         Delta: 1 unit
+
+. xtreg DivDummy did i.year, fe vce(cluster stkcd)
+           _coef_table():  3499  strtoreal() not found
                  <istmt>:     -  function returned error
 r(3499);
 

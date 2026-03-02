@@ -21,19 +21,12 @@ Notes:
       3. More than 2 billion observations are allowed; see help obs_advice.
       4. Maximum number of variables is set to 5,000 but can be increased; see help set_maxvar.
 
-. do 程序代码.do 
+. do 程序代码_mcp_fixed.do 
 
-. use 数据.dta,clear
-
-. global ctrl SIZE AGE LEV ROA GROWTH CFO TOP INDEP MH HHI_BANK MKT
-
-. 
-. *描述性统计
-. sum2docx DivDummy DivPayRate treat post $ctrl using 1.docx , replace stats(N mean sd min p25 median p75 max) 
-> title("表 1: 描述性统计") 
-        docx_clear_wrk():  3499  strtoreal() not found
-                 <istmt>:     -  function returned error
-r(3499);
+. version 19.5
+this is version 18.0 of Stata; it cannot run version 19.5 programs
+     You can purchase the latest version of Stata by visiting https://www.stata.com.
+r(9);
 
 end of do-file
-r(3499);
+r(9);

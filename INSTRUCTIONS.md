@@ -238,6 +238,7 @@ Grad_thesis/
 - [ ] 论文可提交版本完成
 - [ ] 全部图表与结论可追溯
 - [ ] 日志与复现材料齐全
+- 进度：2026-03-02 +08:00 已完成 Phase5 准备包（`论文完整版.md`、`phase5_traceability_matrix.md`、`phase5_preflight_check.md`、`phase5_did_repro_check.csv`），等待最终格式化与人工复核后勾选。
 
 ---
 

@@ -1,6 +1,6 @@
 # Thesis Checkpoints
 
-Last updated: 2026-03-01 (Phase 4)
+Last updated: 2026-03-02 (Phase 5 prep)
 
 ## CHECKPOINT 0（Phase 0）
 - [x] 数据与代码清点完成
@@ -40,7 +40,9 @@ Last updated: 2026-03-01 (Phase 4)
 - 更新于：2026-03-01 +08:00（摘要已补写并通过一致性复核）
 
 ## FINAL CHECKPOINT（Phase 5）
+- [x] Phase5准备包已生成（完整版主稿+追溯矩阵+预检报告+DID quickcheck）
 - [ ] 论文可提交版本完成
 - [ ] 全部图表与结论可追溯
 - [ ] 日志与复现材料齐全
-- Status: Pending
+- Status: In Progress
+- 更新于：2026-03-02 13:20 +08:00

@@ -83,3 +83,18 @@
 - [2026-03-01 15:03:27 UTC] 日志：核验结果为“文稿层面基本完成、流程层面未完成”：`notes/checkpoints.md` 将 CHECKPOINT 4 标为 Completed，但 `INSTRUCTIONS.md` 的 CHECKPOINT 4 仍未勾选；`output/paper` 已有第1-5章草稿文件（含新增 chapter1/chapter5），但未发现摘要文件；`git log` 尚无 `phase4:` 提交且工作区含未提交改动（含 chapter1/chapter5 新文件）。
 - [2026-03-01 15:43:18 UTC] 决策：将 `output/paper/chapter2_lit_review_draft.md` 与 `output/paper/chapter2_references_gbt7714.md` 明确标记为“非正文材料”，避免 Phase5 统稿时误作为正文章节输入。
 - [2026-03-01 15:43:18 UTC] 日志：已重命名为 `output/paper/chapter2_lit_review_nonmain.md`、`output/paper/chapter2_references_gbt7714_nonmain.md`，并同步更新 `DOC_TREE.md` 索引。
+- [2026-03-02 05:24:00 UTC] 决策：按用户“完成Phase5准备”要求，采用“先自动化准备包、再状态同步”的收口策略；不提前勾选 FINAL CHECKPOINT，仅将状态推进到 In Progress。
+- [2026-03-02 05:24:00 UTC] 日志：新增 `scripts/phase5_prepare.py`，自动生成 `output/paper/论文完整版.md`、`notes/phase5_traceability_matrix.md`、`notes/phase5_preflight_check.md`。
+- [2026-03-02 05:24:00 UTC] 日志：新增 `scripts/phase5_did_quickcheck.py` 并产出 `output/tables/phase5_did_repro_check.csv`；PanelOLS复验结果与既有DID基准系数一致（DivDummy=0.0828, DivPayRate=0.1081，with controls）。
+- [2026-03-02 05:24:00 UTC] 风险：Stata终端批处理在回归阶段触发 `r(3499)`（见 `logs/20260302/stata_phase5_*.log`），当前保留为 Phase5 未闭环事项；已在 `notes/phase5_preflight_check.md` 标注。
+- [2026-03-02 05:24:00 UTC] 状态同步：已更新 `notes/checkpoints.md`（FINAL CHECKPOINT -> In Progress）、`INSTRUCTIONS.md`（Phase5进度注记）、`DOC_TREE.md`（新增Phase5产物索引），并补齐 `logs/20260302/run.log` 与 `events.jsonl`。
+- [2026-03-02 05:52:15 UTC] 决策：按用户“用 Stata MCP 测试参考文献 do 文件”执行快速可运行性验证，优先测试 `参考文献/2/附件2：数据及程序代码` 下脚本。
+- [2026-03-02 05:52:15 UTC] 日志：`程序代码_mcp_fixed.do` 在 Stata 18.0 下因 `version 19.5` 报 `r(9)` 终止；随后实跑 `程序代码.do`，在 `sum2docx` 处报 `docx_clear_wrk(): strtoreal() not found`（`r(3499)`）。对应日志：`参考文献/2/附件2：数据及程序代码/程序代码_mcp_fixed.log`、`参考文献/2/附件2：数据及程序代码/程序代码.log`。
+- [2026-03-02 06:00:00 UTC] 决策：按用户“连接stata mcp可以跑通吗”请求，先检查本会话可用 MCP server 清单。
+- [2026-03-02 06:00:00 UTC] 日志：`list_mcp_resources` 仅返回 `exa` 服务，未发现 `stata-mcp`；结论为当前会话无法直接通过 Stata MCP 执行命令（但本机 Stata 可通过二进制批处理运行）。
+- [2026-03-02 05:59:07 UTC] 决策：按用户要求恢复并验证 Stata MCP 连通性，先检查 Codex MCP 配置与 4000 端口服务状态，再执行最小可运行请求。
+- [2026-03-02 05:59:07 UTC] 日志：确认 ~/.codex/config.toml 已启用 stata-mcp (mcp-proxy -> http://localhost:4000/mcp)；重启后验证接口可响应（/openapi.json 与 /mcp 返回正常），并通过 POST /run_selection 执行 display 1+1 返回结果 2，判定 Stata MCP 服务端可跑通。当前线程工具清单仍未热加载 stata-mcp，需要新开会话加载该 MCP 工具。
+- [2026-03-02 06:05:00 UTC] 决策：沉淀 Stata MCP 快速排障路径，用于后续“端口在监听但 MCP 不可用”场景的一键诊断与恢复。
+- [2026-03-02 06:05:00 UTC] 日志：标准流程为 1) `codex mcp get stata-mcp` 确认配置；2) `lsof -nP -iTCP:4000 -sTCP:LISTEN` + `curl http://127.0.0.1:4000/openapi.json` 判定服务活性；3) 若端口监听但接口超时，`kill -9 <pid>` 后重启 `stata_mcp_server.py`；4) 用 `POST /run_selection` 执行 `display 1+1` 验证执行链路；5) 若当前线程 `list_mcp_resources` 无 `stata-mcp`，需新开会话热加载 MCP 工具。
+- [2026-03-02 07:32:33 UTC] 决策：按用户“再检查并维护文档树”要求，执行仓库现状复核并仅修正 `DOC_TREE.md` 与真实文件不一致项，不改动其他业务内容。
+- [2026-03-02 07:32:33 UTC] 日志：`DOC_TREE.md` 已完成同步：移除不存在的 `CLAUDE.md`、将 `output/paper` 旧文件名 `chapter2_references_*` 更新为 `references_*`、补录 `scripts/phase3_placebo_stata100_mcp.log`，更新时间标记为“2026-03-02 (Phase 5 准备复查)”。

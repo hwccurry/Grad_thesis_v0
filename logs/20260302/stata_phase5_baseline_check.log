@@ -19,20 +19,25 @@ Notes:
       1. Stata is running in batch mode.
       2. Unicode is supported; see help unicode_advice.
       3. More than 2 billion observations are allowed; see help obs_advice.
-      4. Maximum number of variables is set to 5,000 but can be increased; see help set_maxvar.
+      4. Maximum number of variables is set to 5,000 but can be increased;
+          see help set_maxvar.
 
-. do 程序代码.do 
+. do tmp/stata_phase5_baseline_check.do 
 
-. use 数据.dta,clear
+. set more off
 
-. global ctrl SIZE AGE LEV ROA GROWTH CFO TOP INDEP MH HHI_BANK MKT
+. capture which reghdfe
 
-. 
-. *描述性统计
-. sum2docx DivDummy DivPayRate treat post $ctrl using 1.docx , replace stats(N mean sd min p25 median p75 max) 
-> title("表 1: 描述性统计") 
-        docx_clear_wrk():  3499  strtoreal() not found
+. if _rc {
+.     ssc install reghdfe, replace
+. }
+
+. use "/Users/mac/Desktop/Grad_thesis/tmp/data_phase5_check.dta", clear
+
+. reghdfe DivDummy did, absorb(year stkcd) vce(cluster stkcd) keepsingletons
+           get_version():  3499  findfile() not found
                  <istmt>:     -  function returned error
+(error occurred while loading reghdfe.ado)
 r(3499);
 
 end of do-file
