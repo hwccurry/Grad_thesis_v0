@@ -223,6 +223,79 @@ Grad_thesis/
 ### Task 5.1 格式规范
 - 对齐学校模板（目录、标题层级、图表、注释、参考文献格式）。
 
+#### 5.1.1 回归结果表（Stata / Python 输出 → Word 三线表）
+
+**通用规范（适用于所有回归结果表）**：
+- **三线表**：顶线 1 磅、表头下细线 0.5 磅、底线 1 磅，无左右边框、无纵线。必要时可加辅助线（如分隔面板），仍称三线表。
+- **系数精度**：统一保留 3–4 位小数（`%9.3f` 或 `%9.4f`），同一张表内位数一致。
+- **括号内容**：默认报告**标准误**（se），置于系数正下方圆括号中。若报告 t/z 统计量需在注释说明。
+- **显著性星号**：`*** p<0.01, ** p<0.05, * p<0.1`，星号跟在系数后方（不在括号内）。注释置于表格底部。
+- **控制变量/固定效应行**：用 `Yes` / `No` 标注，不输出系数。
+- **底部统计量**：至少报告 N（观测值数）、R²（或 adj-R²/Pseudo-R²），可选 F 统计量。
+- **数字对齐**：小数点对齐，缺失值用 `—` 而非空白。
+- **变量标签**：使用中文经济含义标签（如"资产负债率"而非 `Lev`），英文缩写可在首次出现处括注。
+
+**Stata 侧工具链**：
+- 推荐 `esttab`（`estout` 包）或 `outreg2`，输出 `.rtf` 后在 Word 中微调。
+- 常用命令模板：
+  ```stata
+  esttab m1 m2 m3 using "table.rtf", replace ///
+      b(%9.3f) se(%9.3f) star(* 0.1 ** 0.05 *** 0.01) ///
+      r2 ar2 N compress nogap ///
+      mtitles("模型1" "模型2" "模型3") ///
+      title("表X 基准回归结果") ///
+      note("注：括号内为聚类稳健标准误；*** p<0.01, ** p<0.05, * p<0.1。")
+  ```
+- 输出 `.rtf` 后用 Word 打开 → 全选表格 → 套用三线表样式 → 调整字体为宋体五号/Times New Roman 10.5pt。
+
+**Python 侧工具链**：
+- 推荐 `stargazer`（`pip install stargazer`）输出 HTML → 粘贴到 Word；或用 `pandas.DataFrame.to_latex()` + LaTeX 编译。
+- 替代方案：`statsmodels` 的 `summary2.summary_col()` 合并多模型 → `.as_latex()` 或手动转 DataFrame → `.to_csv()` → Excel → Word。
+- 图表（matplotlib）保存时统一 `plt.savefig("fig.png", dpi=300, bbox_inches='tight')`。
+
+#### 5.1.2 图形规范（Python matplotlib / Stata graph）
+
+- **分辨率**：位图不低于 300 dpi（学位论文印刷标准）；优先导出 PDF/EPS 矢量格式，打印时不失真。
+- **字体**：中文宋体或黑体，英文 Times New Roman 或 Arial，字号 8–10 pt，坐标轴标签加粗。
+- **配色**：优先黑白/灰度方案（保证黑白打印可辨认）；如用彩色需确保色差对比鲜明，避免红绿搭配。
+- **坐标轴**：必须包含变量名 + 单位，刻度 5–8 个为宜；纵轴起点视数据而定，不得截断误导。
+- **图例**：放在图内空白区域或图下方，避免遮挡数据。
+- **尺寸**：单栏图宽约 8–10 cm，双栏图宽约 15–17 cm（A4 版面）；高宽比建议 0.618–0.75。
+- **Python matplotlib 模板**：
+  ```python
+  import matplotlib.pyplot as plt
+  plt.rcParams.update({
+      'font.family': 'serif',
+      'font.serif': ['SimSun', 'Times New Roman'],
+      'font.size': 10,
+      'axes.labelsize': 10,
+      'axes.titlesize': 11,
+      'xtick.labelsize': 9,
+      'ytick.labelsize': 9,
+      'figure.dpi': 300,
+      'savefig.dpi': 300,
+      'savefig.bbox': 'tight',
+  })
+  ```
+
+#### 5.1.3 描述性统计与相关系数表
+
+- 同样使用三线表格式。
+- 描述性统计至少报告：N、Mean、SD、Min、Median、Max。
+- 相关系数矩阵：下三角列出 Pearson 相关系数，上三角列出 Spearman（如适用），对角线为 1 或空。
+- 显著性用星号标注，规则同回归表。
+
+#### 5.1.4 Markdown → Word 转换检查清单
+
+转排版时逐项检查：
+- [ ] 所有表格已转为三线表（Word 表格设计 → 仅保留顶线/表头线/底线）
+- [ ] 表标题在表上方居中、图标题在图下方居中
+- [ ] 字体统一：正文宋体小四 / 表内宋体五号 / 英文数字 Times New Roman
+- [ ] 注释格式 `注：xxx` 小五号左对齐
+- [ ] 页码、页眉、目录已按模板设置
+- [ ] 参考文献格式对齐 GB/T 7714 或学校模板
+- [ ] 图片分辨率 ≥ 300 dpi，无模糊/锯齿
+
 ### Task 5.2 风险排查
 - 查重风险段落重写；
 - 图表来源与口径复核；
