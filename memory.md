@@ -136,3 +136,5 @@
 - [2026-03-02 11:41:20 UTC] 日志：核验结果为“技术输入已就绪、流程交付未闭环”：`INSTRUCTIONS.md` 的 CHECKPOINT 5 已勾选且 `output/figures_v2`=28、`output/models`=2；但当前 `git status` 仍有大量未提交改动与未跟踪文件（含脚本/文档/日志/产物目录），不满足“每个 Phase 完成后 git add/commit/push”硬约束，建议先完成 Phase5 收口提交后再正式进入 Phase6。
 - [2026-03-02 11:45:22 UTC] 决策：按用户“先 git push 到远程仓库”请求，先执行远程同步命令，不在本次动作中自动打包未提交改动。
 - [2026-03-02 11:45:22 UTC] 日志：执行 `git push Grad_thesis_v0 main` 返回 `Everything up-to-date`；当前仍存在本地未提交修改与未跟踪文件，尚未形成可推送的新提交。
+- [2026-03-02 11:47:25 UTC] 决策：按用户确认执行 `git add + commit + push` 收口当前改动，采用“保留业务改动、排除超大模型文件与临时缓存”策略。
+- [2026-03-02 11:47:25 UTC] 日志：已提交 `6d27fb1` 并推送到 `Grad_thesis_v0/main`（`b948138..6d27fb1`）；提交包含 Phase5 图表规范化产物（`output/figures_v2`/`v3`）、脚本更新、日志与文档同步；`output/models/`、`scripts/__pycache__/` 与 Office 锁文件未入库。
