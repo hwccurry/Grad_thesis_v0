@@ -2,9 +2,6 @@
 
 毕业论文仓库。
 
-新上手请先看：
-- [ONBOARDING_GUIDE.md](ONBOARDING_GUIDE.md)
-
 关键规则与验收：
 - [INSTRUCTIONS.md](INSTRUCTIONS.md)
 
@@ -15,4 +12,5 @@
 - [memory.md](memory.md)
 
 说明：
-- `output/paper/论文完整版.md`、`output/paper/论文完整版_phase6.docx` 为可再生产物，当前分支可能未跟踪；按 `ONBOARDING_GUIDE.md` 的 Quick Run 可生成。
+- `output/paper/论文完整版.md`、`output/paper/论文终稿.docx` 为可再生产物，可按 `INSTRUCTIONS.md` 的 Quick Run List 生成。
+- `output/paper/论文终稿_base.docx` 为 Pandoc 中间文件，可按需删除。

@@ -162,3 +162,13 @@
 - [2026-03-03 12:40:16 UTC] 日志：已在 `INSTRUCTIONS.md` 增补 4 个板块：`复用基线`、`Quick Run List`、`触发重跑规则`、`默认禁止动作`；明确正文改稿场景下默认不执行 Phase2/3 全量脚本，仅执行 `phase5_prepare -> pandoc -> phase6_format_tables -> phase6_audit`。
 - [2026-03-03 12:47:09 UTC] 决策：按用户“查看维护当前仓库文档并推送远程”请求，执行文档一致性维护；统一将 `output/paper/论文完整版*` 标注为可再生产物，避免与当前分支缺失状态冲突。
 - [2026-03-03 12:47:09 UTC] 日志：已更新 `README.md`、`ONBOARDING_GUIDE.md`、`DOC_TREE.md`、`INSTRUCTIONS.md` 与 `.gitignore`；新增根目录 Word 临时锁文件忽略规则 `~$*.docx`，并删除仓库中的临时锁文件 `~$写作框架.docx`。
+- [2026-03-03 13:45:08 UTC] 决策：按用户“references_final.md 搜索核查文献真实性 + 导入 Zotero + 建立条目管理”请求，采用“DOI/Crossref 精确核查 + 中文题录检索一致性核查 + 增量导入缺失条目”流程，避免对已有库条目重复大规模导入。
+- [2026-03-03 13:45:08 UTC] 日志：新增 `output/paper/references_authenticity_check.md`（31条逐条核查，含网址与源文件）；结论为31/31可追溯，发现并修正 `output/paper/references_final.md` 三处硬错误：`[1]` 期刊卷期改为 AER 46(2)、`[13]` 改为 JFE 81(2)、`[14]` 改为 JFE 89(1)。
+- [2026-03-03 13:45:08 UTC] 日志：新增 `notes/references_final_31_verified.bib`（全量31条已校正文献）与 `notes/references_final_missing8_for_zotero.bib`（增量8条）；已通过 `open -a Zotero` 执行增量导入，`zotero_get_recent` 核验新增8条 item keys：`DQHIFXHQ, 2GGATRHZ, PXJFL9F9, 382SXQGG, XDB5WLXR, SDN78SUZ, 7QDXBZEW, TJJHS2J2`。
+- [2026-03-03 13:45:08 UTC] 日志：新增 `notes/zotero_entry_management_final31.md`，建立 final31 的 Zotero 条目键登记表（31条编号→item key 映射）与后续去重管理建议。
+- [2026-03-03 13:53:08 UTC] 决策：按用户要求执行 `output/paper/references_final.md` 与两篇基准论文（`参考文献/1/中国上市公司分红的动因研究——基于机器学习的证据.pdf`、`参考文献/2/现金分红“硬约束”政策与上市公司股利分配行为_卿小权.pdf`）参考文献交叉比对，采用“文本提取 + OCR（仅扫描版）+ 作者/年份严格匹配”口径。
+- [2026-03-03 13:53:08 UTC] 日志：第2篇 PDF 可直接提取（42条），第1篇为图片型 PDF（`pdffonts` 为空）故对末5页执行 OCR（`notes/ocr_ref1/p-17~p-19`）；比对结果为 `references_final.md` 31条中有18条可在两篇参考文献中定位，13条未定位（[1][2][5][7][9][12][14][17][24][25][27][28][30]），结论为“部分相符、非完全一致”。
+- [2026-03-03 14:11:33 UTC] 决策：按用户要求对 `references_final.md` 中“未在两篇基准论文参考文献定位到”的13条文献做二次严核，采用“英文条目 Crossref+DOI、中文条目 DOI解析链+数据库记录页”口径，避免仅依赖单一检索结果。
+- [2026-03-03 14:11:33 UTC] 日志：新增 `notes/reference_verification/unmatched_refs_verified_evidence_20260303.md` 与 `...json`；结论为13/13均可确认真实存在，其中 `[1]` 采用 Harvard DASH + JSTOR/EBSCO 题录交叉、`[12]` 采用 `10.3969` DOI 解析到万方记录（`kjyj200412001`）并辅以万方参考文献检索页佐证。
+- [2026-03-03 14:20:17 UTC] 决策：按用户“维护当前仓库文档，推送到远程仓库”请求执行最小一致性修订；不恢复已删除的 `ONBOARDING_GUIDE.md`，改为清理失效引用并同步当前产物命名。
+- [2026-03-03 14:20:17 UTC] 日志：已更新 `README.md`、`DOC_TREE.md`、`INSTRUCTIONS.md`（修复失效路径 `ONBOARDING_GUIDE.md` 与 `notes/phase5_test/`，并将终稿产物统一为 `论文终稿.docx` 与 `论文终稿_base.docx`）；随后提交并推送文档维护变更。

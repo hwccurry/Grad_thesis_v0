@@ -1,13 +1,12 @@
 # Repository Document Tree
 
-更新时间：2026-03-03（文档一致性维护：补充新手入口并标注可再生产物）
+更新时间：2026-03-03（文档一致性维护：清理失效路径并同步当前产物命名）
 维护规则：每个 Phase 完成后必须同步更新本文件。
 
 ## 根目录
 ```text
 Grad_thesis/
 ├── INSTRUCTIONS.md
-├── ONBOARDING_GUIDE.md
 ├── DOC_TREE.md
 ├── README.md
 ├── memory.md
@@ -22,7 +21,6 @@ Grad_thesis/
 
 ## 关键文件说明
 - `INSTRUCTIONS.md`：项目总流程、Phase 任务、检查点、全局约束。
-- `ONBOARDING_GUIDE.md`：新写作者快速上手指南（结构、复现、改稿与导出流程）。
 - `DOC_TREE.md`：仓库结构说明（本文件）。
 - `memory.md`：跨会话决策与执行日志。
 - `写作框架.md`：导师给出的章节框架与写作要求。
@@ -42,9 +40,11 @@ notes/
 ├── phase3_reference_do_comparison_20260301.md   # [Phase3收口] 与参考do复跑对照
 ├── phase4_consistency_check.md                   # [Phase4] 统稿一致性校验（含摘要复核）
 ├── phase5_traceability_matrix.md                 # [Phase5收口] 结论-图表-脚本追溯矩阵
-├── phase5_test/                                  # [Phase5测试] 图表质量测试与对比样图
-├── phase6_benchmark/                             # [Phase6基准] 学校模板页面渲染样图
-└── phase6_delivery_audit.md                      # [Phase6新增] 自动化交付审计报告
+├── phase6_delivery_audit.md                      # [Phase6新增] 自动化交付审计报告
+├── reference_verification/                       # [参考文献核验] Crossref与二次核验证据
+├── references_final_31_verified.bib              # [参考文献核验] 31条最终校正文献
+├── references_final_missing8_for_zotero.bib      # [参考文献核验] Zotero增量导入包(8条)
+└── zotero_entry_management_final31.md            # [参考文献核验] final31条目管理台账
 ```
 - `data_code_inventory.md`：数据/代码盘点。
 - `path_unification.md`：路径统一策略与改造记录。
@@ -57,9 +57,11 @@ notes/
 - `phase3_reference_do_comparison_20260301.md`：参考文献2 do-file 复跑对照与剩余参数差异说明。
 - `phase4_consistency_check.md`：Phase4 一致性校验记录（研究闭环、H1-H3映射、证据边界、摘要一致性复核）。
 - `phase5_traceability_matrix.md`：Phase5 图表-结论-脚本追溯关系表（已切换至 `figures_v2`）。
-- `phase5_test/`：Phase5 图表质量测试资产（DPI/字体/尺寸验证脚本与截图）。
-- `phase6_benchmark/`：Phase6 模板对照图（用于 Word 排版基准比对）。
 - `phase6_delivery_audit.md`：Phase6 自动化审计（图像、编号、DID复验、docx 结构摘要）。
+- `reference_verification/`：参考文献真实性核验证据（Crossref 与二次核验）。
+- `references_final_31_verified.bib`：31条终稿参考文献 BibTeX（已校正）。
+- `references_final_missing8_for_zotero.bib`：Zotero 增量导入 BibTeX（8条）。
+- `zotero_entry_management_final31.md`：编号到 Zotero item key 映射台账。
 
 ## output/
 ```text
@@ -73,8 +75,13 @@ output/
 │   ├── chapter1_introduction_draft.md        # [Phase4新增] 第1章绪论草稿
 │   ├── chapter5_conclusion_draft.md          # [Phase4新增] 第5章结论与启示草稿
 │   ├── abstract_draft.md                     # [Phase4收口] 中英文摘要
+│   ├── references_final.md                   # [Phase6新增] 正文参考文献主清单(31条)
+│   ├── references_authenticity_check.md      # [Phase6新增] 参考文献真实性核验报告
+│   ├── acknowledgment.md                     # [Phase6新增] 后记
+│   ├── declaration.md                        # [Phase6新增] 独创性与授权声明
 │   ├── 论文完整版.md                          # [可再生] 由 `scripts/phase5_prepare.py` 按需生成
-│   └── 论文完整版_phase6.docx                # [可再生] 由 `pandoc + scripts/phase6_format_tables.py` 按需生成
+│   ├── 论文终稿.docx                          # [可再生] 由 `pandoc + scripts/postprocess_docx.py` 按需生成
+│   └── 论文终稿_base.docx                     # [可再生] Pandoc中间产物（可删除）
 ├── tables/
 │   ├── phase0_minimal_repro_metrics.csv
 │   ├── 变量定义表-第3章.md                    # [Phase2] 变量定义与样本说明
@@ -171,6 +178,7 @@ scripts/
 ├── phase5_did_quickcheck.py                   # [Phase5准备] PanelOLS复验DID基准系数
 ├── phase6_audit.py                            # [Phase6新增] 自动化交付审计脚本
 ├── phase6_format_tables.py                    # [Phase6新增] DOCX三线表格式化脚本
+├── postprocess_docx.py                        # [Phase6新增] Word后处理脚本（样式/页码/图片缩放）
 └── stata_mata_compat.do                       # [Phase5排障] Mata 库兼容修复脚本
 ```
 
