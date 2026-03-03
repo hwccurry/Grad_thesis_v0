@@ -150,3 +150,15 @@
 - [2026-03-02 13:43:50 UTC] 结论：Phase6 当前为“进行中未闭环”——Task 6.2 与 6.3 已完成且自动化审计通过，但 Task 6.1 的 Word 人工终检项与 FINAL CHECKPOINT“论文可提交版本完成”尚未勾选。
 - [2026-03-02 13:52:18 UTC] 决策：按用户请求增强 /Users/mac/Desktop/phase6_minimal_bundle/README.md，补充最简交付包文档树、文件作用、文件交叉联系与图表-主稿映射。
 - [2026-03-02 13:52:18 UTC] 日志：README 已新增 6 个结构化板块（目标、文档树、各文件作用、核心依赖链、图1-图12映射、表1-表11映射）；并明确标注最简包当前未单独附带的表源文件（rf_yearly_r2.csv、did_descriptive_stats.csv），避免追溯歧义。
+- [2026-03-03 03:45:39 UTC] 决策：按用户“终稿最小复现包宁少勿多”要求，对 `/Users/mac/Desktop/论文材料` 执行最小化审计；以 `参考文献`（脚本+数据）与 `写作框架.md` 作为硬标准，不新增非必要文件。
+- [2026-03-03 03:45:39 UTC] 日志：审计发现当前包 7.3G，其中 `自己跑的图表和脚本` 占 7.0G（含 `models/rf_model.joblib` 7.0G）且脚本主要复用 `参考文献` 数据再加工；判定可作为首要删减对象。另发现 `论文终稿.md` 图路径全部指向缺失的 `../figures_v2/*`，若保留该 md 需修路径或附图，否则建议仅保留 `论文完整版.docx` 作为终稿载体。
+- [2026-03-03 03:47:38 UTC] 决策：按用户“执行清理”指令，采用最小复现包口径，仅保留 `写作框架.md`、`参考文献/`、`论文完整版.docx`。
+- [2026-03-03 03:47:38 UTC] 日志：已删除 `自己跑的图表和脚本/`（含 7.0G 模型）、`商学院本科生毕业论文格式模板2025.01.docx`、`论文终稿.md`，并递归清理 `.DS_Store` 与 `~$*` 临时文件；复核后 `/Users/mac/Desktop/论文材料` 总体积约 242M，顶层仅剩 3 项。
+- [2026-03-03 03:51:23 UTC] 决策：按用户要求新增“新写作者快速上手指南”，目标覆盖仓库结构认知、快速复现、完整复现、终稿改写与导出链路；采用“快速复现优先 + 完整复现补充”的双层路径。
+- [2026-03-03 03:51:23 UTC] 日志：新增根目录 `ONBOARDING_GUIDE.md`（含目录地图、命令清单、已知风险 Stata r(3499)、改稿工作流与终稿定义）；更新 `README.md` 为入口型文档并链接 `ONBOARDING_GUIDE.md` 与 `INSTRUCTIONS.md`。
+- [2026-03-03 12:36:32 UTC] 决策：按用户“修改重构正文时避免重复执行 Phase5/6”请求，制定“文本改动优先复用已有图表/模型/表格产物”的最小流水线；默认不重跑 Phase5 图表重生成与 Phase6 全量审计，仅在触发条件满足时局部重跑。
+- [2026-03-03 12:36:32 UTC] 日志：核验当前仓库可复用资产为 `output/figures_v2/`（28张）、`output/models/rf_model.joblib` 与 `gbdt_model.joblib`、`notes/phase5_traceability_matrix.md`、`notes/phase6_delivery_audit.md`；发现 `output/paper/论文完整版.md` 与 `output/paper/论文完整版_phase6.docx` 当前缺失，后续改稿流程需先运行 `scripts/phase5_prepare.py` 重建主稿，再执行 `pandoc -> scripts/phase6_format_tables.py -> scripts/phase6_audit.py` 完成轻量交付复核。
+- [2026-03-03 12:40:16 UTC] 决策：按用户要求维护 `INSTRUCTIONS.md`，新增“正文改动后的快速改稿清单（默认复用 Phase5/6 产物）”，固化最小命令链与触发重跑规则，供当前会话及后续 AI 直接复用。
+- [2026-03-03 12:40:16 UTC] 日志：已在 `INSTRUCTIONS.md` 增补 4 个板块：`复用基线`、`Quick Run List`、`触发重跑规则`、`默认禁止动作`；明确正文改稿场景下默认不执行 Phase2/3 全量脚本，仅执行 `phase5_prepare -> pandoc -> phase6_format_tables -> phase6_audit`。
+- [2026-03-03 12:47:09 UTC] 决策：按用户“查看维护当前仓库文档并推送远程”请求，执行文档一致性维护；统一将 `output/paper/论文完整版*` 标注为可再生产物，避免与当前分支缺失状态冲突。
+- [2026-03-03 12:47:09 UTC] 日志：已更新 `README.md`、`ONBOARDING_GUIDE.md`、`DOC_TREE.md`、`INSTRUCTIONS.md` 与 `.gitignore`；新增根目录 Word 临时锁文件忽略规则 `~$*.docx`，并删除仓库中的临时锁文件 `~$写作框架.docx`。

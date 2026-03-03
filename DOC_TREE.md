@@ -1,12 +1,13 @@
 # Repository Document Tree
 
-更新时间：2026-03-02 (Phase 6 主体完成：三线表格式化、参考文献补齐、查重段落改写)
+更新时间：2026-03-03（文档一致性维护：补充新手入口并标注可再生产物）
 维护规则：每个 Phase 完成后必须同步更新本文件。
 
 ## 根目录
 ```text
 Grad_thesis/
 ├── INSTRUCTIONS.md
+├── ONBOARDING_GUIDE.md
 ├── DOC_TREE.md
 ├── README.md
 ├── memory.md
@@ -21,6 +22,7 @@ Grad_thesis/
 
 ## 关键文件说明
 - `INSTRUCTIONS.md`：项目总流程、Phase 任务、检查点、全局约束。
+- `ONBOARDING_GUIDE.md`：新写作者快速上手指南（结构、复现、改稿与导出流程）。
 - `DOC_TREE.md`：仓库结构说明（本文件）。
 - `memory.md`：跨会话决策与执行日志。
 - `写作框架.md`：导师给出的章节框架与写作要求。
@@ -71,8 +73,8 @@ output/
 │   ├── chapter1_introduction_draft.md        # [Phase4新增] 第1章绪论草稿
 │   ├── chapter5_conclusion_draft.md          # [Phase4新增] 第5章结论与启示草稿
 │   ├── abstract_draft.md                     # [Phase4收口] 中英文摘要
-│   ├── 论文完整版.md                          # [Phase6完成] 合并主稿（含参考文献列表23篇+查重改写）
-│   └── 论文完整版_phase6.docx                # [Phase6完成] 模板导出版（三线表+标题格式化）
+│   ├── 论文完整版.md                          # [可再生] 由 `scripts/phase5_prepare.py` 按需生成
+│   └── 论文完整版_phase6.docx                # [可再生] 由 `pandoc + scripts/phase6_format_tables.py` 按需生成
 ├── tables/
 │   ├── phase0_minimal_repro_metrics.csv
 │   ├── 变量定义表-第3章.md                    # [Phase2] 变量定义与样本说明
@@ -187,6 +189,7 @@ scripts/
 
 ## 更新约定
 - 新增/删除关键文件或目录后，立即更新本文件。
+- 对可再生产物（如 `output/paper/论文完整版*`）需显式标注“生成方式”，避免误判为丢失文件。
 - 每个 Phase 完成后，至少更新：
   - `output/` 新产物
   - `notes/` 新决策文档
