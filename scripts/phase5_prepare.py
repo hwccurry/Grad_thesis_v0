@@ -27,6 +27,9 @@ FULL_PAPER_PARTS = [
     ("第三章 机器学习预测分析", PAPER_DIR / "chapter3_ml_prediction_draft.md"),
     ("第四章 DID因果评估", PAPER_DIR / "chapter4_did_evaluation_draft.md"),
     ("第五章 结论与启示", PAPER_DIR / "chapter5_conclusion_draft.md"),
+    ("参考文献", PAPER_DIR / "references_final.md"),
+    ("后记", PAPER_DIR / "acknowledgment.md"),
+    ("论文独创性及授权声明", PAPER_DIR / "declaration.md"),
 ]
 
 FULL_PAPER_OUTPUT = PAPER_DIR / "论文完整版.md"
@@ -61,10 +64,8 @@ def build_full_paper() -> list[CheckItem]:
         return [CheckItem("论文合并源文件齐全", False, f"缺失: {', '.join(missing)}")]
 
     chunks: list[str] = []
-    chunks.append("# 论文完整版（Phase5 合并稿）")
-    chunks.append("")
-    chunks.append(f"- 生成时间：{now_str()}")
-    chunks.append("- 说明：该文件为答辩前质检与格式迁移用主稿，排版以学校模板 docx 为准。")
+    chunks.append(f"<!-- 论文完整版 — 生成时间：{now_str()} -->")
+    chunks.append("<!-- 说明：该文件为答辩前质检与格式迁移用主稿，排版以学校模板 docx 为准。 -->")
     chunks.append("")
 
     for title, p in FULL_PAPER_PARTS:
@@ -94,14 +95,14 @@ def build_traceability() -> CheckItem:
         (
             "H1：生命周期/代理成本是关键动因",
             "output/tables/model_comparison_ch3.csv; output/tables/feature_importance_RF_fixed.csv; output/tables/feature_importance_GBDT.csv; output/tables/subsample_robustness_ch3.csv; output/tables/pca_model_comparison.csv",
-            "output/figures_v2/feature_importance_bar_rf.png; output/figures_v2/feature_importance_bar_gbdt.png; output/figures_v2/pca_scree_plot.png; output/figures_v2/pca_loading_heatmap.png",
+            "output/figures_v3/feature_importance_bar_rf.png; output/figures_v3/feature_importance_bar_gbdt.png; output/figures_v3/pca_scree_plot.png; output/figures_v3/pca_loading_heatmap.png",
             "scripts/phase2_ml_training.py; scripts/phase2_rf_and_summary.py; scripts/phase2_ale_pdp_plots.py; scripts/phase2_subsample.py; scripts/phase2_pca_analysis.py",
             "output/paper/chapter3_ml_prediction_draft.md",
         ),
         (
             "H2：政策显著提高分红意愿与水平",
             "output/tables/did_baseline_regression.csv; output/tables/did_event_study_DivDummy.csv; output/tables/did_event_study_DivPayRate.csv; output/tables/did_robustness_checks.csv; output/tables/did_placebo_DivDummy.csv; output/tables/did_placebo_DivPayRate.csv",
-            "output/figures_v2/did_parallel_trends.png; output/figures_v2/did_placebo_test.png",
+            "output/figures_v3/did_parallel_trends.png; output/figures_v3/did_placebo_test.png",
             "scripts/phase3_did_stata_replication.do; scripts/phase5_did_trends_plot.py; scripts/phase3_placebo_plot.py",
             "output/paper/chapter4_did_evaluation_draft.md",
         ),

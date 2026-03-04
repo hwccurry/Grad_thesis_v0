@@ -1,0 +1,15 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/mac/Desktop/Grad_thesis/复核_最简.log
+  log type:  text
+ opened on:   4 Mar 2026, 09:02:04
+
+. 
+. * ---- 依赖：仅保留最少 ----
+. * ---- 数据 ----
+. use 数据.dta, clear
+file 数据.dta not found
+r(601);
+r(601);
+
+. capture log close _all

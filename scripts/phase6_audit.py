@@ -27,7 +27,7 @@ from docx import Document
 
 ROOT = Path(__file__).resolve().parents[1]
 PAPER_MD = ROOT / "output" / "paper" / "论文完整版.md"
-PAPER_DOCX = ROOT / "output" / "paper" / "论文完整版_phase6.docx"
+PAPER_DOCX = ROOT / "output" / "paper" / "论文终稿.docx"
 BASELINE_CSV = ROOT / "output" / "tables" / "did_baseline_regression.csv"
 REPRO_CSV = ROOT / "output" / "tables" / "phase5_did_repro_check.csv"
 REPORT = ROOT / "notes" / "phase6_delivery_audit.md"
@@ -36,6 +36,22 @@ PLACEHOLDER_PATTERN = re.compile(r"\bR\d{2}\b|TODO|TBD|待补|待定|xxx|XXX")
 IMAGE_PATTERN = re.compile(r"!\[[^\]]*]\(([^)]+)\)")
 FIG_CAPTION_PATTERN = re.compile(r"\*\*图(\d+)\s")
 TAB_CAPTION_PATTERN = re.compile(r"\*\*表(\d+)\s")
+REF_ENTRY_PATTERN = re.compile(r"^\[\d+\]\s", re.MULTILINE)
+
+# Required sections that must exist as H1 headings in the merged paper
+REQUIRED_SECTIONS = [
+    "摘要",
+    "Abstract",
+    "第一章 绪论",
+    "第二章 文献综述与理论基础",
+    "第三章 上市公司分红的动因预测分析",
+    "第四章 基于政策准自然实验的因果效应评估",
+    "第五章 研究结论、启示与展望",
+    "参考文献",
+    "后记",
+    "论文独创性及授权声明",
+]
+MIN_REF_COUNT = 25
 DPI_MIN = 299.5
 
 
@@ -179,6 +195,23 @@ def docx_summary(path: Path) -> dict:
     }
 
 
+def check_sections(text: str) -> tuple[bool, list[str]]:
+    """Check that all required sections exist as H1 headings."""
+    h1_pattern = re.compile(r"^# (.+)$", re.MULTILINE)
+    h1_titles = [m.group(1).strip() for m in h1_pattern.finditer(text)]
+    missing = []
+    for req in REQUIRED_SECTIONS:
+        if not any(req in t for t in h1_titles):
+            missing.append(req)
+    return len(missing) == 0, missing
+
+
+def check_ref_count(text: str) -> tuple[bool, int]:
+    """Check that reference count meets minimum threshold."""
+    count = len(REF_ENTRY_PATTERN.findall(text))
+    return count >= MIN_REF_COUNT, count
+
+
 def build_report() -> str:
     text = load_text(PAPER_MD)
     placeholder_hits = check_placeholders(text)
@@ -194,6 +227,9 @@ def build_report() -> str:
     did_ok, did_details = compare_did(baseline, repro)
 
     docx = docx_summary(PAPER_DOCX)
+
+    sections_ok, sections_missing = check_sections(text)
+    ref_ok, ref_count = check_ref_count(text)
 
     lines = [
         "# Phase 6 交付审计报告",
@@ -238,7 +274,24 @@ def build_report() -> str:
 
     lines += [
         "",
-        "## 5. DOCX 导出结构摘要",
+        "## 5. 章节完整性门禁",
+        f"- 结果：{'通过' if sections_ok else '未通过'}",
+    ]
+    if sections_missing:
+        lines.append(f"- 缺失章节：{', '.join(sections_missing)}")
+    else:
+        lines.append("- 全部必需章节均已包含")
+
+    lines += [
+        "",
+        "## 6. 参考文献数量检查",
+        f"- 结果：{'通过' if ref_ok else '未通过'}",
+        f"- 参考文献条目数：{ref_count}（下限 {MIN_REF_COUNT}）",
+    ]
+
+    lines += [
+        "",
+        "## 7. DOCX 导出结构摘要",
     ]
     if not docx.get("exists"):
         lines.append("- 结果：未导出 docx")
@@ -251,11 +304,18 @@ def build_report() -> str:
         lines.append(f"- Heading 段落数：{docx['heading_paras']}")
 
     overall_ok = (
-        len(placeholder_hits) == 0 and image_ok and fig_seq_ok and tab_seq_ok and did_ok and docx.get("exists", False)
+        len(placeholder_hits) == 0
+        and image_ok
+        and fig_seq_ok
+        and tab_seq_ok
+        and did_ok
+        and sections_ok
+        and ref_ok
+        and docx.get("exists", False)
     )
     lines += [
         "",
-        "## 6. 结论",
+        "## 8. 结论",
         f"- 自动化审计结论：{'通过' if overall_ok else '存在未通过项'}",
         "- 说明：Word 版式细节（页眉页脚、三线表线宽、字体混排）仍需人工终检。",
         "",

@@ -1,0 +1,216 @@
+[
+  {
+    "idx": 1,
+    "exists": true,
+    "method": "Manual web records",
+    "citation": "Lintner J. Distribution of Incomes of Corporations Among Dividends, Retained Earnings, and Taxes[J]. The American Economic Review, 1956, 46(2): 97-113.",
+    "doi": null,
+    "links": [
+      "https://dash.harvard.edu/entities/publication/73120378-feb6-6bd4-e053-0100007fdf3b",
+      "https://www.jstor.org/stable/1910664",
+      "https://search.ebscohost.com/login.aspx?direct=true&db=bth&AN=4509909&site=ehost-live"
+    ],
+    "checks": [
+      {
+        "url": "https://dash.harvard.edu/entities/publication/73120378-feb6-6bd4-e053-0100007fdf3b",
+        "http_status": 200,
+        "final_url": "https://dash.harvard.edu/entities/publication/73120378-feb6-6bd4-e053-0100007fdf3b"
+      },
+      {
+        "url": "https://www.jstor.org/stable/1910664",
+        "http_status": 403,
+        "final_url": "https://www.jstor.org/stable/1910664"
+      },
+      {
+        "url": "https://search.ebscohost.com/login.aspx?direct=true&db=bth&AN=4509909&site=ehost-live",
+        "http_status": 200,
+        "final_url": "https://login.ebsco.com/?requestIdentifier=66421e15-9170-4147-8db5-db509c27b7a2&acrValues=uid&ui_locales&redirect_uri=https://logon.ebsco.zone/api/dispatcher/continue/prompted?state=ZTA1Y2MzZGNkYmI2NDkyZjlmZDI5MGYzZGI4MWUyMGY=&authRequest=eyJraWQiOiIxNzY5MTEwMjQ0MDQ3IiwiYWxnIjoiUlMyNTYifQ.eyJpc3MiOiJodHRwczpcL1wvYXV0aC5lYnNjby56b25lXC9hcGlcL2Rpc3BhdGNoZXIiLCJhdXRoUmVxdWVzdCI6eyJsb2dpbl9oaW50IjoiYW46NDUwOTkwOSxzaXRlOmVob3N0LWxpdmUiLCJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbl9jb2RlIiwic2NvcGUiOiJvcGVuaWQgZW1haWwgYWZmaWxpYXRpb24iLCJhY3JfdmFsdWVzIjoidWlkIiwicmVzcG9uc2VfdHlwZSI6ImNvZGUiLCJyZWRpcmVjdF91cmkiOiJodHRwczpcL1wvc2VhcmNoLmVic2NvaG9zdC5jb21cL3dlYmF1dGhcL1Byb21wdGVkQ2FsbGJhY2suYXNweCIsInN0YXRlIjoiQXhDWUxNeERrMEpNSTF3WW14ajdXQ283Mk9UbURBM2VRY0F2a3ZvYUVtQWNhZWNmMHNxclhXOHRJQmRQSTAzWUN0RUx0M0h0Y2liMHJkc3c2bnAxSUYwbXVLclNqS0xIbTNBNkItQV9NQ0ttTzFBaGJNU1g4alB4NzhUWTMydFhoR0ZQaVhYVXZERXV4NTJ0RVpVeG0ySnpDQ2dEREZELS02OUM1dEJRQUtyS1FFTHVQQjkwQXo3VVZVQnAtTjJ3OVp0N0tGamNQbXU1RVJidnZkRFZPbVZmbDZQQk0zcVUtTFhCOWY2bFZxLTVrYm43bDk3czIwbGg1T21sTUpYZmN3TFFvaXZuTTJHZjBHcHJpQ1lVUWI4cDFqeTYxcmNCT2EtdmEzS3FjQ1hoUENiVkxoVnAxLVlCdkhHSDhlcVFKekpqdWpsRGlnMUVFZlNjNGd1c0FTdkhRWnpvVGxzVnVoZWRoc2J5VnY3bnE0aVNoLXUybVluaUhoUi1zUUZwbjBoOUFyYjlXbnZ5dHR6amdRIiwiY2xpZW50X2lkIjoiYXdneWNJeDU3TXJ3bkRRNWg0VWU2eUNWRVAwcjVNdDkiLCJyZXNwb25zZV9tb2RlIjoicXVlcnkiLCJyZXFJZCI6IjY2NDIxZTE1LTkxNzAtNDE0Ny04ZGI1LWRiNTA5YzI3YjdhMiJ9LCJpYXQiOjE3NzI1NDcwMTIsImp0aSI6ImZmODllZmY2LTYzZmYtNDBlMS1iOTkzLTE4YjE3YzJkZmY4ZCIsInJlcUlkIjoiNjY0MjFlMTUtOTE3MC00MTQ3LThkYjUtZGI1MDljMjdiN2EyIn0.lgJHb4OO5s9n0H9ZBP2FhqJOTwDKLR9TB3avs3Stsv3TxOhnNIOXIJmhmW3gEqiyA4UqnqYUOS-BLmi_nbe4AhXHKP8BBsuX3X56HZQHmSjZgM3wzzqMtmuZhjkLUkZaD7ngqhXjmRkIqZGLT3alHf-dzQyfA4PnsmuH07m6HzKfYpHi4-rGkLyeaIFdQwQyFsvBhGI7okujYuEJOI5pNDbjT5pleAlNWyu2phI6BlMytQ1UlwRhS8-v7rPkjLHB4Do-VMidbAykayFqsVs0MjRsfkz2fIi2zXXhIGyeYb4-DqfolfhzSpnwRaWGjUsYr4qJUu9wikCpWYYQ6pHlWA"
+      }
+    ],
+    "note": "Harvard DASH 页面给出完整题录；JSTOR stable 与 EBSCO 记录均对应同一文献（机器访问可能触发403/登录）。"
+  },
+  {
+    "idx": 2,
+    "exists": true,
+    "method": "Crossref+DOI",
+    "citation": "Dividend Policy, Growth, and the Valuation of Shares (1961), The Journal of Business, 34(4): 411",
+    "doi": "10.1086/294442",
+    "links": [
+      "https://api.crossref.org/works/10.1086/294442",
+      "https://doi.org/10.1086/294442"
+    ],
+    "doi_final_url": "https://www.jstor.org/stable/2351143",
+    "doi_http_status": 403,
+    "note": "Crossref元数据与题录要素（题名/刊名/年卷期页）一致。"
+  },
+  {
+    "idx": 5,
+    "exists": true,
+    "method": "Crossref+DOI",
+    "citation": "Do Investment-Cash Flow Sensitivities Provide Useful Measures of Financing Constraints? (1997), The Quarterly Journal of Economics, 112(1): 169-215",
+    "doi": "10.1162/003355397555163",
+    "links": [
+      "https://api.crossref.org/works/10.1162/003355397555163",
+      "https://doi.org/10.1162/003355397555163"
+    ],
+    "doi_final_url": "https://academic.oup.com/qje/article-lookup/doi/10.1162/003355397555163",
+    "doi_http_status": 403,
+    "note": "Crossref元数据与题录要素（题名/刊名/年卷期页）一致。"
+  },
+  {
+    "idx": 7,
+    "exists": true,
+    "method": "Crossref+DOI",
+    "citation": "Random Forests (2001), Machine Learning, 45(1): 5-32",
+    "doi": "10.1023/A:1010933404324",
+    "links": [
+      "https://api.crossref.org/works/10.1023/A:1010933404324",
+      "https://doi.org/10.1023/A:1010933404324"
+    ],
+    "doi_final_url": "https://link.springer.com/article/10.1023/A:1010933404324",
+    "doi_http_status": 200,
+    "note": "Crossref元数据与题录要素（题名/刊名/年卷期页）一致。"
+  },
+  {
+    "idx": 9,
+    "exists": true,
+    "method": "Crossref+DOI",
+    "citation": "Greedy function approximation: A gradient boosting machine. (2001), The Annals of Statistics, 29(5): ",
+    "doi": "10.1214/aos/1013203451",
+    "links": [
+      "https://api.crossref.org/works/10.1214/aos/1013203451",
+      "https://doi.org/10.1214/aos/1013203451"
+    ],
+    "doi_final_url": "https://projecteuclid.org/journals/annals-of-statistics/volume-29/issue-5/Greedy-function-approximation-A-gradient-boosting-machine/10.1214/aos/1013203451.full",
+    "doi_http_status": 200,
+    "note": "Crossref元数据与题录要素（题名/刊名/年卷期页）一致。"
+  },
+  {
+    "idx": 12,
+    "exists": true,
+    "method": "Manual web records",
+    "citation": "李增泉, 孙铮, 王志伟. “掏空”与所有权安排——来自我国上市公司大股东资金占用的经验证据[J]. 会计研究, 2004(12): 3-13.",
+    "doi": null,
+    "links": [
+      "https://doi.org/10.3969/j.issn.1003-2886.2004.12.001",
+      "https://d.wanfangdata.com.cn/periodical/kjyj200412001",
+      "https://d.wanfangdata.com.cn/periodical/zgjjgc200901019"
+    ],
+    "checks": [
+      {
+        "url": "https://doi.org/10.3969/j.issn.1003-2886.2004.12.001",
+        "http_status": 200,
+        "final_url": "https://d.wanfangdata.com.cn/periodical/CiBQZXJpb2RpY2FsQ0hJU29scjkyMDI2MDIwMjE0MTYxMhINa2p5ajIwMDQxMjAwMRoINnBvNXZjZWQ%253D"
+      },
+      {
+        "url": "https://d.wanfangdata.com.cn/periodical/kjyj200412001",
+        "http_status": 200,
+        "final_url": "https://d.wanfangdata.com.cn/periodical/kjyj200412001"
+      },
+      {
+        "url": "https://d.wanfangdata.com.cn/periodical/zgjjgc200901019",
+        "http_status": 200,
+        "final_url": "https://d.wanfangdata.com.cn/periodical/zgjjgc200901019"
+      }
+    ],
+    "note": "10.3969 DOI 解析到万方期刊记录页面（HTTP 302->200）；并可在万方文献参考文献中检索到该条。"
+  },
+  {
+    "idx": 14,
+    "exists": true,
+    "method": "Crossref+DOI",
+    "citation": "Why do firms pay dividends? International evidence on the determinants of dividend policy☆ (2008), Journal of Financial Economics, 89(1): 62-82",
+    "doi": "10.1016/j.jfineco.2007.06.006",
+    "links": [
+      "https://api.crossref.org/works/10.1016/j.jfineco.2007.06.006",
+      "https://doi.org/10.1016/j.jfineco.2007.06.006"
+    ],
+    "doi_final_url": "https://linkinghub.elsevier.com/retrieve/pii/S0304405X08000445",
+    "doi_http_status": 200,
+    "note": "Crossref元数据与题录要素（题名/刊名/年卷期页）一致。"
+  },
+  {
+    "idx": 17,
+    "exists": true,
+    "method": "Crossref+DOI",
+    "citation": "Tunneling through intercorporate loans: The China experience☆ (2010), Journal of Financial Economics, 98(1): 1-20",
+    "doi": "10.1016/j.jfineco.2010.05.002",
+    "links": [
+      "https://api.crossref.org/works/10.1016/j.jfineco.2010.05.002",
+      "https://doi.org/10.1016/j.jfineco.2010.05.002"
+    ],
+    "doi_final_url": "https://linkinghub.elsevier.com/retrieve/pii/S0304405X10001145",
+    "doi_http_status": 200,
+    "note": "Crossref元数据与题录要素（题名/刊名/年卷期页）一致。"
+  },
+  {
+    "idx": 24,
+    "exists": true,
+    "method": "Crossref+DOI",
+    "citation": "Difference-in-Differences with multiple time periods (2021), Journal of Econometrics, 225(2): 200-230",
+    "doi": "10.1016/j.jeconom.2020.12.001",
+    "links": [
+      "https://api.crossref.org/works/10.1016/j.jeconom.2020.12.001",
+      "https://doi.org/10.1016/j.jeconom.2020.12.001"
+    ],
+    "doi_final_url": "https://linkinghub.elsevier.com/retrieve/pii/S0304407620303948",
+    "doi_http_status": 200,
+    "note": "Crossref元数据与题录要素（题名/刊名/年卷期页）一致。"
+  },
+  {
+    "idx": 25,
+    "exists": true,
+    "method": "Crossref+DOI",
+    "citation": "Difference-in-differences with variation in treatment timing (2021), Journal of Econometrics, 225(2): 254-277",
+    "doi": "10.1016/j.jeconom.2021.03.014",
+    "links": [
+      "https://api.crossref.org/works/10.1016/j.jeconom.2021.03.014",
+      "https://doi.org/10.1016/j.jeconom.2021.03.014"
+    ],
+    "doi_final_url": "https://linkinghub.elsevier.com/retrieve/pii/S0304407621001445",
+    "doi_http_status": 200,
+    "note": "Crossref元数据与题录要素（题名/刊名/年卷期页）一致。"
+  },
+  {
+    "idx": 27,
+    "exists": true,
+    "method": "Crossref+DOI",
+    "citation": "Do tournament incentives affect corporate dividend policy? (2023), Journal of Banking &amp; Finance, 152: 106877",
+    "doi": "10.1016/j.jbankfin.2023.106877",
+    "links": [
+      "https://api.crossref.org/works/10.1016/j.jbankfin.2023.106877",
+      "https://doi.org/10.1016/j.jbankfin.2023.106877"
+    ],
+    "doi_final_url": "https://linkinghub.elsevier.com/retrieve/pii/S0378426623001012",
+    "doi_http_status": 200,
+    "note": "Crossref元数据与题录要素（题名/刊名/年卷期页）一致。"
+  },
+  {
+    "idx": 28,
+    "exists": true,
+    "method": "Crossref+DOI",
+    "citation": "Dividend policy and corporate life cycle: a study of Indian companies (2023), Managerial Finance, 49(11): 1722-1749",
+    "doi": "10.1108/MF-01-2023-0053",
+    "links": [
+      "https://api.crossref.org/works/10.1108/MF-01-2023-0053",
+      "https://doi.org/10.1108/MF-01-2023-0053"
+    ],
+    "doi_final_url": "https://www.emerald.com/mf/article/49/11/1722-1749/290892",
+    "doi_http_status": 403,
+    "note": "Crossref元数据与题录要素（题名/刊名/年卷期页）一致。"
+  },
+  {
+    "idx": 30,
+    "exists": true,
+    "method": "Crossref+DOI",
+    "citation": "Digital finance and dividend policy: Evidence from China (2025), Pacific-Basin Finance Journal, 90: 102704",
+    "doi": "10.1016/j.pacfin.2025.102704",
+    "links": [
+      "https://api.crossref.org/works/10.1016/j.pacfin.2025.102704",
+      "https://doi.org/10.1016/j.pacfin.2025.102704"
+    ],
+    "doi_final_url": "https://linkinghub.elsevier.com/retrieve/pii/S0927538X25000411",
+    "doi_http_status": 200,
+    "note": "Crossref元数据与题录要素（题名/刊名/年卷期页）一致。"
+  }
+]

@@ -182,3 +182,5 @@
 - [2026-03-04 10:32:38 UTC] 日志：已更新 output/paper/chapter4_did_evaluation_draft.md 的 4.3.2 为单表；已导出 output/doc/chapter4_变量定义_三线表.docx 与 output/paper/chapter4_变量定义_三线表.docx（1张表、16行、4列，第一列分组纵向合并）。
 - [2026-03-04 14:17:41 UTC] 决策：按用户“维护仓库文档并推送远程”请求，执行最小文档一致性维护；仅同步当前已落地产物，不改动研究脚本与正文业务逻辑。
 - [2026-03-04 14:17:41 UTC] 日志：已更新 `DOC_TREE.md`（补录 `output/doc`、`output/paper/chapter3_变量定义_三线表.docx`、`output/paper/chapter4_变量定义_三线表.docx`、`output/figures_v2/feature_importance_combined.png`、`scripts/phase6_combined_feature_importance.py`），并完成本次会话记忆追加。
+- [2026-03-04 14:31:59 UTC] 决策：按用户“ 一并提交 ”指令执行全量收口提交，采用 `git add -A` 一次性纳入当前仓库全部剩余变更（含新增、修改、删除）并推送远程。
+- [2026-03-04 14:31:59 UTC] 日志：已先完成变更统计（22 个已跟踪改动 + 25 个未跟踪文件），随后执行全量提交与推送，作为本轮会话交付闭环。

@@ -1,0 +1,11 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/mac/Desktop/Grad_thesis/复核_最简_mcp.log
+  log type:  text
+ opened on:   4 Mar 2026, 09:02:04
+
+. version 18.0
+
+. set more off
+
+. capture log close _all

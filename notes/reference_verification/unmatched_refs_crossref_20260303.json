@@ -1,0 +1,242 @@
+[
+  {
+    "idx": 1,
+    "query": {
+      "title": "Distribution of Incomes of Corporations Among Dividends, Retained Earnings, and Taxes",
+      "authors": "Lintner J",
+      "year": 1956,
+      "journal": "The American Economic Review",
+      "doi": null
+    },
+    "verified": true,
+    "crossref_source": "https://api.crossref.org/works?query.title=Distribution+of+Incomes+of+Corporations+Among+Dividends%2C+Retained+Earnings%2C+and+Taxes&rows=5",
+    "title": "Chapter 1. Wages, Earnings, Incomes and Taxes",
+    "journal": "Australian Economic Review",
+    "year": 1974,
+    "volume": "7",
+    "issue": "1",
+    "page": "7-9",
+    "doi": "10.1111/j.1467-8462.1974.tb00509.x",
+    "url": "https://doi.org/10.1111/j.1467-8462.1974.tb00509.x"
+  },
+  {
+    "idx": 2,
+    "query": {
+      "title": "Dividend Policy, Growth, and the Valuation of Shares",
+      "authors": "Modigliani F, Miller MH",
+      "year": 1961,
+      "journal": "The Journal of Business",
+      "doi": "10.1086/294442"
+    },
+    "verified": true,
+    "crossref_source": "https://api.crossref.org/works/10.1086/294442",
+    "title": "Dividend Policy, Growth, and the Valuation of Shares",
+    "journal": "The Journal of Business",
+    "year": 1961,
+    "volume": "34",
+    "issue": "4",
+    "page": "411",
+    "doi": "10.1086/294442",
+    "url": "https://doi.org/10.1086/294442"
+  },
+  {
+    "idx": 5,
+    "query": {
+      "title": "Do Investment-Cash Flow Sensitivities Provide Useful Measures of Financing Constraints?",
+      "authors": "Kaplan SN, Zingales L",
+      "year": 1997,
+      "journal": "The Quarterly Journal of Economics",
+      "doi": "10.1162/003355397555163"
+    },
+    "verified": true,
+    "crossref_source": "https://api.crossref.org/works/10.1162/003355397555163",
+    "title": "Do Investment-Cash Flow Sensitivities Provide Useful Measures of Financing Constraints?",
+    "journal": "The Quarterly Journal of Economics",
+    "year": 1997,
+    "volume": "112",
+    "issue": "1",
+    "page": "169-215",
+    "doi": "10.1162/003355397555163",
+    "url": "https://doi.org/10.1162/003355397555163"
+  },
+  {
+    "idx": 7,
+    "query": {
+      "title": "Random Forests",
+      "authors": "Breiman L",
+      "year": 2001,
+      "journal": "Machine Learning",
+      "doi": "10.1023/A:1010933404324"
+    },
+    "verified": true,
+    "crossref_source": "https://api.crossref.org/works/10.1023/A:1010933404324",
+    "title": "Random Forests",
+    "journal": "Machine Learning",
+    "year": 2001,
+    "volume": "45",
+    "issue": "1",
+    "page": "5-32",
+    "doi": "10.1023/a:1010933404324",
+    "url": "https://doi.org/10.1023/a:1010933404324"
+  },
+  {
+    "idx": 9,
+    "query": {
+      "title": "Greedy Function Approximation: A Gradient Boosting Machine",
+      "authors": "Friedman JH",
+      "year": 2001,
+      "journal": "The Annals of Statistics",
+      "doi": "10.1214/aos/1013203451"
+    },
+    "verified": true,
+    "crossref_source": "https://api.crossref.org/works/10.1214/aos/1013203451",
+    "title": "Greedy function approximation: A gradient boosting machine.",
+    "journal": "The Annals of Statistics",
+    "year": 2001,
+    "volume": "29",
+    "issue": "5",
+    "page": null,
+    "doi": "10.1214/aos/1013203451",
+    "url": "https://doi.org/10.1214/aos/1013203451"
+  },
+  {
+    "idx": 14,
+    "query": {
+      "title": "Why Do Firms Pay Dividends? International Evidence on the Determinants of Dividend Policy",
+      "authors": "Denis DJ, Osobov I",
+      "year": 2008,
+      "journal": "Journal of Financial Economics",
+      "doi": "10.1016/j.jfineco.2007.06.006"
+    },
+    "verified": true,
+    "crossref_source": "https://api.crossref.org/works/10.1016/j.jfineco.2007.06.006",
+    "title": "Why do firms pay dividends? International evidence on the determinants of dividend policy☆",
+    "journal": "Journal of Financial Economics",
+    "year": 2008,
+    "volume": "89",
+    "issue": "1",
+    "page": "62-82",
+    "doi": "10.1016/j.jfineco.2007.06.006",
+    "url": "https://doi.org/10.1016/j.jfineco.2007.06.006"
+  },
+  {
+    "idx": 17,
+    "query": {
+      "title": "Tunneling through Intercorporate Loans: The China Experience",
+      "authors": "Jiang G, Lee CMC, Yue H",
+      "year": 2010,
+      "journal": "Journal of Financial Economics",
+      "doi": "10.1016/j.jfineco.2010.05.002"
+    },
+    "verified": true,
+    "crossref_source": "https://api.crossref.org/works/10.1016/j.jfineco.2010.05.002",
+    "title": "Tunneling through intercorporate loans: The China experience☆",
+    "journal": "Journal of Financial Economics",
+    "year": 2010,
+    "volume": "98",
+    "issue": "1",
+    "page": "1-20",
+    "doi": "10.1016/j.jfineco.2010.05.002",
+    "url": "https://doi.org/10.1016/j.jfineco.2010.05.002"
+  },
+  {
+    "idx": 24,
+    "query": {
+      "title": "Difference-in-Differences with Multiple Time Periods",
+      "authors": "Callaway B, Sant'Anna PHC",
+      "year": 2021,
+      "journal": "Journal of Econometrics",
+      "doi": "10.1016/j.jeconom.2020.12.001"
+    },
+    "verified": true,
+    "crossref_source": "https://api.crossref.org/works/10.1016/j.jeconom.2020.12.001",
+    "title": "Difference-in-Differences with multiple time periods",
+    "journal": "Journal of Econometrics",
+    "year": 2021,
+    "volume": "225",
+    "issue": "2",
+    "page": "200-230",
+    "doi": "10.1016/j.jeconom.2020.12.001",
+    "url": "https://doi.org/10.1016/j.jeconom.2020.12.001"
+  },
+  {
+    "idx": 25,
+    "query": {
+      "title": "Difference-in-Differences with Variation in Treatment Timing",
+      "authors": "Goodman-Bacon A",
+      "year": 2021,
+      "journal": "Journal of Econometrics",
+      "doi": "10.1016/j.jeconom.2021.03.014"
+    },
+    "verified": true,
+    "crossref_source": "https://api.crossref.org/works/10.1016/j.jeconom.2021.03.014",
+    "title": "Difference-in-differences with variation in treatment timing",
+    "journal": "Journal of Econometrics",
+    "year": 2021,
+    "volume": "225",
+    "issue": "2",
+    "page": "254-277",
+    "doi": "10.1016/j.jeconom.2021.03.014",
+    "url": "https://doi.org/10.1016/j.jeconom.2021.03.014"
+  },
+  {
+    "idx": 27,
+    "query": {
+      "title": "Do Tournament Incentives Affect Corporate Dividend Policy?",
+      "authors": "Chowdhury H, Rahman S",
+      "year": 2023,
+      "journal": "Journal of Banking and Finance",
+      "doi": "10.1016/j.jbankfin.2023.106877"
+    },
+    "verified": true,
+    "crossref_source": "https://api.crossref.org/works/10.1016/j.jbankfin.2023.106877",
+    "title": "Do tournament incentives affect corporate dividend policy?",
+    "journal": "Journal of Banking &amp; Finance",
+    "year": 2023,
+    "volume": "152",
+    "issue": null,
+    "page": "106877",
+    "doi": "10.1016/j.jbankfin.2023.106877",
+    "url": "https://doi.org/10.1016/j.jbankfin.2023.106877"
+  },
+  {
+    "idx": 28,
+    "query": {
+      "title": "Dividend Policy and Corporate Life Cycle: A Study of Indian Companies",
+      "authors": "Singh R, Gupta CP, Chaudhary P",
+      "year": 2023,
+      "journal": "Managerial Finance",
+      "doi": "10.1108/MF-01-2023-0053"
+    },
+    "verified": true,
+    "crossref_source": "https://api.crossref.org/works/10.1108/MF-01-2023-0053",
+    "title": "Dividend policy and corporate life cycle: a study of Indian companies",
+    "journal": "Managerial Finance",
+    "year": 2023,
+    "volume": "49",
+    "issue": "11",
+    "page": "1722-1749",
+    "doi": "10.1108/mf-01-2023-0053",
+    "url": "https://doi.org/10.1108/mf-01-2023-0053"
+  },
+  {
+    "idx": 30,
+    "query": {
+      "title": "Digital Finance and Dividend Policy: Evidence from China",
+      "authors": "Song Y, Lee S, Wang B",
+      "year": 2025,
+      "journal": "Pacific-Basin Finance Journal",
+      "doi": "10.1016/j.pacfin.2025.102704"
+    },
+    "verified": true,
+    "crossref_source": "https://api.crossref.org/works/10.1016/j.pacfin.2025.102704",
+    "title": "Digital finance and dividend policy: Evidence from China",
+    "journal": "Pacific-Basin Finance Journal",
+    "year": 2025,
+    "volume": "90",
+    "issue": null,
+    "page": "102704",
+    "doi": "10.1016/j.pacfin.2025.102704",
+    "url": "https://doi.org/10.1016/j.pacfin.2025.102704"
+  }
+]
