@@ -172,3 +172,13 @@
 - [2026-03-03 14:11:33 UTC] 日志：新增 `notes/reference_verification/unmatched_refs_verified_evidence_20260303.md` 与 `...json`；结论为13/13均可确认真实存在，其中 `[1]` 采用 Harvard DASH + JSTOR/EBSCO 题录交叉、`[12]` 采用 `10.3969` DOI 解析到万方记录（`kjyj200412001`）并辅以万方参考文献检索页佐证。
 - [2026-03-03 14:20:17 UTC] 决策：按用户“维护当前仓库文档，推送到远程仓库”请求执行最小一致性修订；不恢复已删除的 `ONBOARDING_GUIDE.md`，改为清理失效引用并同步当前产物命名。
 - [2026-03-03 14:20:17 UTC] 日志：已更新 `README.md`、`DOC_TREE.md`、`INSTRUCTIONS.md`（修复失效路径 `ONBOARDING_GUIDE.md` 与 `notes/phase5_test/`，并将终稿产物统一为 `论文终稿.docx` 与 `论文终稿_base.docx`）；随后提交并推送文档维护变更。
+- [2026-03-04 04:10:19 UTC] 决策：按用户要求将第3章变量定义改为表格表达，并导出 Word 三线表版本；以 `output/paper/chapter3_ml_prediction_draft.md` 的 3.2 节为唯一源，避免正文与导出稿不一致。
+- [2026-03-04 04:10:19 UTC] 日志：已重写 `output/paper/chapter3_ml_prediction_draft.md` 的 3.2.1/3.2.2 为结构化 Markdown 表格（被解释变量表 + 分组概览 + 5类详细变量表）；已生成 `output/doc/chapter3_变量定义_三线表.docx`（7个表），并在 XML 层核验三线表样式为顶线1磅(`sz=8`)、表头下线0.5磅(`sz=4`)、底线1磅(`sz=8`)、无竖线。
+- [2026-03-04 10:18:08 UTC] 决策：针对用户“看不到 doc 文件”反馈，保留原始导出目录 `output/doc/` 的同时，新增一份副本到 `output/paper/` 提高可见性。
+- [2026-03-04 10:18:08 UTC] 日志：已确认 `output/doc/chapter3_变量定义_三线表.docx` 存在（39KB），并复制为 `output/paper/chapter3_变量定义_三线表.docx`。
+- [2026-03-04 10:24:45 UTC] 决策：按用户最新排版要求，将第3章变量定义改为单张三列表（类型/名称/定义），不再拆分多张表。
+- [2026-03-04 10:24:45 UTC] 日志：已更新 output/paper/chapter3_ml_prediction_draft.md 的 3.2 为单表；已重导 output/doc/chapter3_变量定义_三线表.docx 与 output/paper/chapter3_变量定义_三线表.docx（1 张表，41 行，3 列，第一列按类别纵向合并，三线表边框）。
+- [2026-03-04 10:32:38 UTC] 决策：按用户参考图要求，将第4章变量定义统一为单张4列表（变量类型/变量符号/变量名称/变量定义），并采用三线表输出。
+- [2026-03-04 10:32:38 UTC] 日志：已更新 output/paper/chapter4_did_evaluation_draft.md 的 4.3.2 为单表；已导出 output/doc/chapter4_变量定义_三线表.docx 与 output/paper/chapter4_变量定义_三线表.docx（1张表、16行、4列，第一列分组纵向合并）。
+- [2026-03-04 14:17:41 UTC] 决策：按用户“维护仓库文档并推送远程”请求，执行最小文档一致性维护；仅同步当前已落地产物，不改动研究脚本与正文业务逻辑。
+- [2026-03-04 14:17:41 UTC] 日志：已更新 `DOC_TREE.md`（补录 `output/doc`、`output/paper/chapter3_变量定义_三线表.docx`、`output/paper/chapter4_变量定义_三线表.docx`、`output/figures_v2/feature_importance_combined.png`、`scripts/phase6_combined_feature_importance.py`），并完成本次会话记忆追加。

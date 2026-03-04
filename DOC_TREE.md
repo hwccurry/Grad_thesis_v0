@@ -1,6 +1,6 @@
 # Repository Document Tree
 
-更新时间：2026-03-03（文档一致性维护：清理失效路径并同步当前产物命名）
+更新时间：2026-03-04（文档一致性维护：同步第3/4章变量定义三线表产物与 Phase6 脚本）
 维护规则：每个 Phase 完成后必须同步更新本文件。
 
 ## 根目录
@@ -66,12 +66,17 @@ notes/
 ## output/
 ```text
 output/
+├── doc/
+│   ├── chapter3_变量定义_三线表.docx          # [Phase6新增] 第3章变量定义单表三线表导出
+│   └── chapter4_变量定义_三线表.docx          # [Phase6新增] 第4章变量定义单表三线表导出
 ├── paper/
 │   ├── chapter2_lit_review.md                # [Phase1]第2章文献综述材料
 │   ├── references_with_links.md
 │   ├── references_gbt7714_nonmain.md         # 参考文献材料（非正文，供Phase5参考）
 │   ├── chapter3_ml_prediction_draft.md       # [Phase2] 第3章ML预测分析草稿
+│   ├── chapter3_变量定义_三线表.docx           # [Phase6新增] 第3章变量定义表（便捷查看副本）
 │   ├── chapter4_did_evaluation_draft.md      # [Phase3新增] 第4章DID因果评估草稿
+│   ├── chapter4_变量定义_三线表.docx           # [Phase6新增] 第4章变量定义表（便捷查看副本）
 │   ├── chapter1_introduction_draft.md        # [Phase4新增] 第1章绪论草稿
 │   ├── chapter5_conclusion_draft.md          # [Phase4新增] 第5章结论与启示草稿
 │   ├── abstract_draft.md                     # [Phase4收口] 中英文摘要
@@ -119,6 +124,7 @@ output/
 │   ├── ale_gbdt_*.png (10张)                  # [Phase5] GBDT ALE图
 │   ├── feature_importance_bar_rf.png          # [Phase5] RF特征重要性Top10（灰色条形图）
 │   ├── feature_importance_bar_gbdt.png        # [Phase5] GBDT特征重要性Top10
+│   ├── feature_importance_combined.png        # [Phase6新增] RF+GBDT合并特征重要性图
 │   ├── pdp_grid_rf.png                        # [Phase5] RF PDP网格（中文标签, 黑色线）
 │   ├── pdp_grid_gbdt.png                      # [Phase5] GBDT PDP网格
 │   ├── pca_scree_plot.png                     # [Phase5] PCA碎石图（灰度友好）
@@ -177,6 +183,7 @@ scripts/
 ├── phase5_prepare.py                          # [Phase5准备] 生成完整版/追溯矩阵
 ├── phase5_did_quickcheck.py                   # [Phase5准备] PanelOLS复验DID基准系数
 ├── phase6_audit.py                            # [Phase6新增] 自动化交付审计脚本
+├── phase6_combined_feature_importance.py      # [Phase6新增] 合并RF/GBDT特征重要性绘图脚本
 ├── phase6_format_tables.py                    # [Phase6新增] DOCX三线表格式化脚本
 ├── postprocess_docx.py                        # [Phase6新增] Word后处理脚本（样式/页码/图片缩放）
 └── stata_mata_compat.do                       # [Phase5排障] Mata 库兼容修复脚本
