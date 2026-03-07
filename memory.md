@@ -184,3 +184,17 @@
 - [2026-03-04 14:17:41 UTC] 日志：已更新 `DOC_TREE.md`（补录 `output/doc`、`output/paper/chapter3_变量定义_三线表.docx`、`output/paper/chapter4_变量定义_三线表.docx`、`output/figures_v2/feature_importance_combined.png`、`scripts/phase6_combined_feature_importance.py`），并完成本次会话记忆追加。
 - [2026-03-04 14:31:59 UTC] 决策：按用户“ 一并提交 ”指令执行全量收口提交，采用 `git add -A` 一次性纳入当前仓库全部剩余变更（含新增、修改、删除）并推送远程。
 - [2026-03-04 14:31:59 UTC] 日志：已先完成变更统计（22 个已跟踪改动 + 25 个未跟踪文件），随后执行全量提交与推送，作为本轮会话交付闭环。
+
+- [2026-03-07 UTC] 决策：执行 Phase7 重构计划，将 Markdown pipeline 对齐 v7.docx 结构，并落地导师 5 项修改建议（修改建议0306.docx）。
+- [2026-03-07 UTC] Phase7 完成清单：
+  1. 标题全局替换：上市公司为何分红 → 中国上市公司为何分红（chapter5/INSTRUCTIONS/CLAUDE.md/写作框架.md）。
+  2. 摘要改写：单段→四段结构（背景+ML路径+DID路径+综合结论），中英文同步，按导师提供文本。
+  3. 第2章 §2.4 扩展：理论框架→理论分析与研究假设，假设标签改为"动因排序/政策效应/异质性效应"，每条假设增加理论论证段落（~1500→~2500字）。
+  4. 第3章重编号：表1-3（主文）+ 附表A1-A4（附录）、图1-2（主文）+ 附图A1-A6（附录），ALE节精简为单段。
+  5. 第4章重编号：表4-9、图3-4；表6增加完整控制变量系数（Python PanelOLS生成）；§4.4.5改写为传导机制叙事。
+  6. 新增 appendix.md（附表A1-A4、附图A1-A6）。
+  7. 参考文献精简 31→23（移除 Kaplan-Zingales/李增泉/Denis-Osobov/Jiang-Lee/窦欢-陆正飞/Callaway-Sant'Anna/Goodman-Bacon/Chowdhury-Rahman）。
+  8. phase5_prepare.py 更新：FULL_PAPER_PARTS 增加 appendix.md。
+  9. Pipeline rebuild：论文完整版.md 重建通过审计（0占位符、23条参考文献、所有章节 + 附录均存在）。
+- [2026-03-07 UTC] Stata r(3499) workaround：Stata 18 Mata strtoreal() 缺失导致所有回归命令在 _coef_table() 阶段报错；已用 Python linearmodels.PanelOLS 完全替代，结果验证一致（m1 did=0.0805, m2 did=0.0828, m3 did=0.1238, m4 did=0.1081）。
+- [2026-03-07 UTC] 产出：did_baseline_regression_full.csv（4模型含11个控制变量系数），供 Table 6 使用。

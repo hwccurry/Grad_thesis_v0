@@ -1,6 +1,6 @@
 # Repository Document Tree
 
-更新时间：2026-03-04（文档一致性维护：同步第3/4章变量定义三线表产物与 Phase6 脚本）
+更新时间：2026-03-07（Phase7 重构：v7对齐、导师修改建议落地、参考文献精简至23条、附录新增）
 维护规则：每个 Phase 完成后必须同步更新本文件。
 
 ## 根目录
@@ -80,7 +80,8 @@ output/
 │   ├── chapter1_introduction_draft.md        # [Phase4新增] 第1章绪论草稿
 │   ├── chapter5_conclusion_draft.md          # [Phase4新增] 第5章结论与启示草稿
 │   ├── abstract_draft.md                     # [Phase4收口] 中英文摘要
-│   ├── references_final.md                   # [Phase6新增] 正文参考文献主清单(31条)
+│   ├── references_final.md                   # [Phase7更新] 正文参考文献主清单(23条，由31条精简)
+│   ├── appendix.md                           # [Phase7新增] 附录（附表A1-A4、附图A1-A6）
 │   ├── references_authenticity_check.md      # [Phase6新增] 参考文献真实性核验报告
 │   ├── acknowledgment.md                     # [Phase6新增] 后记
 │   ├── declaration.md                        # [Phase6新增] 独创性与授权声明
@@ -99,7 +100,8 @@ output/
 │   ├── pca_loadings_top.csv                   # [Phase2-PCA] 载荷矩阵+Top3变量
 │   ├── pca_model_comparison.csv               # [Phase2-PCA] PCA vs 原始特征预测对比
 │   ├── did_descriptive_stats.csv              # [Phase3新增] DID样本描述性统计
-│   ├── did_baseline_regression.csv            # [Phase3新增] 基准DID回归(表8)
+│   ├── did_baseline_regression.csv            # [Phase3新增] 基准DID回归
+│   ├── did_baseline_regression_full.csv      # [Phase7新增] 含控制变量系数的完整基准DID回归
 │   ├── did_event_study_DivDummy.csv           # [Phase3新增] 事件研究系数(DivDummy)
 │   ├── did_event_study_DivPayRate.csv         # [Phase3新增] 事件研究系数(DivPayRate)
 │   ├── did_placebo_DivDummy.csv               # [Phase3收口] 安慰剂检验系数(100次，policy-year-only)
@@ -185,6 +187,7 @@ scripts/
 ├── phase6_audit.py                            # [Phase6新增] 自动化交付审计脚本
 ├── phase6_combined_feature_importance.py      # [Phase6新增] 合并RF/GBDT特征重要性绘图脚本
 ├── phase6_format_tables.py                    # [Phase6新增] DOCX三线表格式化脚本
+├── phase7_baseline_with_controls.do           # [Phase7新增] 基准回归含控制变量系数导出(Stata)
 ├── postprocess_docx.py                        # [Phase6新增] Word后处理脚本（样式/页码/图片缩放）
 └── stata_mata_compat.do                       # [Phase5排障] Mata 库兼容修复脚本
 ```

@@ -28,6 +28,7 @@ FULL_PAPER_PARTS = [
     ("第四章 DID因果评估", PAPER_DIR / "chapter4_did_evaluation_draft.md"),
     ("第五章 结论与启示", PAPER_DIR / "chapter5_conclusion_draft.md"),
     ("参考文献", PAPER_DIR / "references_final.md"),
+    ("附录", PAPER_DIR / "appendix.md"),
     ("后记", PAPER_DIR / "acknowledgment.md"),
     ("论文独创性及授权声明", PAPER_DIR / "declaration.md"),
 ]
